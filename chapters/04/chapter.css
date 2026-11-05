@@ -1,0 +1,75 @@
+/* สร้างอัตโนมัติจาก <style> ใน source/content_chN.html โดย tools/build_chapter.py — อย่าแก้ด้วยมือ */
+.book .expr { font-weight: bold; color: var(--pri); font-size: 18.0px; position: relative; }
+.book .expr.numbered { padding: 0 141.8px; }
+.book .eqn { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font: 500 12.8px "Prompt", var(--font); color: var(--ink-3); }
+.book .ov { margin: 0 0.5px; line-height: .8; }
+.book .callout .expr { color: #fff; }
+.book .callout .eqn { color: #ffb788; }
+.book .callout { padding: 14.2px 28.3px 11.8px; font-size: 15.5px; line-height: 1.32; }
+.book .callout p { margin: 0 0 .25em; }
+.book .callout .expr { margin: .1em 0 0; }
+.book .callout .thm { font-weight: bold; }
+.book .deriv { display: grid; grid-template-columns: max-content max-content 1fr; column-gap: 7.6px; row-gap: 2.8px; margin: .4em 0 .9em 18.9px; font-size: 17.0px; }
+.book .deriv .l { text-align: right; white-space: nowrap; font-weight: bold; color: var(--pri); }
+.book .deriv .r { white-space: nowrap; font-weight: bold; color: var(--pri); }
+.book .deriv .why { padding-left: 37.8px; font-size: 14.5px; color: var(--ink-2); align-self: center; }
+.book .rule-head { font: 600 14.2px "Prompt", var(--font); color: var(--acc); margin-right: 7.1px; }
+.book .rule-eq { font-weight: bold; font-size: 17.5px; color: var(--pri); margin-right: 9.4px; white-space: nowrap; }
+.book table.rules { width: auto; margin: .2em 0 1em 18.9px; border-top: 2.1px solid var(--pri); border-bottom: 2.1px solid var(--pri); }
+.book table.rules td { padding: 1.9px 18.9px; font-size: 17.0px; font-weight: bold; color: var(--pri); white-space: nowrap; border-bottom: 0.7px solid var(--line); }
+.book table.rules td.no { font: 700 14.2px "Prompt", var(--font); color: var(--acc); text-align: right; padding-right: 4.7px; width: 42.5px; }
+.book table.rules td.gap { border-bottom: 0; width: 47.2px; padding: 0; }
+.book table.rules tr:last-child td { border-bottom: 0; }
+.book .tcap .sub { display: block; font-size: 13.0px; color: var(--ink-3); }
+.book table.tt { border-collapse: collapse; width: auto; margin: .5em 0 1em 18.9px; }
+.book table.tt th { font: 600 12.2px "Prompt", var(--font); color: var(--ink-2); letter-spacing: .04em; padding: 7.6px 15.1px; border-bottom: 2.1px solid var(--pri); text-align: center; white-space: nowrap; }
+.book table.tt thead tr:not(:last-child) th { border-bottom: 0.7px solid var(--line); color: var(--pri); }
+.book table.tt th .ov { padding-top: 2.7px; }
+.book table.tt td { font: 400 14.2px/1.5 "Prompt", var(--font); text-align: center; padding: 2.4px 15.1px; border-bottom: 0.7px solid var(--line); }
+.book table.tt td.out, .book table.tt th.out { color: var(--acc); }
+.book table.tt td.out { font-weight: 600; }
+.book table.tt th.vr, .book table.tt td.vr { border-right: 1.1px solid var(--pri); }
+.book .tcap.solo { padding-left: 0; }
+.book .tblock { margin: .6em 0 1em; }
+.book .tblock .tcap { margin-bottom: 4.7px; }
+.book .eqtab { display: flex; justify-content: center; align-items: center; gap: 42.5px; margin: .3em 0 .4em; }
+.book .eqtab table.tt { margin: 0; }
+.book table.tt tfoot td { border-bottom: 0; padding: 0; height: 37.8px; position: relative; }
+.book table.tt tfoot td.eqS::before, .book table.tt tfoot td.eqE::before { content: ""; position: absolute; left: 50%; top: 6.1px; height: 17.5px; border-left: 1.2px solid var(--acc2); }
+.book table.tt tfoot td.eqS::after, .book table.tt tfoot td.eqE::after { content: ""; position: absolute; left: calc(50% - 5.2px); top: 0; border: 5.2px solid transparent; border-top: 0; border-bottom: 9.0px solid var(--acc2); }
+.book table.tt tfoot td.eqS, .book table.tt tfoot td.eqE, .book table.tt tfoot td.eqM { background: linear-gradient(var(--acc2), var(--acc2)) no-repeat; background-size: 100% 1.2px; background-position: 0 23.6px; }
+.book table.tt tfoot td.eqS { background-size: 50% 1.2px; background-position: 100% 23.6px; }
+.book table.tt tfoot td.eqE { background-size: calc(50% + 0.6px) 1.2px; background-position: 0 23.6px; }
+.book .eqlab { position: absolute; top: 23.6px; font: 600 11.5px "Prompt", var(--font); color: var(--acc2); background: #fff; padding: 0 6.6px; line-height: 1.2; letter-spacing: .06em; transform: translate(-50%, -52%); white-space: nowrap; }
+.book .eqtab .ckt img { display: block; }
+.book table.tt.t44 th, .book table.tt.t44 td { padding-left: 8.5px; padding-right: 8.5px; }
+.book .ckt-note { font-size: 13.0px; color: var(--ink-2); text-align: center; margin-top: 4.7px; }
+.book .tt-note { font-size: 14.0px; color: var(--ink-2); text-align: center; margin: 0 0 1em; }
+.book .parts3 { display: grid; grid-template-columns: repeat(3, auto); justify-content: space-between; gap: 4.7px 28.3px; font-size: 17.0px; font-weight: bold; color: var(--pri); margin: .1em 18.9px .6em; }
+.book .pn { font: 700 13.5px "Prompt", var(--font); color: var(--acc2); margin-right: 9.4px; }
+.book .solution .expr { margin: .3em 0 .7em; }
+.book .solution .pl { margin-top: .5em; }
+.book .xsteps { display: grid; grid-template-columns: max-content 1fr; gap: 7.1px 14.2px; margin: .3em 0 .5em; font-size: 17.0px; font-weight: bold; color: var(--pri); align-items: baseline; }
+.book .ans { color: var(--acc); }
+.book ol.steps { list-style: none; padding-left: 0; margin: .3em 0 1em; }
+.book ol.steps > li { margin-bottom: .5em; }
+.book .step { font: 700 14.2px "Prompt", var(--font); color: var(--acc2); margin-right: 7.1px; }
+.book ol.nsteps { padding-left: 33.1px; }
+.book ol.nsteps li::marker { font: 700 13.5px "Prompt", var(--font); color: var(--acc); }
+.book .cno { display: inline-block; width: 25.5px; height: 25.5px; border-radius: 50%; color: #fff; font: 700 12.2px/25.5px "Prompt", var(--font); text-align: center; margin-right: 8.5px; vertical-align: 1.9px; }
+.book .cno.c1 { background: var(--acc); }
+.book .cno.c2 { background: var(--acc2); }
+.book .note ul.conds { list-style: none; padding-left: 0; margin: .2em 0 .3em; }
+.book .t45 { display: grid; grid-template-columns: 330.8px 321.3px; width: 652.0px; position: relative; margin: .2em 0 1em; }
+.book .t45 table.tt { margin: 0 0 0 auto; }
+.book .t45 table.tt td { height: 25.0px; padding-top: 0; padding-bottom: 0; line-height: 25.0px; }
+.book .t45 table.tt tr.hit td { background: var(--soft2); }
+.book .t45 table.tt th { padding-left: 12.3px; padding-right: 12.3px; }
+.book .t45 .conds { position: relative; }
+.book .t45 .cond { position: absolute; left: 75.6px; right: 0; font-size: 14.5px; line-height: 1.3; padding: 6.6px 11.8px; border-left: 5.7px solid; background: var(--soft); }
+.book .t45 .cond.k1 { border-color: var(--acc); }
+.book .t45 .cond.k2 { border-color: var(--acc2); }
+.book .t45 svg.arrows { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.book p.sub4 { font: 600 16.2px "Prompt", var(--font); color: var(--pri); margin: 1em 0 .3em; }
+.book p.sub4 .n { color: var(--acc2); margin-right: 9.4px; }
+.book figure img { margin: 0; }

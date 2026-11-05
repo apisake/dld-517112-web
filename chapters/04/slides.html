@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สไลด์ บทที่ 4 พีชคณิตบูลีน · 517 112</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/slides.css">
+<script src="../../assets/js/site.js"></script>
+<script src="../../assets/js/logic.js"></script>
+<script src="../../assets/js/numbers.js"></script>
+<script src="../../assets/js/boolean.js"></script>
+<script src="../../assets/js/slides.js"></script>
+<script src="widgets.js"></script>
+<style>
+  .slide .eq { font: 700 30px var(--mono); }
+  .slide .rt { border-collapse: collapse; font: 700 24px var(--mono); }
+  .slide .rt td { padding: 6px 16px; border-bottom: 1px solid var(--line); }
+  .slide .rt td.n { color: var(--accent); font: 700 16px var(--font); text-align: right; }
+  .slide .deriv { display: grid; grid-template-columns: max-content max-content 1fr; gap: 6px 14px; font: 700 24px var(--mono); align-items: baseline; }
+  .slide .deriv .why { font: 500 17px var(--font); color: var(--ink-3); }
+  .slide .thm { background: #262c38; color: #fff; border-radius: 14px; padding: 16px 22px; }
+  .slide .thm .h { color: #ffb788; font-weight: 700; font-size: 18px; }
+  .slide .thm .eq { color: #fff; margin-top: 6px; }
+</style>
+</head>
+<body class="deck" data-footer="517 112 · บทที่ 4 พีชคณิตบูลีน" data-lesson="index.html">
+<div class="stage"><div class="canvas">
+
+<section class="slide title">
+  <div class="kicker">517 112 DIGITAL LOGIC DESIGN · สัปดาห์ที่ 5</div>
+  <h1>บทที่ 4<br>พีชคณิตบูลีน</h1>
+  <div class="en">Boolean Algebra</div>
+  <div class="meta">CLO2 เทคนิคการลดรูปวงจรตรรกะ · CLO4 หลักการตรรกะเชิงเลข<br>ปฏิบัติการ: พิสูจน์ความเทียบเท่าของวงจร</div>
+  <aside class="notes">บทนี้เป็นเครื่องมือคณิตศาสตร์ที่ใช้ตลอดวิชา — บทที่ 5 (ลดรูป) และบทที่ 6 (วิเคราะห์วงจร) ต่อยอดโดยตรง</aside>
+</section>
+
+<section class="slide">
+  <div class="kicker">บทที่ 4</div>
+  <h2>จุดประสงค์ และเนื้อหาในบทนี้</h2>
+  <div class="cols wide-r" style="align-items:start">
+    <div class="card" style="font-size:20px"><b>🎯 จุดประสงค์</b>
+      <ol style="margin-top:6px;line-height:1.5"><li>ใช้กฎและหลักเกณฑ์พื้นฐานของพีชคณิตบูลีน</li><li>ใช้ทฤษฎีบทของ DeMorgan กับสมการบูลีน</li><li>เขียนวงจรเกทเป็นสมการบูลีน</li><li>ประเมินผลลัพธ์ของสมการบูลีน</li></ol></div>
+    <ol style="font-size:24px;list-style:none;padding:0">
+      <li><span class="mono hl">4.1</span> ที่มาของพีชคณิตบูลีน</li><li><span class="mono hl">4.2</span> การปฏิบัติการและสมการบูลีน</li>
+      <li><span class="mono hl">4.3</span> กฎและหลักเกณฑ์</li><li><span class="mono hl">4.4</span> ทฤษฎีบทของ DeMorgan</li><li><span class="mono hl">4.5</span> วิเคราะห์วงจรลอจิก</li>
+    </ol>
+  </div>
+  <aside class="notes">ทบทวนจากบทที่ 3: NAND ≡ Negative-OR และ NOR ≡ Negative-AND — วันนี้จะพิสูจน์ด้วยพีชคณิต</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">4.1</span>ที่มาของพีชคณิตบูลีน</h2>
+  <div class="grid-2" style="font-size:22px">
+    <div class="card"><div class="mono acc" style="font-size:40px">1854</div><b>George Boole</b><br><i class="muted">An Investigation of the Laws of Thought…</i><br>→ กำเนิด <b>พีชคณิตเชิงตรรก (logical algebra)</b></div>
+    <div class="card frag"><div class="mono acc" style="font-size:40px">1938</div><b>Claude Shannon</b><br><i class="muted">A Symbolic Analysis of Relay and Switching Circuits</i><br>→ นำมาวิเคราะห์และออกแบบ<b>วงจรลอจิก</b></div>
+  </div>
+  <p class="small muted frag" style="margin-top:18px">โยงกับบทที่ 1: แชนนอนอยู่ในไทม์ไลน์ (Switching Algebra) — รากฐานของวิชานี้</p>
+  <aside class="notes">พีชคณิตบูลีน = คณิตศาสตร์ของระบบดิจิทัล</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">4.2</span>Variable · Complement · Literal</h2>
+  <div class="grid-3" style="font-size:21px">
+    <div class="card"><b class="hl">Variable</b><br>อักษรพิมพ์ใหญ่แทนปริมาณทางลอจิก มีค่า 0 หรือ 1</div>
+    <div class="card frag"><b class="hl">Complement</b><br>นิเสธของ variable: <span class="eq" style="font-size:24px"><span class="ov">A</span></span> (“เอบาร์” / “น็อตเอ”) หรือ A′</div>
+    <div class="card frag"><b class="hl">Literal</b><br>variable หรือ complement ของ variable เช่น A, <span class="ov">B</span></div>
+  </div>
+  <div class="grid-2 frag" style="font-size:21px;margin-top:18px">
+    <div class="card"><b>Sum term</b> (OR) เช่น A + <span class="ov">B</span> + C<br>= 1 เมื่อ literal ใดเป็น 1 · <b class="acc">= 0 เมื่อทุก literal เป็น 0</b></div>
+    <div class="card"><b>Product term</b> (AND) เช่น A<span class="ov">B</span>C<br><b class="acc">= 1 เมื่อทุก literal เป็น 1</b> · = 0 เมื่อ literal ใดเป็น 0</div>
+  </div>
+  <aside class="notes">ตัวอย่างที่ 4.1: A + <span class="ov">B</span> + C + <span class="ov">D</span> = 0 เมื่อ A=0, B=1, C=0, D=1 · ตัวอย่างที่ 4.2: A<span class="ov">B</span>C<span class="ov">D</span> = 1 เมื่อ A=1, B=0, C=1, D=0</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: Sum term และ Product term</h2>
+  <div class="body"><div data-widget="termeval"></div></div>
+  <aside class="notes">ให้นักศึกษาตอบก่อนว่าต้องตั้งค่าอะไร แล้วกดตรวจ</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">4.3.1</span>กฎพื้นฐาน 3 กฎ</h2>
+  <table class="rt" style="margin-bottom:16px">
+    <tr><td class="n">สลับที่</td><td>A + B = B + A</td><td>AB = BA</td><td class="n">(4.1, 4.2)</td></tr>
+    <tr class="frag"><td class="n">เปลี่ยนกลุ่ม</td><td>A + (B + C) = (A + B) + C</td><td>A(BC) = (AB)C</td><td class="n">(4.3, 4.4)</td></tr>
+    <tr class="frag"><td class="n">กระจาย</td><td colspan="2">A(B + C) = AB + AC</td><td class="n">(4.5)</td></tr>
+  </table>
+  <div class="figbox frag"><img src="img/fig4-5.png" alt="รูปที่ 4.5" style="max-height:200px"></div>
+  <div class="cap frag">รูปที่ 4.5 กฎการกระจายกับวงจรเกท · ทางกลับกันคือการแยกแฟกเตอร์ AB + AC = A(B + C)</div>
+  <aside class="notes">เหมือนพีชคณิตทั่วไป · ใช้ได้กับตัวแปรกี่ตัวก็ได้</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: พิสูจน์ด้วยตารางค่าความจริง</h2>
+  <div class="body"><div data-widget="lawcheck"></div></div>
+  <aside class="notes">กดปุ่ม “ลองข้อผิด” ให้เห็นว่า A + BC ≠ (A + B)C — แล้วถามว่าวงเล็บไหนที่เท่ากับ A + BC (→ หลักเกณฑ์ข้อ 12)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">4.3.2</span>หลักเกณฑ์พื้นฐาน 12 ข้อ (ตารางที่ 4.1)</h2>
+  <div class="cols" style="align-items:start">
+    <table class="rt">
+      <tr><td class="n">1</td><td>A + 0 = A</td></tr><tr><td class="n">2</td><td>A + 1 = 1</td></tr><tr><td class="n">3</td><td>A · 0 = 0</td></tr>
+      <tr><td class="n">4</td><td>A · 1 = A</td></tr><tr><td class="n">5</td><td>A + A = A</td></tr><tr><td class="n">6</td><td>A + <span class="ov">A</span> = 1</td></tr>
+    </table>
+    <table class="rt frag">
+      <tr><td class="n">7</td><td>A · A = A</td></tr><tr><td class="n">8</td><td>A · <span class="ov">A</span> = 0</td></tr><tr><td class="n">9</td><td><span class="ov"><span class="ov">A</span></span> = A</td></tr>
+      <tr><td class="n">10</td><td>A + AB = A</td></tr><tr><td class="n">11</td><td>A + <span class="ov">A</span>B = A + B</td></tr><tr><td class="n">12</td><td>(A + B)(A + C) = A + BC</td></tr>
+    </table>
+  </div>
+  <p class="small muted" style="margin-top:12px">A, B, C แทนตัวแปรเดี่ยว <b>หรือกลุ่มของตัวแปร</b> ก็ได้</p>
+  <aside class="notes">ข้อ 1–9 เห็นได้จากเกทหนึ่งตัว (รูปที่ 4.6–4.14) · ข้อ 10–12 ต้องพิสูจน์ ให้นักศึกษาท่องให้ได้ — ใช้ทุกครั้งในบทที่ 5</aside>
+</section>
+
+<section class="slide">
+  <h2>ข้อ 1–9 มองเป็นเกทหนึ่งตัว</h2>
+  <div class="grid-3" style="gap:10px">
+    <div class="figbox"><img src="img/fig4-6.png" alt="ข้อ 1" style="max-height:110px"><div class="cap">ข้อ 1: A + 0 = A</div></div>
+    <div class="figbox"><img src="img/fig4-7.png" alt="ข้อ 2" style="max-height:110px"><div class="cap">ข้อ 2: A + 1 = 1</div></div>
+    <div class="figbox"><img src="img/fig4-8.png" alt="ข้อ 3" style="max-height:110px"><div class="cap">ข้อ 3: A · 0 = 0</div></div>
+    <div class="figbox frag"><img src="img/fig4-11.png" alt="ข้อ 6" style="max-height:110px"><div class="cap">ข้อ 6: A + <span class="ov">A</span> = 1</div></div>
+    <div class="figbox frag"><img src="img/fig4-13.png" alt="ข้อ 8" style="max-height:110px"><div class="cap">ข้อ 8: A · <span class="ov">A</span> = 0</div></div>
+    <div class="figbox frag"><img src="img/fig4-14.png" alt="ข้อ 9" style="max-height:110px"><div class="cap">ข้อ 9: complement สองชั้น = A</div></div>
+  </div>
+  <aside class="notes">โยงบทที่ 3 หัวข้อ 3.7.8: อินพุตที่ไม่ใช้ของ AND ต่อ VCC (ข้อ 4: A·1 = A) และของ OR ต่อ GND (ข้อ 1: A+0 = A)</aside>
+</section>
+
+<section class="slide">
+  <h2>พิสูจน์ข้อ 10 และ 11</h2>
+  <div class="cols" style="align-items:start">
+    <div>
+      <div class="deriv">
+        <span>A + AB</span><span>= A(1 + B)</span><span class="why">กฎการกระจาย</span>
+        <span></span><span class="frag">= A · 1</span><span class="why frag">ข้อ 2</span>
+        <span></span><span class="frag">= A</span><span class="why frag">ข้อ 4</span>
+      </div>
+      <div class="figbox frag" style="margin-top:14px"><img src="img/tab4-2ckt.png" alt="วงจรข้อ 10" style="max-height:120px"></div>
+    </div>
+    <div class="deriv frag" style="font-size:21px">
+      <span>A + <span class="ov">A</span>B</span><span>= (A + AB) + <span class="ov">A</span>B</span><span class="why">ข้อ 10</span>
+      <span></span><span>= (AA + AB) + <span class="ov">A</span>B</span><span class="why">ข้อ 7</span>
+      <span></span><span>= AA + AB + A<span class="ov">A</span> + <span class="ov">A</span>B</span><span class="why">ข้อ 8 (+0)</span>
+      <span></span><span>= (A + <span class="ov">A</span>)(A + B)</span><span class="why">แยกแฟกเตอร์</span>
+      <span></span><span>= 1 · (A + B)</span><span class="why">ข้อ 6</span>
+      <span></span><span>= A + B</span><span class="why">ข้อ 4</span>
+    </div>
+  </div>
+  <aside class="notes">ข้อ 12 พิสูจน์ในหน้าเนื้อหา: (A+B)(A+C) = AA + AC + AB + BC = A + AC + AB + BC = A(1+C) + AB + BC = A + AB + BC = A(1+B) + BC = A + BC</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: หลักเกณฑ์ 12 ข้อ</h2>
+  <div class="body"><div data-widget="rules12"></div></div>
+  <aside class="notes">ข้อ 1–9 กดเปลี่ยน A ดูเกท · ข้อ 10–12 ดูคอลัมน์ระหว่างทางในตาราง (ตารางที่ 4.2–4.4)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">4.4</span>ทฤษฎีบทของ DeMorgan</h2>
+  <div class="grid-2" style="font-size:19px">
+    <div class="thm"><div class="h">ทฤษฎีบทแรก</div>complement ของ<b>ผลคูณ</b> = <b>ผลบวก</b>ของ complement แต่ละตัว<div class="eq"><span class="ov">XY</span> = <span class="ov">X</span> + <span class="ov">Y</span></div><div class="mini" style="color:#ffb788">สมการที่ 4.6 · NAND ≡ Negative-OR</div></div>
+    <div class="thm frag"><div class="h">ทฤษฎีบทที่สอง</div>complement ของ<b>ผลบวก</b> = <b>ผลคูณ</b>ของ complement แต่ละตัว<div class="eq"><span class="ov">X + Y</span> = <span class="ov">X</span><span class="ov">Y</span></div><div class="mini" style="color:#ffb788">สมการที่ 4.7 · NOR ≡ Negative-AND</div></div>
+  </div>
+  <div class="callout tip frag" style="font-size:22px;margin-top:18px"><b>หลักจำ:</b> “ทลายเส้น bar แล้วเปลี่ยนเครื่องหมาย” (· ↔ +) · ใช้ได้กับกี่ตัวแปรก็ได้:<br><span class="mono"><span class="ov">XYZ</span> = <span class="ov">X</span> + <span class="ov">Y</span> + <span class="ov">Z</span> · <span class="ov">W + X + Y + Z</span> = <span class="ov">W</span><span class="ov">X</span><span class="ov">Y</span><span class="ov">Z</span></span></div>
+  <aside class="notes">ตัวอย่างที่ 4.3–4.4 · รูปที่ 4.15 เทียบเกทและตารางค่าความจริง · X, Y เป็นพจน์ก็ได้ เช่น complement ของ (AB + C)(A + BC)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">4.4.1</span>ขั้นตอนการใช้ DeMorgan</h2>
+  <ol class="small" style="line-height:1.7">
+    <li>กำหนดพจน์ใหญ่ให้เป็นตัวแปรเดี่ยว X, Y</li>
+    <li class="frag">ใช้ DeMorgan กับเส้น bar ที่<b>อยู่นอกสุดก่อน</b></li>
+    <li class="frag">bar ซ้อนสองชั้นหักล้างด้วย<b>ข้อ 9</b> (ไม่ใช่ DeMorgan)</li>
+    <li class="frag">ทำซ้ำกับพจน์ที่ยังมี bar คร่อมกลุ่ม จนเหลือ bar บนตัวแปรเดี่ยว</li>
+  </ol>
+  <div class="card frag" style="font-size:21px"><b>ตัวอย่างที่ 4.7</b> หา XNOR จาก XOR<br><span class="mono">complement(A<span class="ov">B</span> + <span class="ov">A</span>B) = (<span class="ov">A</span> + B)(A + <span class="ov">B</span>) = <span class="ov">A</span>A + <span class="ov">A</span><span class="ov">B</span> + AB + B<span class="ov">B</span> = <b class="acc"><span class="ov">A</span><span class="ov">B</span> + AB</b></span></div>
+  <aside class="notes">ตัวอย่างที่ 4.5–4.6 ให้ทำบนกระดาษก่อน แล้วตรวจด้วยแบบจำลองถัดไป</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: ทลายเส้น bar ทีละขั้น</h2>
+  <div class="body"><div data-widget="demorgan"></div></div>
+  <aside class="notes">กดตัวอย่าง 4.4.1 แล้วกดขั้นถัดไปทีละขั้น ถามก่อนทุกขั้นว่าใช้กฎอะไร · ทุกขั้นมี ✓ = ยังเทียบเท่านิพจน์เดิม</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">4.5</span>วิเคราะห์วงจรลอจิกด้วยพีชคณิตบูลีน</h2>
+  <div class="cols wide-l">
+    <div class="figbox"><img src="img/fig4-16.png" alt="รูปที่ 4.16" style="max-height:280px"></div>
+    <ol class="small">
+      <li>เริ่มจากเกท<b>ซ้ายสุด</b> (ใกล้อินพุต)</li>
+      <li class="frag">AND: <b class="mono">CD</b></li>
+      <li class="frag">OR: <b class="mono">B + CD</b></li>
+      <li class="frag">AND: <b class="mono acc">A(B + CD)</b></li>
+    </ol>
+  </div>
+  <aside class="notes">วงจรที่ผสานเกทหลายตัว = วงจรคอมบิเนชัน (บทที่ 6 จะวิเคราะห์อย่างเป็นระบบ)</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: วงจร → นิพจน์</h2>
+  <div class="body"><div data-widget="circuit416"></div></div>
+  <aside class="notes">กดเกทถัดไปทีละเกท แล้วเปลี่ยนอินพุตให้ X = 1 ทั้งสองเงื่อนไข</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">4.5.2</span>ประเมินนิพจน์ → ตารางค่าความจริง</h2>
+  <div class="cols">
+    <div class="small">
+      <p>A(B + CD) = 1 ก็ต่อเมื่อ A = 1 <b>และ</b> B + CD = 1</p>
+      <div class="callout note frag" style="font-size:20px"><b>①</b> A = 1 และ B = 1 (C, D อะไรก็ได้) → 4 แถว<br><b>②</b> A = 1 และ C = D = 1 (B อะไรก็ได้) → 2 แถว</div>
+      <p class="frag">ซ้ำที่ ABCD = 1111 → รวม <b class="acc">5 แถว</b> ที่เหลือเป็น 0</p>
+    </div>
+    <table class="data frag" style="font-size:16px">
+      <tr><th>A</th><th>B</th><th>C</th><th>D</th><th>X</th></tr>
+      <tr><td>1</td><td>0</td><td>1</td><td>1</td><td class="num"><b class="acc">1</b> ②</td></tr>
+      <tr><td>1</td><td>1</td><td>0</td><td>0</td><td class="num"><b class="acc">1</b> ①</td></tr>
+      <tr><td>1</td><td>1</td><td>0</td><td>1</td><td class="num"><b class="acc">1</b> ①</td></tr>
+      <tr><td>1</td><td>1</td><td>1</td><td>0</td><td class="num"><b class="acc">1</b> ①</td></tr>
+      <tr><td>1</td><td>1</td><td>1</td><td>1</td><td class="num"><b class="acc">1</b> ①②</td></tr>
+      <tr><td colspan="4" class="muted">อีก 11 แถว</td><td>0</td></tr>
+    </table>
+  </div>
+  <aside class="notes">ตารางที่ 4.5 ครบ 16 แถวพร้อมลูกศรอยู่ในหน้าเนื้อหา</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: สร้างตารางค่าความจริง</h2>
+  <div class="body"><div data-widget="truthtable"></div></div>
+  <aside class="notes">เปิดโหมด “ลองเติมเอง” ให้นักศึกษาเติมคอลัมน์เอาต์พุตทีละแถว แล้วตรวจ · ลองนิพจน์ XOR/XNOR</aside>
+</section>
+
+<section class="slide">
+  <h2>สรุปท้ายบท</h2>
+  <ul style="font-size:21px;line-height:1.55">
+    <li class="frag">บูล (1854) → แชนนอน (1938) นำมาใช้กับวงจรสวิตช์</li>
+    <li class="frag">การบวก = OR (sum term = 0 เมื่อทุก literal = 0) · การคูณ = AND (product term = 1 เมื่อทุก literal = 1)</li>
+    <li class="frag">กฎสลับที่ · เปลี่ยนกลุ่ม · กระจาย A(B + C) = AB + AC</li>
+    <li class="frag">หลักเกณฑ์ 12 ข้อ เช่น A + <span class="ov">A</span> = 1, A<span class="ov">A</span> = 0, A + AB = A, A + <span class="ov">A</span>B = A + B, (A + B)(A + C) = A + BC</li>
+    <li class="frag">DeMorgan: <span class="ov">XY</span> = <span class="ov">X</span> + <span class="ov">Y</span> · <span class="ov">X + Y</span> = <span class="ov">X</span><span class="ov">Y</span></li>
+    <li class="frag">วิเคราะห์วงจร: เขียนนิพจน์ทีละเกทจากอินพุตไปเอาต์พุต → ประเมิน → ตาราง 2ⁿ แถว</li>
+  </ul>
+  <aside class="notes">มอบหมาย: แบบทดสอบท้ายบทบนเว็บ</aside>
+</section>
+
+<section class="slide">
+  <h2>เช็กความเข้าใจ</h2>
+  <div class="grid-2" style="font-size:21px;gap:16px">
+    <div class="card"><b>Q1</b> ลดรูป A + AB + ABC<div class="frag acc" style="margin-top:6px">→ A (ข้อ 10 สองครั้ง)</div></div>
+    <div class="card"><b>Q2</b> ลดรูป AB + A<span class="ov">B</span><div class="frag acc" style="margin-top:6px">→ A(B + <span class="ov">B</span>) = A · 1 = A</div></div>
+    <div class="card"><b>Q3</b> ใช้ DeMorgan กับ complement ของ (A + <span class="ov">B</span>)C<div class="frag acc" style="margin-top:6px">→ <span class="ov">A</span>B + <span class="ov">C</span></div></div>
+    <div class="card"><b>Q4</b> AB + C มีกี่แถวที่ได้ 1?<div class="frag acc" style="margin-top:6px">→ 5 แถว (C=1: 4 แถว, AB=1,C=0: 1 แถว)</div></div>
+  </div>
+  <aside class="notes">exit ticket ก่อนเข้าปฏิบัติการ</aside>
+</section>
+
+<section class="slide">
+  <div class="kicker">ปฏิบัติการสัปดาห์ที่ 5</div>
+  <h2>พิสูจน์ความเทียบเท่าของวงจร</h2>
+  <ol class="small" style="line-height:1.7">
+    <li>กฎการกระจาย: A(B + C) เทียบ AB + AC</li>
+    <li>ข้อ 10: A + AB เทียบสาย A ตรง</li>
+    <li>ข้อ 11: A + <span class="ov">A</span>B เทียบ A + B</li>
+    <li>DeMorgan: 7400 เทียบ Negative-OR · 7402 เทียบ Negative-AND</li>
+    <li>วงจรในรูปที่ 4.16 ครบ 16 กรณี เทียบตารางที่ 4.5</li>
+    <li>นับเกท/ตัวถังก่อน–หลังลดรูป → ปูทางสู่บทที่ 5</li>
+  </ol>
+  <p class="mini muted">รายละเอียดอยู่ท้ายหน้าเนื้อหาบทที่ 4</p>
+  <aside class="notes">ใบงานปฏิบัติการที่ 3</aside>
+</section>
+
+<section class="slide section">
+  <div class="kicker">สัปดาห์หน้า</div>
+  <div class="no">05</div>
+  <h2>การลดรูปนิพจน์บูลีน</h2>
+  <p class="muted">รูปแบบ SOP และ POS · แผนผังคาร์โนห์ · don’t care <span class="clo-chip">CLO2</span></p>
+  <aside class="notes">ให้ทบทวนหลักเกณฑ์ 12 ข้อและ DeMorgan ให้คล่อง</aside>
+</section>
+
+</div></div>
+</body>
+</html>

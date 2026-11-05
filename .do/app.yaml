@@ -1,0 +1,16 @@
+# DigitalOcean App Platform spec — static site (no server cost tier needed)
+# 1) push this "web" folder to a GitHub repo (repo root = this folder)
+# 2) แก้ github.repo ด้านล่างให้เป็น repo จริง
+# 3) doctl apps create --spec .do/app.yaml   (หรือสร้างผ่านหน้าเว็บ DO แล้วเลือก Static Site)
+name: dld-517112
+region: sgp
+static_sites:
+  - name: web
+    github:
+      repo: YOUR_GITHUB_USER/dld-517112-web
+      branch: main
+      deploy_on_push: true
+    source_dir: /
+    output_dir: /
+    index_document: index.html
+    error_document: 404.html

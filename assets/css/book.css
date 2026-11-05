@@ -1,0 +1,194 @@
+/* =========================================================
+   book.css — styles for lesson content converted from the
+   teaching document (source/content_chN.html) by build_chapter.py
+   All rules are scoped to .book so they never clash with main.css
+   ========================================================= */
+.book { --b-pri: var(--ink); --b-acc: var(--accent); --b-acc2: var(--brand); }
+.book .lead { font-size: 18.5px; color: var(--ink-2); }
+.book section.sec > h2, .book h2 { font-size: 27px; display: flex; gap: 12px; align-items: baseline; padding-bottom: 10px; border-bottom: 1px solid var(--line); margin-top: 0; }
+.book h3 { font-size: 21px; margin-top: 34px; display: flex; gap: 10px; align-items: baseline; }
+.book h2 .no, .book h3 .no { font-family: var(--mono); color: var(--brand); font-weight: 600; }
+.book strong { color: var(--ink); }
+.book .term { color: var(--brand); font-weight: 600; }
+.book .ans { color: var(--accent); font-weight: 700; }
+.book em { font-style: normal; color: var(--ink-2); }
+.book .ul { text-decoration: underline; text-underline-offset: 3px; }
+.book .mono { font-family: var(--mono); }
+.book sup, .book sub { font-size: .72em; }
+
+/* ---------- SVG diagrams from the book (hard-coded dark ink) ---------- */
+.book svg.fig-svg { display: block; overflow: visible; }
+.book .dgm { margin: 12px 0 16px; overflow-x: auto; }
+.book .dgm.c { display: flex; justify-content: center; }
+.book figure { margin: 22px 0; text-align: center; }
+.book figure svg.fig-svg { margin: 0 auto; }
+.book figcaption { font-size: 14.5px; color: var(--ink-2); margin-top: 8px; }
+.book .cap-no, .book .tcap .cap-no { font-weight: 700; color: var(--ink); margin-right: 6px; }
+:root[data-theme="dark"] .book svg.fig-svg { background: var(--fig-bg); border-radius: 10px; padding: 8px; box-sizing: content-box; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .book svg.fig-svg { background: var(--fig-bg); border-radius: 10px; padding: 8px; box-sizing: content-box; } }
+
+.book .calc { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 14px 40px; margin: 10px 0 16px; }
+.book .calc.col { flex-direction: column; gap: 10px; }
+.book .ci { display: flex; align-items: flex-start; gap: 10px; min-width: 0; max-width: 100%; overflow-x: auto; }
+.book .ci.v { flex-direction: column; gap: 4px; }
+.book .ci-l { font-weight: 600; color: var(--brand); padding-top: 6px; min-width: 28px; font-size: 15px; }
+
+/* ---------- expressions, rules, statements ---------- */
+.book .expr, .book .expr-block { font-family: var(--font); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 16px; margin: 10px 0 16px; overflow-x: auto; width: fit-content; max-width: 100%; }
+.book .expr .f { font-weight: 700; color: var(--brand); }
+.book .rules { display: grid; grid-template-columns: max-content 1fr; gap: 4px 24px; margin: 10px 0 18px; padding: 12px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; width: fit-content; max-width: 100%; }
+.book .rules .r { font-family: var(--mono); text-align: right; white-space: nowrap; }
+.book .rules .r b { color: var(--accent); }
+.book .rules .x { color: var(--ink-2); }
+.book .statement { background: var(--accent-soft); border-left: 5px solid var(--accent); border-radius: 0 10px 10px 0; padding: 10px 16px; margin: 12px 0 18px; font-weight: 600; }
+.book .note { display: block; background: var(--brand-soft); border-radius: 10px; padding: 10px 16px; margin: 12px 0 18px; font-size: 15.5px; }
+.book .note-tag { font-weight: 700; color: var(--brand); margin-right: 6px; }
+.book .seq { font-family: var(--mono); line-height: 2; margin: 8px 0 16px; padding: 10px 16px; background: var(--surface); border-radius: 10px; border: 1px solid var(--line); overflow-x: auto; }
+.book .lowhead { font-weight: 700; color: var(--ink); margin: 22px 0 6px; }
+.book .lowhead .n { display: inline-block; background: var(--brand); color: var(--brand-ink); border-radius: 6px; padding: 0 8px; margin-right: 8px; font-size: 14px; }
+.book ul.reasons li::marker, .book ol.steps li::marker { color: var(--accent); font-weight: 700; }
+.book ul.reasons li, .book ol.steps li { margin-bottom: 6px; }
+
+/* ---------- examples & exercises ---------- */
+.book .example { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 12px; background: var(--surface); padding: 16px 20px; margin: 22px 0; }
+.book .example .ex-head { margin-bottom: 4px; }
+.book .example .ex-tag { font-weight: 700; color: var(--accent); }
+.book .example .opts, .book .exercise .opts { display: flex; flex-wrap: wrap; gap: 4px 28px; margin: 4px 0 6px; font-family: var(--mono); }
+.book .opts b { color: var(--brand); font-family: var(--font); margin-right: 4px; }
+.book details.solution { margin-top: 10px; background: var(--surface-2); border-radius: 10px; padding: 8px 14px; }
+.book details.solution > summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 2px 0; }
+.book details.solution[open] > summary { margin-bottom: 8px; }
+.book .exercise { border: 1px dashed var(--brand); border-radius: 12px; background: var(--brand-soft); padding: 14px 20px; margin: 24px 0; }
+.book .exercise .ex-title { font-weight: 700; color: var(--brand); }
+.book .exercise ol { margin: 6px 0 0; padding-left: 1.3em; }
+.book .exercise li { margin: 6px 0; }
+
+/* ---------- tables ---------- */
+.book .table-wrap { border: 0; background: transparent; overflow-x: auto; margin: 16px 0; }
+.book .tcap { font-size: 15px; color: var(--ink-2); margin-bottom: 8px; }
+.book .tt-row { display: flex; flex-wrap: wrap; gap: 24px; }
+.book table.tt { border-collapse: collapse; margin: 8px 0 14px; background: var(--surface); border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+.book table.tt th { background: var(--surface-2); font-weight: 600; font-size: 14px; color: var(--ink-2); padding: 7px 14px; text-align: center; white-space: nowrap; }
+.book table.tt td { padding: 4px 14px; text-align: center; border-top: 1px solid var(--line); font-family: var(--mono); }
+.book table.tt td.out, .book table.tt th.out { color: var(--accent); font-weight: 700; }
+.book table.tt.wt th { text-align: left; }
+.book table.data { width: auto; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 15px; }
+.book table.data th { background: var(--brand); color: var(--brand-ink); font-weight: 600; font-size: 14px; padding: 7px 10px; text-align: center; }
+.book table.data th.fr { background: var(--accent); color: #fff; }
+.book table.data td { padding: 6px 10px; text-align: center; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 14.5px; }
+.book table.data td.pw { background: var(--brand-soft); font-weight: 700; color: var(--brand); }
+.book table.data td.pw.fr { background: var(--accent-soft); color: var(--accent); }
+.book table.data td small { display: block; font-size: 11px; color: var(--ink-3); }
+.book .src-note { font-size: 13px; color: var(--ink-3); margin-top: 6px; }
+
+/* long division */
+.book .ldiv-row { display: flex; flex-wrap: wrap; gap: 30px; margin: 10px 0 16px; }
+.book .ldiv-row .pair { display: flex; gap: 22px; align-items: flex-start; }
+.book table.ldiv { border-collapse: collapse; font-family: var(--mono); }
+.book table.ldiv td { padding: 0 5px; min-width: 14px; text-align: center; line-height: 1.8; }
+.book table.ldiv td.q { color: var(--accent); font-weight: 700; }
+.book table.ldiv td.dv { text-align: right; padding-right: 8px; }
+.book table.ldiv td.br { border-right: 2px solid var(--ink); }
+.book table.ldiv td.top, .book table.ldiv td.line { border-top: 2px solid var(--ink); }
+.book table.ldiv.dec td { color: var(--ink-3); }
+
+/* ASCII */
+.book table.ascii { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 11.5px; background: var(--surface); }
+.book table.ascii th { background: var(--brand); color: var(--brand-ink); padding: 4px 2px; font-weight: 600; }
+.book table.ascii td { text-align: center; padding: 1px 3px; border-top: 1px solid var(--line); }
+.book table.ascii td.dc { font-weight: 700; color: var(--brand); border-left: 2px solid var(--line); }
+.book table.ascii td.ch { color: var(--accent); font-weight: 700; }
+.book table.ascii td.ctl { color: var(--brand); font-weight: 500; font-size: 10.5px; }
+.book table.ascii tr:nth-child(even) td { background: var(--surface-2); }
+.book table.extascii { border-collapse: collapse; margin: 10px 0; }
+.book table.extascii th { background: var(--brand); color: var(--brand-ink); padding: 4px 0; width: 38px; }
+.book table.extascii td { width: 38px; height: 30px; text-align: center; border: 1px solid var(--line); font-family: var(--mono); font-size: 17px; background: var(--surface); }
+.book table.extascii td.acc { background: var(--accent-soft); }
+.book table.extascii td.box { background: var(--brand-soft); }
+.book b.lbl { color: var(--brand); }
+
+@media (max-width: 640px) {
+  .book .rules { grid-template-columns: 1fr; }
+  .book .rules .r { text-align: left; }
+  .book .example { padding: 14px; }
+}
+.book .tbl-scroll, .book .tt-row, .book .ldiv-row { max-width: 100%; overflow-x: auto; }
+.book .tt-row { flex-wrap: nowrap; }
+
+/* ---- additions for chapters with PNG figures (บทที่ 3 เป็นต้นไป) ---- */
+.book figure img { max-width: 100%; height: auto; background: #fff; border-radius: 8px; padding: 4px; }
+.book figure.parts .pgrid { display: grid; justify-content: center; align-items: end; row-gap: 6px; max-width: 100%; overflow-x: auto; }
+.book figure.parts .pgrid img { justify-self: center; margin: 0; }
+.book figure.parts .subcap { text-align: center; font-size: 14.5px; color: var(--ink-2); }
+.book svg.fig { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+:root[data-theme="dark"] .book svg.fig { background: var(--fig-bg); border-radius: 10px; padding: 8px; box-sizing: content-box; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .book svg.fig { background: var(--fig-bg); border-radius: 10px; padding: 8px; box-sizing: content-box; } }
+.book svg.pol { display: inline-block; width: .8em; height: .6em; vertical-align: -.02em; }
+.book .tblock { margin: 14px 0 18px; }
+.book .callout .callout-head { font-weight: 700; color: var(--brand); margin-bottom: 6px; }
+.book .callout ol { margin: 0; padding-left: 1.3em; }
+.book .callout li { margin-bottom: 4px; }
+.book .callout li b { color: var(--accent); }
+.book ul.bul li::marker { color: var(--accent); }
+.book p.sub4 { font-weight: 700; margin: 20px 0 6px; }
+.book p.sub4 .n { color: var(--brand); margin-right: 6px; }
+.book .nw { white-space: nowrap; }
+.book .expr-block.c { width: auto; text-align: center; font-weight: 700; font-size: 20px; margin-left: auto; margin-right: auto; }
+.book table.ic { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 15px; }
+.book table.ic th { background: var(--ink); color: var(--bg); font-weight: 600; font-size: 14px; padding: 7px 10px; text-align: center; }
+.book table.ic th.nm { background: var(--accent); color: #fff; }
+.book table.ic td { padding: 6px 10px; text-align: center; border-top: 1px solid var(--line); }
+.book table.ic td.l { text-align: left; }
+.book table.ic td.k { font-weight: 700; background: var(--surface-2); font-family: var(--mono); }
+.book table.ic td.nm { color: var(--accent); font-weight: 700; background: var(--accent-soft); }
+.book table.ic tr.foot td { font-size: 13px; color: var(--ink-3); text-align: left; }
+.book table.tt thead tr:not(:last-child) th { color: var(--brand); }
+.book .exercise ol.num { padding-left: 1.3em; margin: 6px 0 0; }
+
+/* ---- ตัวแปรสีของเล่ม (ใช้โดย chapters/NN/chapter.css ที่แปลงจากเล่ม) ---- */
+.book { --pri: var(--ink); --acc: var(--accent); --acc2: var(--brand); --soft: var(--surface-2); --soft2: var(--accent-soft); --hang: 0px; }
+/* กล่องเข้มแบบในเล่ม (div.callout จากต้นฉบับ) */
+.book .bk-callout { background: #262c38; color: #fff; border: 0; border-radius: 12px; padding: 14px 20px; }
+:root[data-theme="dark"] .book .bk-callout { background: #222b46; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .book .bk-callout { background: #222b46; } }
+.book .bk-callout .callout-head { color: #ffb788; }
+.book .bk-callout li b, .book .bk-callout strong { color: #ffb788; }
+.book .bk-callout .expr { background: transparent; border-color: rgba(255,255,255,.25); color: #fff; }
+@media (max-width: 700px) { .book .expr.numbered { padding-left: 0 !important; padding-right: 0 !important; } .book .expr .eqn { position: static; display: block; transform: none; } }
+.book ul.defs { list-style: none; padding-left: 0; }
+.book ul.defs li { margin-bottom: 8px; }
+.book ul.defs .term { display: inline-block; min-width: 6.5em; }
+.book .deriv, .book .xsteps, .book .parts3 { max-width: 100%; overflow-x: auto; }
+@media (max-width: 700px) { .book .deriv .why { padding-left: 12px; white-space: normal; min-width: 140px; } }
+@media (max-width: 700px) {
+  .book .m, .book .expr, .book .expr-block, .book .rom li, .book .num li { white-space: normal !important; }
+  .book .exercise, .book .ex-body, .book ol.rom { min-width: 0; max-width: 100%; }
+  .book ol.rom { grid-template-columns: 1fr !important; }
+}
+@media (max-width: 700px) { .book .ab4 { grid-template-columns: 1fr !important; margin-left: 0 !important; } }
+
+/* mobile: sub-figure labels follow the scaled image; truth tables side-by-side wrap */
+@media (max-width: 700px) {
+  main .book .sublab { max-width: 100%; margin-left: 0; }
+  main .book .sublab span { font-size: 11px; white-space: normal; max-width: 48%; text-align: center; line-height: 1.2; }
+  main .book .tt-row { flex-wrap: wrap; }
+  main .book svg.ckt, main .book .example svg.ckt { max-width: 100%; height: auto; margin-left: 0 !important; }
+  main .book .ovl, main .book .ovl img { max-width: 100%; height: auto; margin-left: 0 !important; }
+  main .book .table-wrap { margin-left: 0 !important; max-width: 100%; }
+  main .book .subrow { flex-wrap: wrap; gap: 14px !important; padding-left: 0; }
+  main .book .subrow .sub img { max-width: 100%; height: auto; }
+  main .book ol.nsteps.row3 { display: block; }
+  main .book .ovlab { max-width: 100%; margin-left: 0 !important; }
+  main .book .ovlab span { font-size: 11px; }
+  main .book svg.fig { margin-left: 0 !important; height: auto !important; }
+  main .widget .seg { flex-wrap: wrap; }
+  main .book .svgfig svg, main .book svg.f10 { max-width: 100%; height: auto !important; margin-left: 0 !important; }
+  main .book .opts { grid-template-columns: 1fr !important; display: grid; }
+  main .book .opts span { white-space: normal !important; }
+}
+
+/* โค้ดจากเล่ม (บทที่ 12) — ขยายจากขนาดพิมพ์ให้อ่านบนจอได้ และเลื่อนแนวนอนได้ */
+main .book pre.code, main .book .simout pre { font-size: 13.5px; line-height: 1.5; overflow-x: auto; }
+main .book pre.code .ln { width: 30px; padding-right: 10px; }
+main .book code, main .book .cd { font-size: .88em; white-space: normal; }
+@media (max-width: 700px) { main .book pre.code, main .book .simout pre { font-size: 12px; } main .book .cmp2 { display: block !important; } main .book .cmp2 > div { min-width: 0; margin-bottom: 10px; } }

@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>บทที่ 4 พีชคณิตบูลีน · 517 112</title>
+<meta name="description" content="517 112 การออกแบบวงจรตรรกะเชิงเลข — บทที่ 4 พีชคณิตบูลีน (Boolean Algebra)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Prompt:wght@400;600;700&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/book.css">
+<link rel="stylesheet" href="chapter.css">
+<script src="../../assets/js/site.js"></script>
+<script src="../../assets/js/logic.js"></script>
+<script src="../../assets/js/numbers.js"></script>
+<script src="../../assets/js/boolean.js"></script>
+<script src="widgets.js"></script>
+</head>
+<body>
+<!-- สร้างอัตโนมัติด้วย web/tools/build_chapter.py — แก้เนื้อหาที่ source/content_ch4.html หรือ chapter.json แล้วรันใหม่ -->
+<header class="topbar">
+  <a class="brand" href="../../index.html"><span class="chip">517 112</span><span>Digital Logic Design</span></a>
+  <span class="crumb">/ บทที่ 4 พีชคณิตบูลีน</span>
+  <span class="spacer"></span>
+  <a class="btn sm" href="slides.html">▶ สไลด์</a>
+  <button class="btn sm icon" data-theme-toggle title="สลับโหมดสว่าง/มืด" aria-label="สลับธีม">◐</button>
+</header>
+
+<div class="layout">
+  <nav class="toc-side" aria-label="สารบัญบทที่ 4">
+    <h4>บทที่ 4</h4>
+    <ol><li><a href="#overview">ภาพรวมและจุดประสงค์</a></li><li><a href="#s4-1">4.1 ที่มาของพีชคณิตบูลีน</a></li><li><a href="#s4-2">4.2 การปฏิบัติการและสมการบูลีน</a></li><li class="sub"><a href="#s4-2-1">4.2.1 การบวกแบบบูลีน (Boolean Addition)</a></li><li class="sub"><a href="#s4-2-2">4.2.2 การคูณแบบบูลีน (Boolean Multipli…</a></li><li><a href="#s4-3">4.3 กฎและหลักเกณฑ์ของพีชคณิตบูลีน</a></li><li class="sub"><a href="#s4-3-1">4.3.1 กฎของพีชคณิตบูลีน</a></li><li class="sub"><a href="#s4-3-2">4.3.2 หลักเกณฑ์ของพีชคณิตบูลีน (Rules …</a></li><li><a href="#s4-4">4.4 ทฤษฎีบทของ DeMorgan</a></li><li class="sub"><a href="#s4-4-1">4.4.1 การประยุกต์ใช้ทฤษฎีบทของ DeMorgan</a></li><li><a href="#s4-5">4.5 การใช้พีชคณิตบูลีนเพื่อวิเคราะห์…</a></li><li class="sub"><a href="#s4-5-1">4.5.1 นิพจน์บูลีนสำหรับวงจรลอจิก</a></li><li class="sub"><a href="#s4-5-2">4.5.2 การสร้างตารางค่าความจริงจากวงจรล…</a></li><li><a href="#summary">สรุปท้ายบท</a></li><li><a href="#quiz">แบบทดสอบท้ายบท</a></li><li><a href="#lab">ปฏิบัติการสัปดาห์ที่ 5</a></li></ol>
+    <div class="side-actions">
+      <a class="btn primary" href="slides.html">▶ เปิดสไลด์บรรยาย</a>
+      <a class="btn" href="../../index.html">← หน้ารายวิชา</a>
+    </div>
+  </nav>
+
+  <main class="lesson">
+    <div class="hero">
+      <div class="ch-label">CHAPTER 04 · สัปดาห์ที่ 5</div>
+      <h1>พีชคณิตบูลีน</h1>
+      <div class="en">Boolean Algebra</div>
+      <div class="meta"><span>บรรยาย 2 ชม. + ปฏิบัติการ 2 ชม.</span><span>CLO2</span><span>CLO4</span><span>PLO10</span><span>5 หัวข้อ · 6 แบบจำลองเชิงโต้ตอบ</span></div>
+      <div class="hero-actions">
+        <a class="btn" href="slides.html">▶ สไลด์บรรยาย</a>
+        <a class="btn ghost" href="#quiz">แบบทดสอบท้ายบท</a>
+        <a class="btn ghost" href="#lab">ใบงานปฏิบัติการ</a>
+      </div>
+    </div>
+
+    <section id="overview">
+      <div class="grid-2">
+        <div class="card objectives">
+          <h3 style="font-size:18px">🎯 จุดประสงค์ของบทเรียน</h3>
+          <ol><li>สามารถประยุกต์ใช้กฎและหลักเกณฑ์พื้นฐานของพีชคณิตบูลีนได้</li><li>สามารถประยุกต์ใช้ทฤษฎีบทของ DeMorgan กับสมการบูลีนได้</li><li>เขียนอธิบายวงจรการเชื่อมต่อของเกทต่าง ๆ ให้อยู่ในรูปของสมการบูลีนได้</li><li>ประเมินผลลัพธ์ของสมการบูลีนที่กำหนดให้ได้</li></ol>
+        </div>
+        <div class="card">
+          <h3 style="font-size:18px">🧭 ความเชื่อมโยงกับ มคอ.3</h3>
+          <p style="margin:0 0 8px"><span class="clo-chip">CLO2</span> อธิบายเทคนิคการลดรูปวงจรตรรกะ</p><p style="margin:0 0 8px"><span class="clo-chip">CLO4</span> อธิบายหลักการตรรกะเชิงเลขเบื้องต้นในการนำไปใช้สร้างวงจรดิจิทัลและการประยุกต์ใช้ในการสร้างระบบคอมพิวเตอร์</p>
+          <p style="margin:0;font-size:15px;color:var(--ink-2)"><b>กิจกรรม:</b> บรรยาย / แบบฝึกหัด · ปฏิบัติการ: พิสูจน์ความเทียบเท่าของวงจร<br><b>การประเมิน:</b> แบบฝึกหัดและรายงานผลการทดลอง (20%) · สอบกลางภาค บทที่ 1–6 (30%)</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="book">
+<section class="sec"><h2 id="s4-1"><span class="no">4.1</span> ที่มาของพีชคณิตบูลีน</h2>
+<p class="lead">ในปี ค.ศ. 1854 <strong>จอร์จ บูล</strong> (<em>George Boole</em>) ได้ตีพิมพ์ผลงานที่มีชื่อว่า “<em>An Investigation of the Laws of Thought, on Which Are Founded the Mathematical Theories of Logic and Probabilities</em>” ซึ่งผลงานนี้เป็นสิ่งที่ทำให้ <strong>พีชคณิตเชิงตรรก</strong> (<em>logical algebra</em>) ได้ถือกำเนิดขึ้น และทุกวันนี้เราเรียกกันว่า <strong>พีชคณิตบูลีน</strong> (<em>Boolean Algebra</em>) ซึ่งเป็นวิธีที่สะดวกและเป็นระบบเพื่อการอธิบายและวิเคราะห์การปฏิบัติการของวงจรเชิงตรรก และนักคณิตศาสตร์นาม <strong>คล็อด แชนนอน</strong> (<em>Claude Shannon</em>) ได้นำผลงานของบูลมาประยุกต์ใช้สำหรับการวิเคราะห์และออกแบบวงจรลอจิก โดยในปี ค.ศ. 1938 เขาได้เขียนวิทยานิพนธ์หัวข้อ “<em>A Symbolic Analysis of Relay and Switching Circuits</em>” เอาไว้</p>
+</section><section class="sec"><h2 id="s4-2"><span class="no">4.2</span> การปฏิบัติการและสมการบูลีน</h2>
+<p>พีชคณิตบูลีนเป็นคณิตศาสตร์สำหรับระบบดิจิทัล ซึ่งเป็นความรู้พื้นฐานที่สำคัญอย่างมากสำหรับผู้เรียนด้านนี้ เพื่อที่จะเข้าใจและสามารถทำการวิเคราะห์วงจรลอจิกได้ สำหรับในบทนี้อาจมีคำศัพท์ภาษาอังกฤษหลายคำที่ขอใช้คำทับศัพท์ภาษาอังกฤษไปเลย เพื่อไม่ให้เกิดความเข้าใจที่ผิดเพี้ยนอันเนื่องมาจากคำแปลภาษาไทยที่ไม่สามารถหามาทดแทนได้อย่างตรงและกระชับ ซึ่ง 3 คำแรกได้แก่คำว่า variable, complement และ literal ซึ่งจะขออธิบายนิยามเอาไว้ดังต่อไปนี้</p>
+<ul class="defs">
+<li><span class="term">Variable</span> เป็นสัญลักษณ์ (ซึ่งต่อไปจะใช้อักษรพิมพ์ใหญ่) ที่ใช้สำหรับเป็นตัวแทนของค่าปริมาณทางลอจิก (<em>logical quantity</em>) ซึ่ง variable อันหนึ่งสามารถจะมีค่าเป็น 1 หรือ 0 ก็ได้</li>
+<li><span class="term">Complement</span> คือนิเสธของ variable และจะบ่งได้ด้วยการใส่ขีดกำกับเอาไว้ด้านบนอักษรของ variable นั้น ๆ ตัวอย่างเช่น complement ของ variable A ก็คือ <span class="ov">A</span> ถ้า A = 1 จะได้ <span class="ov">A</span> = 0 และถ้า A = 0 จะได้ <span class="ov">A</span> = 1 complement ของ A เราอ่านออกเสียงว่า “น็อตเอ” หรือ “เอบาร์” ก็ได้ ในบางตำราอาจมีการใช้เครื่องหมาย prime (′) เพื่อบ่งว่าเป็น complement ของ variable ใด ๆ เช่น B′ เพื่อบอกว่าเป็น complement ของ B เป็นต้น</li>
+<li><span class="term">Literal</span> หมายถึง variable หรือ complement ของ variable</li>
+</ul>
+<h3 id="s4-2-1"><span class="no">4.2.1</span> การบวกแบบบูลีน (Boolean Addition)</h3>
+<p>การบวกแบบบูลีนเทียบเท่ากับปฏิบัติการ <span class="gate">OR</span> รูปข้างล่างนี้จะแสดงให้เห็นถึงความสัมพันธ์ของการบวกแบบบูลีนกับ OR gate</p>
+<figure><img alt="" loading="lazy" src="img/fig4-or.png" style="width:350px"/></figure>
+<p><strong>Sum term</strong> ในพีชคณิตบูลีนหมายถึงผลรวมของ literal ส่วนในเรื่องของวงจรลอจิก sum term คือผลลัพธ์ของปฏิบัติการ OR โดยที่ไม่มี AND เข้ามาเกี่ยวข้อง ตัวอย่างของ sum term ได้แก่ <b>A + B</b>,  <b>A + <span class="ov">B</span></b>,  <b>A + B + <span class="ov">C</span></b> และ <b><span class="ov">A</span> + B + C + <span class="ov">D</span></b> เป็นต้น</p>
+<p>Sum term จะมีค่าเท่ากับ 1 เมื่อ literal ตัวใดตัวหนึ่งหรือมากกว่านั้นเป็น 1 และ sum term จะมีค่าเป็น 0 เฉพาะกรณีที่ทุก literal มีค่าเป็น 0 ทั้งหมด</p>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 4.1</span></div>
+<p>จงหาค่าของ A, B, C และ D ที่ทำให้ sum term <b>A + <span class="ov">B</span> + C + <span class="ov">D</span></b> มีค่าเท่ากับ 0</p>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>สำหรับ sum term ที่มีผลลัพธ์เป็น 0 นั้น เกิดจากการที่ทุก literal ที่ประกอบอยู่นั้นมีค่าเป็น 0 ดังนั้นเราจะได้ว่า A = 0, <span class="ov">B</span> = 0 (B = 1), C = 0 และ <span class="ov">D</span> = 0 (D = 1)</p>
+<div class="expr">A + <span class="ov">B</span> + C + <span class="ov">D</span> = 0 + <span class="ov">1</span> + 0 + <span class="ov">1</span> = 0 + 0 + 0 + 0 = <span class="ans">0</span></div>
+</details></div>
+<h3 id="s4-2-2"><span class="no">4.2.2</span> การคูณแบบบูลีน (Boolean Multiplication)</h3>
+<p>การคูณแบบบูลีนเทียบเท่ากับปฏิบัติการ <span class="gate">AND</span> รูปข้างล่างนี้จะแสดงให้เห็นถึงความสัมพันธ์ของการคูณแบบบูลีนกับ AND gate</p>
+<figure><img alt="" loading="lazy" src="img/fig4-and.png" style="width:350px"/></figure>
+<p><strong>Product term</strong> ในพีชคณิตบูลีนหมายถึงผลคูณของ literal ส่วนในเรื่องของวงจรลอจิก product term คือผลลัพธ์ของปฏิบัติการ AND โดยที่ไม่มี OR เข้ามาเกี่ยวข้อง ตัวอย่างของ product term ได้แก่ <b>AB</b>,  <b>A<span class="ov">B</span></b>,  <b>ABC</b> และ <b>A<span class="ov">B</span>C<span class="ov">D</span></b> เป็นต้น</p>
+<p>Product term จะมีค่าเท่ากับ 1 เฉพาะกรณีที่ทุก literal มีค่าเท่ากับ 1 เท่านั้น และ product term จะมีค่าเป็น 0 เมื่อ literal ตัวใดตัวหนึ่งหรือมากกว่านั้นมีค่าเท่ากับ 0</p>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 4.2</span></div>
+<p>จงหาค่าของ A, B, C และ D ที่ทำให้ product term <b>A<span class="ov">B</span>C<span class="ov">D</span></b> มีค่าเท่ากับ 1</p>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>สำหรับ product term ที่มีผลลัพธ์เป็น 1 นั้น เกิดจากการที่ทุก literal ที่ประกอบอยู่นั้นมีค่าเป็น 1 ดังนั้นเราจะได้ว่า A = 1, <span class="ov">B</span> = 1 (B = 0), C = 1 และ <span class="ov">D</span> = 1 (D = 0)</p>
+<div class="expr">A<span class="ov">B</span>C<span class="ov">D</span> = 1 · <span class="ov">0</span> · 1 · <span class="ov">0</span> = 1 · 1 · 1 · 1 = <span class="ans">1</span></div>
+</details></div>
+<div data-widget="termeval"></div></section><section class="sec"><h2 id="s4-3"><span class="no">4.3</span> กฎและหลักเกณฑ์ของพีชคณิตบูลีน</h2>
+<p>เนื่องจากพีชคณิตบูลีนเป็นคณิตศาสตร์แขนงหนึ่ง ซึ่งจะต้องมีกฎและหลักเกณฑ์ (<em>laws and rules</em>) อยู่มากมาย ในที่นี้จะกล่าวถึงส่วนที่มีความสำคัญต่อการเรียนรู้สำหรับการออกแบบและวิเคราะห์วงจรลอจิก</p>
+<h3 id="s4-3-1"><span class="no">4.3.1</span> กฎของพีชคณิตบูลีน</h3>
+<p>กฎพื้นฐานของพีชคณิตบูลีนก็เหมือนกับกฎของพีชคณิตทั่วไป ได้แก่</p>
+<ul class="reasons">
+<li><strong>กฎการสลับที่</strong> (<em>commutative law</em>) สำหรับการบวกและการคูณ</li>
+<li><strong>กฎการเปลี่ยนกลุ่ม</strong> (<em>associative law</em>) สำหรับการบวกและการคูณ</li>
+<li><strong>กฎการกระจาย</strong> (<em>distributive law</em>)</li>
+</ul>
+<p>ต่อไปจะเป็นการอธิบายกฎที่ได้กล่าวมาด้วยการใช้ตัวแปร 2 หรือ 3 ตัวแปรเพื่อทำความเข้าใจ แต่ในการใช้งานจริงจะไม่มีข้อจำกัดในเรื่องจำนวนตัวแปร</p>
+<p class="sub4"><span class="n">4.3.1.1</span>กฎการสลับที่</p>
+<p><u>กฎการสลับที่ของการบวก</u>สำหรับตัวแปร 2 ตัวสามารถเขียนได้ดังนี้</p>
+<div class="expr numbered chk">A + B = B + A<span class="eqn">สมการที่ 4.1</span></div>
+<p>กฎนี้กล่าวว่าลำดับของตัวแปรที่ทำการ OR กันนั้นสามารถสลับที่กันได้โดยจะไม่เกิดความแตกต่างของผลลัพธ์ เมื่อเราประยุกต์ใช้พีชคณิตบูลีนกับวงจรลอจิก การบวกกับการ OR จึงเป็นเรื่องเดียวกัน รูปที่ 4.1 ได้แสดงว่ากฎการสลับที่สามารถใช้ได้กับ OR gate กล่าวคือไม่ว่าอินพุต A หรือ B จะอยู่ตำแหน่งใดของ OR gate ก็ไม่มีผลต่อเอาต์พุต</p>
+<figure><img alt="รูปที่ 4.1 การประยุกต์ใช้กฎการสลับที่ของการบวก" loading="lazy" src="img/fig4-1.png" style="width:411px"/><figcaption><span class="cap-no">รูปที่ 4.1</span> การประยุกต์ใช้กฎการสลับที่ของการบวก</figcaption></figure>
+<p><u>กฎการสลับที่ของการคูณ</u>สำหรับตัวแปร 2 ตัวสามารถเขียนได้ดังนี้</p>
+<div class="expr numbered chk">AB = BA<span class="eqn">สมการที่ 4.2</span></div>
+<p>กฎนี้กล่าวว่าลำดับของตัวแปรที่ทำการ AND กันนั้นสามารถสลับที่กันได้โดยจะไม่เกิดความแตกต่างของผลลัพธ์ เมื่อเราประยุกต์ใช้พีชคณิตบูลีนกับวงจรลอจิก การคูณกับการ AND จึงเป็นเรื่องเดียวกัน รูปที่ 4.2 ได้แสดงว่ากฎการสลับที่สามารถใช้ได้กับ AND gate กล่าวคือไม่ว่าอินพุต A หรือ B จะอยู่ตำแหน่งใดของ AND gate ก็ไม่มีผลต่อเอาต์พุต</p>
+<figure><img alt="รูปที่ 4.2 การประยุกต์ใช้กฎการสลับที่ของการคูณ" loading="lazy" src="img/fig4-2.png" style="width:378px"/><figcaption><span class="cap-no">รูปที่ 4.2</span> การประยุกต์ใช้กฎการสลับที่ของการคูณ</figcaption></figure>
+<p class="sub4"><span class="n">4.3.1.2</span>กฎการเปลี่ยนกลุ่ม</p>
+<p><u>กฎการเปลี่ยนกลุ่มของการบวก</u>สามารถเขียนโดยการใช้ตัวแปรสามตัวดังนี้</p>
+<div class="expr numbered chk">A + (B + C) = (A + B) + C<span class="eqn">สมการที่ 4.3</span></div>
+<p>กฎข้อนี้กล่าวว่าเมื่อทำการ OR ตัวแปรตั้งแต่ 2 ตัวขึ้นไป การเปลี่ยนกลุ่มของการ OR กันจะไม่ทำให้เกิดผลลัพธ์ที่แตกต่างกันแต่อย่างใด ดังจะเห็นได้จากการประยุกต์ใช้กฎนี้กับบรรดา OR gate ในรูปที่ 4.3</p>
+<figure><img alt="รูปที่ 4.3 การประยุกต์ใช้กฎการเปลี่ยนกลุ่มของการบวก" loading="lazy" src="img/fig4-3.png" style="width:633px"/><figcaption><span class="cap-no">รูปที่ 4.3</span> การประยุกต์ใช้กฎการเปลี่ยนกลุ่มของการบวก</figcaption></figure>
+<p><u>กฎการเปลี่ยนกลุ่มของการคูณ</u>สามารถเขียนโดยการใช้ตัวแปรสามตัวดังนี้</p>
+<div class="expr numbered chk">A(BC) = (AB)C<span class="eqn">สมการที่ 4.4</span></div>
+<p>กฎข้อนี้กล่าวว่าเมื่อทำการ AND ตัวแปรตั้งแต่ 2 ตัวขึ้นไป การเปลี่ยนกลุ่มของการ AND กันจะไม่ทำให้เกิดผลลัพธ์ที่แตกต่างกันแต่อย่างใด ดังจะเห็นได้จากการประยุกต์ใช้กฎนี้กับบรรดา AND gate ในรูปที่ 4.4</p>
+<figure><img alt="รูปที่ 4.4 การประยุกต์ใช้กฎการเปลี่ยนกลุ่มของการคูณ" loading="lazy" src="img/fig4-4.png" style="width:572px"/><figcaption><span class="cap-no">รูปที่ 4.4</span> การประยุกต์ใช้กฎการเปลี่ยนกลุ่มของการคูณ</figcaption></figure>
+<p class="sub4"><span class="n">4.3.1.3</span>กฎการกระจาย</p>
+<p>กฎการกระจายสามารถเขียนได้ดังนี้</p>
+<div class="expr numbered chk">A(B + C) = AB + AC<span class="eqn">สมการที่ 4.5</span></div>
+<p>กฎนี้กล่าวว่าการ OR ตัวแปรตั้งแต่ 2 ตัวขึ้นไปแล้วนำเอาผลลัพธ์ที่ได้มาทำ AND กับตัวแปรเดี่ยวใด ๆ จะมีค่าเท่ากับการนำตัวแปรเดี่ยวนั้นมา AND กับตัวแปรอื่นแต่ละตัว แล้วจึงค่อยนำผลลัพธ์ที่ได้จากการ AND (ผลคูณ) มาทำการ OR กัน และกฎการกระจายนี้ในทางตรงกันข้ามก็คือความสามารถในการแยกแฟกเตอร์ เช่น <b class="chk">AB + AC = A(B + C)</b> รูปที่ 4.5 แสดงให้เห็นถึงการนำกฎการกระจายไปใช้กับวงจรเกท</p>
+<figure><img alt="รูปที่ 4.5 การประยุกต์ใช้กฎการกระจาย" loading="lazy" src="img/fig4-5.png" style="width:510px"/><figcaption><span class="cap-no">รูปที่ 4.5</span> การประยุกต์ใช้กฎการกระจาย</figcaption></figure>
+<div data-widget="lawcheck"></div><h3 id="s4-3-2"><span class="no">4.3.2</span> หลักเกณฑ์ของพีชคณิตบูลีน (Rules of Boolean Algebra)</h3>
+<p>ตารางที่ 4.1 เป็นรายการของหลักเกณฑ์พื้นฐานทั้ง 12 ข้อที่จะเป็นประโยชน์ในการจัดการ (<em>manipulate</em>) และทำให้สมการบูลีนอยู่ในรูปแบบที่ง่ายที่สุด (<em>simplify</em>)</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 4.1</span> หลักเกณฑ์พื้นฐานของพีชคณิตบูลีน 12 ข้อ<span class="sub">ตัวแปร A, B และ C สามารถเป็นตัวแทนตัวแปรเดี่ยวหรือกลุ่มของตัวแปรก็ได้</span></div>
+<div class="tbl-scroll"><table class="rules">
+<tr><td class="no">1</td><td class="chk">A + 0 = A</td><td class="gap"></td><td class="no">7</td><td class="chk">A · A = A</td></tr>
+<tr><td class="no">2</td><td class="chk">A + 1 = 1</td><td class="gap"></td><td class="no">8</td><td class="chk">A · <span class="ov">A</span> = 0</td></tr>
+<tr><td class="no">3</td><td class="chk">A · 0 = 0</td><td class="gap"></td><td class="no">9</td><td class="chk"><span class="ov"><span class="ov">A</span></span> = A</td></tr>
+<tr><td class="no">4</td><td class="chk">A · 1 = A</td><td class="gap"></td><td class="no">10</td><td class="chk">A + AB = A</td></tr>
+<tr><td class="no">5</td><td class="chk">A + A = A</td><td class="gap"></td><td class="no">11</td><td class="chk">A + <span class="ov">A</span>B = A + B</td></tr>
+<tr><td class="no">6</td><td class="chk">A + <span class="ov">A</span> = 1</td><td class="gap"></td><td class="no">12</td><td class="chk">(A + B)(A + C) = A + BC</td></tr>
+</table></div>
+</div>
+<div class="keep">
+<p><span class="rule-head">หลักเกณฑ์ข้อที่ 1</span> <span class="rule-eq">A + 0 = A</span> ตัวแปรใด ๆ ที่นำมา OR กับ 0 จะได้ผลลัพธ์เป็นตัวแปรนั้น ๆ ดังนั้นถ้าตัวแปรอินพุต A เป็น 1 ตัวแปรเอาต์พุต X จะมีค่าเท่ากับ 1 ซึ่งก็คือค่าของ A ในขณะนั้น แต่ถ้าเปลี่ยนเป็นตัวแปร A มีค่าเป็น 0 เอาต์พุตที่ได้ก็จะเป็น 0 ซึ่งก็คือค่าของ A ในขณะนั้นเช่นกัน หลักเกณฑ์นี้แสดงเอาไว้ในรูปที่ 4.6 ซึ่งขาอินพุตขาล่างกำหนดค่าคงที่เป็น 0</p>
+<figure><img alt="รูปที่ 4.6 หลักเกณฑ์ข้อที่ 1: A + 0 = A" loading="lazy" src="img/fig4-6.png" style="width:444px"/><figcaption><span class="cap-no">รูปที่ 4.6</span> หลักเกณฑ์ข้อที่ 1: A + 0 = A</figcaption></figure>
+</div>
+<div class="keep">
+<p><span class="rule-head">หลักเกณฑ์ข้อที่ 2</span> <span class="rule-eq">A + 1 = 1</span> ตัวแปรใด ๆ ที่ OR กับ 1 จะได้ผลลัพธ์เท่ากับ 1 เสมอ ไม่ว่าค่าของตัวแปรนั้น ๆ จะเป็นอะไรก็ตาม หลักเกณฑ์นี้แสดงเอาไว้ในรูปที่ 4.7 ซึ่งขาอินพุตขาล่างกำหนดค่าคงที่เป็น 1</p>
+<figure><img alt="รูปที่ 4.7 หลักเกณฑ์ข้อที่ 2: A + 1 = 1" loading="lazy" src="img/fig4-7.png" style="width:444px"/><figcaption><span class="cap-no">รูปที่ 4.7</span> หลักเกณฑ์ข้อที่ 2: A + 1 = 1</figcaption></figure>
+</div>
+<div class="keep">
+<p><span class="rule-head">หลักเกณฑ์ข้อที่ 3</span> <span class="rule-eq">A · 0 = 0</span> ตัวแปรใด ๆ ที่ AND กับ 0 จะได้ผลลัพธ์เท่ากับ 0 เสมอ ไม่ว่าค่าของตัวแปรนั้น ๆ จะเป็นอะไรก็ตาม หลักเกณฑ์นี้แสดงเอาไว้ในรูปที่ 4.8 ซึ่งขาอินพุตขาล่างกำหนดค่าคงที่เป็น 0</p>
+<figure><img alt="รูปที่ 4.8 หลักเกณฑ์ข้อที่ 3: A · 0 = 0" loading="lazy" src="img/fig4-8.png" style="width:444px"/><figcaption><span class="cap-no">รูปที่ 4.8</span> หลักเกณฑ์ข้อที่ 3: A · 0 = 0</figcaption></figure>
+</div>
+<div class="keep">
+<p><span class="rule-head">หลักเกณฑ์ข้อที่ 4</span> <span class="rule-eq">A · 1 = A</span> ตัวแปรใด ๆ ที่นำมา AND กับ 1 จะได้ผลลัพธ์เป็นตัวแปรนั้น ๆ เสมอ ถ้า A เป็น 0 เอาต์พุตของ AND gate จะได้ 0 และเมื่อ A เป็น 1 เอาต์พุตของ AND gate จะได้ 1 เนื่องจากอินพุตทั้งสองเป็น 1 หลักเกณฑ์นี้แสดงเอาไว้ในรูปที่ 4.9 ซึ่งขาอินพุตขาล่างกำหนดค่าคงที่เป็น 1</p>
+<figure><img alt="รูปที่ 4.9 หลักเกณฑ์ข้อที่ 4: A · 1 = A" loading="lazy" src="img/fig4-9.png" style="width:444px"/><figcaption><span class="cap-no">รูปที่ 4.9</span> หลักเกณฑ์ข้อที่ 4: A · 1 = A</figcaption></figure>
+</div>
+<div class="keep">
+<p><span class="rule-head">หลักเกณฑ์ข้อที่ 5</span> <span class="rule-eq">A + A = A</span> ตัวแปรใด ๆ ที่ทำการ OR กับตัวมันเองจะได้ผลลัพธ์เท่ากับตัวแปรนั้นเอง ถ้า A เป็น 0 ดังนั้น 0 + 0 = 0 และเมื่อ A เป็น 1 จะได้ 1 + 1 = 1 หลักเกณฑ์นี้แสดงเอาไว้ในรูปที่ 4.10 ซึ่งอินพุตทั้งสองเป็นตัวแปรเดียวกัน</p>
+<figure><img alt="รูปที่ 4.10 หลักเกณฑ์ข้อที่ 5: A + A = A" loading="lazy" src="img/fig4-10.png" style="width:444px"/><figcaption><span class="cap-no">รูปที่ 4.10</span> หลักเกณฑ์ข้อที่ 5: A + A = A</figcaption></figure>
+</div>
+<div class="keep">
+<p><span class="rule-head">หลักเกณฑ์ข้อที่ 6</span> <span class="rule-eq">A + <span class="ov">A</span> = 1</span> ตัวแปรใด ๆ ที่ทำการ OR กับ complement ของตัวมันเองจะได้ผลลัพธ์เป็น 1 เสมอ ถ้า A เป็น 0 ดังนั้น <b>0 + <span class="ov">0</span> = 1</b> และเมื่อ A เป็น 1 จะได้ <b>1 + <span class="ov">1</span> = 1</b> หลักเกณฑ์นี้แสดงเอาไว้ในรูปที่ 4.11 ซึ่งอินพุตหนึ่งเป็น complement ของอีกอินพุตหนึ่ง</p>
+<figure><img alt="รูปที่ 4.11 หลักเกณฑ์ข้อที่ 6: A + A = 1" loading="lazy" src="img/fig4-11.png" style="width:444px"/><figcaption><span class="cap-no">รูปที่ 4.11</span> หลักเกณฑ์ข้อที่ 6: A + <span class="ov">A</span> = 1</figcaption></figure>
+</div>
+<div class="keep">
+<p><span class="rule-head">หลักเกณฑ์ข้อที่ 7</span> <span class="rule-eq">A · A = A</span> ตัวแปรใด ๆ ที่ทำการ AND กับตัวมันเองจะได้ผลลัพธ์เท่ากับตัวแปรนั้น ถ้า A เป็น 0 ดังนั้น 0 · 0 = 0 และเมื่อ A เป็น 1 จะได้ 1 · 1 = 1 หลักเกณฑ์นี้แสดงเอาไว้ในรูปที่ 4.12 ซึ่งอินพุตทั้งสองเป็นตัวแปรเดียวกัน</p>
+<figure><img alt="รูปที่ 4.12 หลักเกณฑ์ข้อที่ 7: A · A = A" loading="lazy" src="img/fig4-12.png" style="width:444px"/><figcaption><span class="cap-no">รูปที่ 4.12</span> หลักเกณฑ์ข้อที่ 7: A · A = A</figcaption></figure>
+</div>
+<div class="keep">
+<p><span class="rule-head">หลักเกณฑ์ข้อที่ 8</span> <span class="rule-eq">A · <span class="ov">A</span> = 0</span> ตัวแปรใด ๆ ที่ทำการ AND กับ complement ของตัวมันเองจะได้ผลลัพธ์เป็น 0 เสมอ เพราะไม่ A ก็ <span class="ov">A</span> ตัวใดตัวหนึ่งจะต้องมีค่าเป็น 0 และเมื่อมี 0 ที่อินพุตหนึ่งของ AND gate ก็จะได้เอาต์พุตเป็น 0 อย่างแน่นอน หลักเกณฑ์นี้แสดงเอาไว้ในรูปที่ 4.13</p>
+<figure><img alt="รูปที่ 4.13 หลักเกณฑ์ข้อที่ 8: A · A = 0" loading="lazy" src="img/fig4-13.png" style="width:444px"/><figcaption><span class="cap-no">รูปที่ 4.13</span> หลักเกณฑ์ข้อที่ 8: A · <span class="ov">A</span> = 0</figcaption></figure>
+</div>
+<div class="keep">
+<p><span class="rule-head">หลักเกณฑ์ข้อที่ 9</span> <span class="rule-eq"><span class="ov"><span class="ov">A</span></span> = A</span> การทำ complement ซ้อนสองชั้นที่ตัวแปรใด ๆ จะได้ผลลัพธ์เท่ากับตัวแปรนั้น ๆ เพราะถ้าเริ่มจากตัวแปร A เมื่อทำการ complement ครั้งแรกก็จะได้ <span class="ov">A</span> และเมื่อนำเอา <span class="ov">A</span> มา complement ก็จะได้ A ซึ่งก็คือตัวแปรดั้งเดิม หลักเกณฑ์ข้อนี้แสดงเอาไว้ในรูปที่ 4.14 ที่ใช้อินเวอร์เตอร์</p>
+<figure><img alt="รูปที่ 4.14 หลักเกณฑ์ข้อที่ 9: A = A" loading="lazy" src="img/fig4-14.png" style="width:553px"/><figcaption><span class="cap-no">รูปที่ 4.14</span> หลักเกณฑ์ข้อที่ 9: <span class="ov"><span class="ov">A</span></span> = A</figcaption></figure>
+</div>
+<div class="keep">
+<p><span class="rule-head">หลักเกณฑ์ข้อที่ 10</span> <span class="rule-eq">A + AB = A</span> หลักเกณฑ์ข้อนี้สามารถพิสูจน์ได้ด้วยการประยุกต์ใช้กฎการกระจายร่วมกับหลักเกณฑ์ข้อที่ 2 และข้อที่ 4 ดังต่อไปนี้</p>
+<div class="deriv chain">
+<span class="l">A + AB</span><span class="r">= A(1 + B)</span><span class="why">ใช้การดึงตัวร่วม (กฎการกระจาย)</span>
+<span class="l"></span><span class="r">= A · 1</span><span class="why">หลักเกณฑ์ข้อที่ 2: 1 + B = 1</span>
+<span class="l"></span><span class="r">= A</span><span class="why">หลักเกณฑ์ข้อที่ 4: A · 1 = A</span>
+</div>
+</div>
+<p>เราสามารถพิสูจน์ด้วยตารางที่ 4.2 ที่แสดงตารางค่าความจริงและผลลัพธ์ของการทำให้วงจรลอจิกง่ายขึ้น</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 4.2</span> ตารางแสดงหลักเกณฑ์ข้อที่ 10: A + AB = A</div>
+<div class="tbl-scroll"><div class="eqtab">
+<table class="tt" data-tt="A,B,AB,A+AB">
+<thead><tr><th class="out">A</th><th>B</th><th>AB</th><th class="out">A + AB</th></tr></thead>
+<tbody>
+<tr><td class="out">0</td><td>0</td><td>0</td><td class="out">0</td></tr>
+<tr><td class="out">0</td><td>1</td><td>0</td><td class="out">0</td></tr>
+<tr><td class="out">1</td><td>0</td><td>0</td><td class="out">1</td></tr>
+<tr><td class="out">1</td><td>1</td><td>1</td><td class="out">1</td></tr>
+</tbody>
+<tfoot><tr><td class="eqS"></td><td class="eqM"><span class="eqlab" style="left:100%">equal</span></td><td class="eqM"></td><td class="eqE"></td></tr></tfoot>
+</table>
+<div class="ckt"><img alt="" loading="lazy" src="img/tab4-2ckt.png" style="width:170px"/></div>
+</div></div>
+<p class="tt-note">คอลัมน์ A กับคอลัมน์ A + AB มีค่าเท่ากันทุกแถว (equal) วงจรทางขวาจึงลดรูปเหลือเพียงการต่อสาย A ตรงไปยังเอาต์พุต (straight connection)</p>
+</div>
+<div class="keep">
+<p><span class="rule-head">หลักเกณฑ์ข้อที่ 11</span> <span class="rule-eq">A + <span class="ov">A</span>B = A + B</span> สามารถพิสูจน์ได้ดังต่อไปนี้</p>
+<div class="deriv chain">
+<span class="l">A + <span class="ov">A</span>B</span><span class="r">= (A + AB) + <span class="ov">A</span>B</span><span class="why">ข้อที่ 10: A = A + AB</span>
+<span class="l"></span><span class="r">= (AA + AB) + <span class="ov">A</span>B</span><span class="why">ข้อที่ 7: A = AA</span>
+<span class="l"></span><span class="r">= AA + AB + A<span class="ov">A</span> + <span class="ov">A</span>B</span><span class="why">ข้อที่ 8: เพิ่ม A<span class="ov">A</span> = 0 เข้าไป</span>
+<span class="l"></span><span class="r">= (A + <span class="ov">A</span>)(A + B)</span><span class="why">แยกตัวประกอบ (กฎการกระจาย)</span>
+<span class="l"></span><span class="r">= 1 · (A + B)</span><span class="why">ข้อที่ 6: A + <span class="ov">A</span> = 1</span>
+<span class="l"></span><span class="r">= A + B</span><span class="why">ข้อที่ 4: ตัด 1 ออกได้</span>
+</div>
+</div>
+<p>เราสามารถพิสูจน์ด้วยตารางที่ 4.3 ที่แสดงตารางค่าความจริงและผลลัพธ์ของการทำให้วงจรลอจิกง่ายขึ้น</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 4.3</span> ตารางแสดงหลักเกณฑ์ข้อที่ 11: A + <span class="ov">A</span>B = A + B</div>
+<div class="tbl-scroll"><div class="eqtab">
+<table class="tt">
+<thead><tr><th>A</th><th>B</th><th><span class="ov">A</span>B</th><th class="out">A + <span class="ov">A</span>B</th><th class="out">A + B</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>0</td><td class="out">0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td class="out">1</td><td class="out">1</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td class="out">1</td><td class="out">1</td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td class="out">1</td><td class="out">1</td></tr>
+</tbody>
+<tfoot><tr><td></td><td></td><td></td><td class="eqS"></td><td class="eqE"><span class="eqlab" style="left:0">equal</span></td></tr></tfoot>
+</table>
+<div class="ckt"><img alt="" loading="lazy" src="img/tab4-3ckt.png" style="width:208px"/></div>
+</div></div>
+<p class="tt-note">คอลัมน์ A + <span class="ov">A</span>B กับคอลัมน์ A + B มีค่าเท่ากันทุกแถว (equal) วงจรทางขวาส่วนบนจึงลดรูปเป็น OR gate เพียงตัวเดียว</p>
+</div>
+<div class="keep">
+<p><span class="rule-head">หลักเกณฑ์ข้อที่ 12</span> <span class="rule-eq">(A + B)(A + C) = A + BC</span> สามารถพิสูจน์ได้ดังต่อไปนี้</p>
+<div class="deriv chain">
+<span class="l">(A + B)(A + C)</span><span class="r">= AA + AC + AB + BC</span><span class="why">กฎการกระจาย</span>
+<span class="l"></span><span class="r">= A + AC + AB + BC</span><span class="why">ข้อที่ 7: AA = A</span>
+<span class="l"></span><span class="r">= A(1 + C) + AB + BC</span><span class="why">แยกตัวประกอบ (กฎการกระจาย)</span>
+<span class="l"></span><span class="r">= A · 1 + AB + BC</span><span class="why">ข้อที่ 2: 1 + C = 1</span>
+<span class="l"></span><span class="r">= A(1 + B) + BC</span><span class="why">แยกตัวประกอบ (กฎการกระจาย)</span>
+<span class="l"></span><span class="r">= A · 1 + BC</span><span class="why">ข้อที่ 2: 1 + B = 1</span>
+<span class="l"></span><span class="r">= A + BC</span><span class="why">ข้อที่ 4: A · 1 = A</span>
+</div>
+</div>
+<p>เราสามารถพิสูจน์ด้วยตารางที่ 4.4 ที่แสดงตารางค่าความจริงและผลลัพธ์ของการทำให้วงจรลอจิกง่ายขึ้น</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 4.4</span> ตารางแสดงหลักเกณฑ์ข้อที่ 12: (A + B)(A + C) = A + BC</div>
+<div class="tbl-scroll"><div class="eqtab" style="gap:33px">
+<table class="tt t44">
+<thead><tr><th>A</th><th>B</th><th>C</th><th>A + B</th><th>A + C</th><th class="out">(A + B)(A + C)</th><th>BC</th><th class="out">A + BC</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td class="out">0</td><td>0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td class="out">0</td><td>0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td class="out">0</td><td>0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td class="out">1</td><td>1</td><td class="out">1</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td class="out">1</td><td>0</td><td class="out">1</td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td class="out">1</td><td>0</td><td class="out">1</td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td class="out">1</td><td>0</td><td class="out">1</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td class="out">1</td><td>1</td><td class="out">1</td></tr>
+</tbody>
+<tfoot><tr><td></td><td></td><td></td><td></td><td></td><td class="eqS"></td><td class="eqM"><span class="eqlab" style="left:50%">equal</span></td><td class="eqE"></td></tr></tfoot>
+</table>
+<div class="ckt"><img alt="" loading="lazy" src="img/tab4-4ckt.png" style="width:156px"/></div>
+</div></div>
+<p class="tt-note">คอลัมน์ (A + B)(A + C) กับคอลัมน์ A + BC มีค่าเท่ากันทุกแถว (equal) วงจรทางขวาส่วนบนจึงลดรูปเป็นวงจรส่วนล่าง</p>
+</div>
+<div data-widget="rules12"></div></section><section class="sec"><h2 id="s4-4"><span class="no">4.4</span> ทฤษฎีบทของ DeMorgan</h2>
+<p>DeMorgan เป็นนักคณิตศาสตร์ที่เสนอสองทฤษฎีบทที่เป็นส่วนประกอบสำคัญในพีชคณิตบูลีน ซึ่งทฤษฎีบทของ DeMorgan นั้นสามารถใช้ตรวจสอบความถูกต้องของความเท่ากันระหว่าง <span class="gate">NAND</span> กับ <span class="gate">Negative-OR</span> และระหว่าง <span class="gate">NOR</span> กับ <span class="gate">Negative-AND</span> ได้</p>
+<div class="callout bk-callout">
+<div class="callout-head">ทฤษฎีบทแรกของ DeMorgan กล่าวไว้ว่า</div>
+<p class="thm">Complement ของผลคูณของเหล่าตัวแปรจะเท่ากับการทำ complement ของตัวแปรแต่ละตัวแล้วเอามาบวกกัน</p>
+<p>หรืออาจกล่าวได้อีกอย่างหนึ่งว่า <span class="thm">complement ของการนำตัวแปรตั้งแต่ 2 ตัวขึ้นไปมา AND กันจะมีค่าเท่ากับการ OR กันของ complement ของแต่ละตัวแปร</span></p>
+<p>เราสามารถเขียนสมการลอจิกของทฤษฎีบทนี้สำหรับการใช้ตัวแปร 2 ตัวได้ว่า</p>
+<div class="expr numbered chk"><span class="ov">XY</span> = <span class="ov">X</span> + <span class="ov">Y</span><span class="eqn">สมการที่ 4.6</span></div>
+</div>
+<div class="callout bk-callout">
+<div class="callout-head">ทฤษฎีบทที่สองของ DeMorgan กล่าวไว้ว่า</div>
+<p class="thm">Complement ของผลบวกของเหล่าตัวแปรจะเท่ากับการทำ complement ของตัวแปรแต่ละตัวแล้วเอามาคูณกัน</p>
+<p>หรืออาจกล่าวได้อีกอย่างหนึ่งว่า <span class="thm">complement ของการนำตัวแปรตั้งแต่ 2 ตัวขึ้นไปมา OR กันจะมีค่าเท่ากับการ AND กันของ complement ของแต่ละตัวแปร</span></p>
+<p>เราสามารถเขียนสมการลอจิกของทฤษฎีบทนี้สำหรับการใช้ตัวแปร 2 ตัวได้ว่า</p>
+<div class="expr numbered chk"><span class="ov">X + Y</span> = <span class="ov">X</span><span class="ov">Y</span><span class="eqn">สมการที่ 4.7</span></div>
+</div>
+<p>รูปที่ 4.15 แสดงการเทียบเท่ากันของเกทชนิดต่าง ๆ และตารางค่าความจริงของสมการที่ 4.6 และ 4.7</p>
+<figure><img alt="รูปที่ 4.15 ความเทียบเท่ากันเชิงลอจิกระหว่าง NAND กับ Negative-OR และระหว่าง NOR กับ Negative-AND ที่เป็นไปตามทฤษฎีบทของ DeMorgan พร้อมแสดงตารางค่าความจริงเพื่อแสดงการเทียบเท่าให้เห็น" loading="lazy" src="img/fig4-15.png" style="width:482px"/><figcaption><span class="cap-no">รูปที่ 4.15</span> ความเทียบเท่ากันเชิงลอจิกระหว่าง NAND กับ Negative-OR และระหว่าง NOR กับ Negative-AND ที่เป็นไปตามทฤษฎีบทของ DeMorgan พร้อมแสดงตารางค่าความจริงเพื่อแสดงการเทียบเท่าให้เห็น</figcaption></figure>
+<p>ทฤษฎีบทของ DeMorgan สามารถประยุกต์ใช้กับสมการที่ประกอบด้วยตัวแปรมากกว่า 2 ตัว ในตัวอย่างต่อไปนี้จะแสดงให้เห็นถึงการใช้ทฤษฎีบทของ DeMorgan กับสมการ 3 ตัวแปรและ 4 ตัวแปร</p>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 4.3</span></div>
+<p>จงใช้ทฤษฎีบทของ DeMorgan สำหรับสมการลอจิก <b><span class="ov">XYZ</span></b> และ <b><span class="ov">X + Y + Z</span></b></p>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<div class="expr chk"><span class="ov">XYZ</span> = <span class="ans"><span class="ov">X</span> + <span class="ov">Y</span> + <span class="ov">Z</span></span></div>
+<div class="expr chk"><span class="ov">X + Y + Z</span> = <span class="ans"><span class="ov">X</span><span class="ov">Y</span><span class="ov">Z</span></span></div>
+</details></div>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 4.4</span></div>
+<p>จงใช้ทฤษฎีบทของ DeMorgan สำหรับสมการลอจิก <b><span class="ov">WXYZ</span></b> และ <b><span class="ov">W + X + Y + Z</span></b></p>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<div class="expr chk"><span class="ov">WXYZ</span> = <span class="ans"><span class="ov">W</span> + <span class="ov">X</span> + <span class="ov">Y</span> + <span class="ov">Z</span></span></div>
+<div class="expr chk"><span class="ov">W + X + Y + Z</span> = <span class="ans"><span class="ov">W</span><span class="ov">X</span><span class="ov">Y</span><span class="ov">Z</span></span></div>
+</details></div>
+<p>ตัวแปรแต่ละตัวในทฤษฎีบทของ DeMorgan ที่ได้ระบุในสมการที่ 4.6 และ 4.7 สามารถแทนพจน์ที่ประกอบด้วยตัวแปรอื่นหลาย ๆ ตัวได้ด้วย เช่น ให้ X เป็นตัวแทนของพจน์ <b>AB + C</b> และให้ Y เป็นตัวแทนของพจน์ <b>A + BC</b> ดังนั้นเมื่อเราประยุกต์ใช้ทฤษฎีบทของ DeMorgan ในสมการ <b><span class="ov">XY</span> = <span class="ov">X</span> + <span class="ov">Y</span></b> ด้วยการใช้แทน <b><span class="ov">(AB + C)(A + BC)</span></b> เราจะได้</p>
+<div class="expr chk"><span class="ov">(AB + C)(A + BC)</span> = (<span class="ov">AB + C</span>) + (<span class="ov">A + BC</span>)</div>
+<p>เราจะได้ผลลัพธ์แยกออกเป็น 2 พจน์ คือ <b>(<span class="ov">AB + C</span>)</b> และ <b>(<span class="ov">A + BC</span>)</b> ซึ่งเรายังสามารถใช้ทฤษฎีบทของ DeMorgan อันได้แก่สมการ <b><span class="ov">X + Y</span> = <span class="ov">X</span><span class="ov">Y</span></b> เพื่อจัดการแต่ละพจน์ได้อีก ซึ่งจะได้เป็น</p>
+<div class="expr chk">(<span class="ov">AB + C</span>) + (<span class="ov">A + BC</span>) = (<span class="ov">AB</span>)<span class="ov">C</span> + <span class="ov">A</span>(<span class="ov">BC</span>)</div>
+<p>จากผลลัพธ์นี้จะเห็นว่ายังมีพจน์ที่สามารถใช้ทฤษฎีบทของ DeMorgan จัดการได้อีก ซึ่งได้แก่พจน์ <b><span class="ov">AB</span></b> และ <b><span class="ov">BC</span></b> ดังนั้นเราจะได้ผลลัพธ์สุดท้ายเป็น</p>
+<div class="expr chk">(<span class="ov">AB</span>)<span class="ov">C</span> + <span class="ov">A</span>(<span class="ov">BC</span>) = <span class="ans">(<span class="ov">A</span> + <span class="ov">B</span>)<span class="ov">C</span> + <span class="ov">A</span>(<span class="ov">B</span> + <span class="ov">C</span>)</span></div>
+<h3 id="s4-4-1"><span class="no">4.4.1</span> การประยุกต์ใช้ทฤษฎีบทของ DeMorgan</h3>
+<p>ต่อไปนี้จะแสดงขั้นตอนในการประยุกต์ใช้ทฤษฎีบทของ DeMorgan และพีชคณิตบูลีนกับนิพจน์ต่อไปนี้</p>
+<div class="expr"><span class="ov"><span class="ov">A + B<span class="ov">C</span></span> + D(<span class="ov">E + <span class="ov">F</span></span>)</span></div>
+<ol class="steps">
+<li><span class="step">ขั้นที่ 1</span> กำหนดพจน์ที่จะทำการใช้ทฤษฎีบทของ DeMorgan และให้คิดว่าแต่ละพจน์คือตัวแปรเดี่ยว ซึ่งในที่นี้จะกำหนดให้ <b><span class="ov">A + B<span class="ov">C</span></span> = X</b> และให้ <b>D(<span class="ov">E + <span class="ov">F</span></span>) = Y</b></li>
+<li class="keep"><span class="step">ขั้นที่ 2</span> จาก <b><span class="ov">X + Y</span> = <span class="ov">X</span><span class="ov">Y</span></b> จะได้ว่า
+    <div class="expr chk"><span class="ov">(<span class="ov">A + B<span class="ov">C</span></span>) + (D(<span class="ov">E + <span class="ov">F</span></span>))</span> = (<span class="ov"><span class="ov">A + B<span class="ov">C</span></span></span>)(<span class="ov">D(<span class="ov">E + <span class="ov">F</span></span>)</span>)</div></li>
+<li class="keep"><span class="step">ขั้นที่ 3</span> ใช้หลักเกณฑ์ข้อที่ 9 (<b><span class="ov"><span class="ov">A</span></span> = A</b>) เพื่อทำการหักล้างเส้น bar ที่ซ้อนกันสำหรับพจน์ซ้ายมือ (ตรงนี้ไม่ใช่การใช้ทฤษฎีบทของ DeMorgan) จะได้
+    <div class="expr chk">(<span class="ov"><span class="ov">A + B<span class="ov">C</span></span></span>)(<span class="ov">D(<span class="ov">E + <span class="ov">F</span></span>)</span>) = (A + B<span class="ov">C</span>)(<span class="ov">D(<span class="ov">E + <span class="ov">F</span></span>)</span>)</div></li>
+<li class="keep"><span class="step">ขั้นที่ 4</span> ใช้ทฤษฎีบทของ DeMorgan กับพจน์ที่สอง
+    <div class="expr chk">(A + B<span class="ov">C</span>)(<span class="ov">D(<span class="ov">E + <span class="ov">F</span></span>)</span>) = (A + B<span class="ov">C</span>)(<span class="ov">D</span> + (<span class="ov"><span class="ov">E + <span class="ov">F</span></span></span>))</div></li>
+<li class="keep"><span class="step">ขั้นที่ 5</span> ใช้หลักเกณฑ์ข้อที่ 9 (<b><span class="ov"><span class="ov">A</span></span> = A</b>) เพื่อทำการหักล้างเส้น bar ที่ซ้อนกันสำหรับส่วน <b>E + <span class="ov">F</span></b> ของพจน์ขวามือ จะได้
+    <div class="expr chk">(A + B<span class="ov">C</span>)(<span class="ov">D</span> + (<span class="ov"><span class="ov">E + <span class="ov">F</span></span></span>)) = <span class="ans">(A + B<span class="ov">C</span>)(<span class="ov">D</span> + E + <span class="ov">F</span>)</span></div></li>
+</ol>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 4.5</span></div>
+<p>จงใช้ทฤษฎีบทของ DeMorgan กับนิพจน์ต่อไปนี้</p>
+<div class="parts3"><span><span class="pn">(I)</span><span class="ov">(A + B + C)D</span></span><span><span class="pn">(II)</span><span class="ov">ABC + DEF</span></span><span><span class="pn">(III)</span><span class="ov">A<span class="ov">B</span> + <span class="ov">C</span>D + EF</span></span></div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p><span class="pn">(I)</span> ให้ <b>A + B + C = X</b> และให้ <b>D = Y</b> ซึ่งจะทำให้นิพจน์ <b><span class="ov">(A + B + C)D</span></b> สามารถเขียนได้เป็น</p>
+<div class="expr chk"><span class="ov">(A + B + C)D</span> = <span class="ov">A + B + C</span> + <span class="ov">D</span></div>
+<p>ต่อไปเราจะใช้ทฤษฎีบทของ DeMorgan กับพจน์ <b><span class="ov">A + B + C</span></b> จะได้</p>
+<div class="expr chk"><span class="ov">A + B + C</span> + <span class="ov">D</span> = <span class="ans"><span class="ov">A</span><span class="ov">B</span><span class="ov">C</span> + <span class="ov">D</span></span></div>
+<p class="pl"><span class="pn">(II)</span> ให้ <b>ABC = X</b> และ <b>DEF = Y</b> ซึ่งจะทำให้นิพจน์ <b><span class="ov">ABC + DEF</span></b> สามารถเขียนได้เป็น</p>
+<div class="expr chk"><span class="ov">ABC + DEF</span> = (<span class="ov">ABC</span>)(<span class="ov">DEF</span>)</div>
+<p>ต่อไปเราจะใช้ทฤษฎีบทของ DeMorgan กับพจน์ <b>(<span class="ov">ABC</span>)</b> และ <b>(<span class="ov">DEF</span>)</b> จะได้</p>
+<div class="expr chk">(<span class="ov">ABC</span>)(<span class="ov">DEF</span>) = <span class="ans">(<span class="ov">A</span> + <span class="ov">B</span> + <span class="ov">C</span>)(<span class="ov">D</span> + <span class="ov">E</span> + <span class="ov">F</span>)</span></div>
+<p class="pl"><span class="pn">(III)</span> ให้ <b>A<span class="ov">B</span> = X</b>, ให้ <b><span class="ov">C</span>D = Y</b> และให้ <b>EF = Z</b> ทำให้นิพจน์ <b><span class="ov">A<span class="ov">B</span> + <span class="ov">C</span>D + EF</span></b> สามารถเขียนอยู่ในรูปของ <b><span class="ov">X + Y + Z</span> = <span class="ov">X</span><span class="ov">Y</span><span class="ov">Z</span></b> และจะสามารถเขียนได้เป็น</p>
+<div class="expr chk"><span class="ov">A<span class="ov">B</span> + <span class="ov">C</span>D + EF</span> = (<span class="ov">A<span class="ov">B</span></span>)(<span class="ov"><span class="ov">C</span>D</span>)(<span class="ov">EF</span>)</div>
+<p>ต่อไปเราจะใช้ทฤษฎีบทของ DeMorgan กับพจน์ <b><span class="ov">A<span class="ov">B</span></span></b>, <b><span class="ov"><span class="ov">C</span>D</span></b> และ <b><span class="ov">EF</span></b> เราจะได้</p>
+<div class="expr chk">(<span class="ov">A<span class="ov">B</span></span>)(<span class="ov"><span class="ov">C</span>D</span>)(<span class="ov">EF</span>) = <span class="ans">(<span class="ov">A</span> + B)(C + <span class="ov">D</span>)(<span class="ov">E</span> + <span class="ov">F</span>)</span></div>
+</details></div>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 4.6</span></div>
+<p>จงใช้ทฤษฎีบทของ DeMorgan กับนิพจน์ต่อไปนี้</p>
+<div class="parts3"><span><span class="pn">(I)</span><span class="ov">(<span class="ov">A + B</span>) + <span class="ov">C</span></span></span><span><span class="pn">(II)</span><span class="ov">(<span class="ov">A</span> + B) + CD</span></span><span><span class="pn">(III)</span><span class="ov">(A + B)<span class="ov">C</span><span class="ov">D</span> + E + <span class="ov">F</span></span></span></div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<div class="xsteps">
+<span class="pn">(I)</span><span class="chk"><span class="ov">(<span class="ov">A + B</span>) + <span class="ov">C</span></span> = (<span class="ov"><span class="ov">A + B</span></span>)<span class="ov"><span class="ov">C</span></span> = <span class="ans">(A + B)C</span></span>
+<span class="pn">(II)</span><span class="chk"><span class="ov">(<span class="ov">A</span> + B) + CD</span> = (<span class="ov"><span class="ov">A</span> + B</span>)<span class="ov">CD</span> = (<span class="ov"><span class="ov">A</span></span><span class="ov">B</span>)(<span class="ov">C</span> + <span class="ov">D</span>) = <span class="ans">A<span class="ov">B</span>(<span class="ov">C</span> + <span class="ov">D</span>)</span></span>
+<span class="pn">(III)</span><span class="chk"><span class="ov">(A + B)<span class="ov">C</span><span class="ov">D</span> + E + <span class="ov">F</span></span> = (<span class="ov">(A + B)<span class="ov">C</span><span class="ov">D</span></span>)(<span class="ov">E + <span class="ov">F</span></span>) = <span class="ans">(<span class="ov">A</span><span class="ov">B</span> + C + D)<span class="ov">E</span>F</span></span>
+</div>
+</details></div>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 4.7</span></div>
+<p>นิพจน์บูลีนสำหรับ XOR gate คือ <b>A<span class="ov">B</span> + <span class="ov">A</span>B</b> จงใช้เป็นจุดเริ่มต้นในการหานิพจน์ของ XNOR โดยใช้ทฤษฎีบทของ DeMorgan รวมทั้งกฎหรือหลักเกณฑ์ของพีชคณิตบูลีนให้เป็นผลสำเร็จ</p>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>เริ่มจากการทำ complement นิพจน์ของ XOR แล้วจึงค่อยประยุกต์ใช้ทฤษฎีบทของ DeMorgan ดังต่อไปนี้</p>
+<div class="expr chk"><span class="ov">A<span class="ov">B</span> + <span class="ov">A</span>B</span> = (<span class="ov">A<span class="ov">B</span></span>)(<span class="ov"><span class="ov">A</span>B</span>) = (<span class="ov">A</span> + <span class="ov"><span class="ov">B</span></span>)(<span class="ov"><span class="ov">A</span></span> + <span class="ov">B</span>) = (<span class="ov">A</span> + B)(A + <span class="ov">B</span>)</div>
+<p>ต่อไปให้ใช้กฎการกระจายและหลักเกณฑ์ข้อที่ 8 (<b>A · <span class="ov">A</span> = 0</b>)</p>
+<div class="expr chk">(<span class="ov">A</span> + B)(A + <span class="ov">B</span>) = <span class="ov">A</span>A + <span class="ov">A</span><span class="ov">B</span> + AB + B<span class="ov">B</span> = <span class="ov">A</span><span class="ov">B</span> + AB</div>
+<p>ดังนั้นนิพจน์ของ XNOR ก็คือ <b class="ans"><span class="ov">A</span><span class="ov">B</span> + AB</b> ซึ่งนิพจน์นี้จะมีค่าเป็น 1 เมื่อตัวแปรทั้งสองเป็น 0 หรือเป็น 1 ทั้งคู่</p>
+</details></div>
+<div data-widget="demorgan"></div></section><section class="sec"><h2 id="s4-5"><span class="no">4.5</span> การใช้พีชคณิตบูลีนเพื่อวิเคราะห์วงจรลอจิก</h2>
+<p>วงจรที่ผสานการทำงานของเกทต่าง ๆ เข้าด้วยกัน เราเรียกว่า <strong>วงจรคอมบิเนชัน</strong> ซึ่งมีกรณีของอินพุตที่เกิดขึ้นจำนวนมากน้อยขึ้นอยู่กับปริมาณของขาสัญญาณอินพุต ทั้งนี้การที่เราจะรู้ว่าเอาต์พุตที่เกิดขึ้นในแต่ละกรณีจะเป็นอย่างไรนั้น เราสามารถใช้พีชคณิตบูลีนในการอธิบายปฏิบัติการของวงจรนั้น ๆ ได้</p>
+<h3 id="s4-5-1"><span class="no">4.5.1</span> นิพจน์บูลีนสำหรับวงจรลอจิก</h3>
+<p>การหานิพจน์บูลีนสำหรับวงจรลอจิกหนึ่ง ๆ ทำได้จากการเริ่มต้นที่อินพุตทางซ้ายมือสุดและขยับไปยังเอาต์พุตสุดท้าย โดยให้เขียนนิพจน์ของแต่ละเกทจากต้นจนจบ สำหรับตัวอย่างวงจรที่แสดงในรูปที่ 4.16 นั้นจะสามารถกำหนดนิพจน์บูลีนได้ตามขั้นตอนดังต่อไปนี้</p>
+<ol class="nsteps">
+<li>AND gate ที่อยู่ซ้ายมือสุดมีอินพุต C และ D จะมีนิพจน์เป็น <b>CD</b></li>
+<li>เอาต์พุตของ AND gate ซ้ายมือสุดเป็นอินพุตหนึ่งของ OR gate ซึ่งมี B เป็นอินพุตอีกขาหนึ่ง ดังนั้นนิพจน์ของ OR gate นี้จะเป็น <b>B + CD</b></li>
+<li>เอาต์พุตของ OR gate เป็นอินพุตหนึ่งของ AND gate ตัวขวามือสุดที่มี A เป็นอีกอินพุตหนึ่ง ดังนั้นนิพจน์สำหรับ AND gate จะเป็น <b>A(B + CD)</b> ซึ่งเป็นเอาต์พุตสุดท้าย อันจะเป็นนิพจน์ของทั้งวงจรนั่นเอง</li>
+</ol>
+<figure><img alt="รูปที่ 4.16 วงจรลอจิกสำหรับเป็นตัวอย่างในการสร้างนิพจน์บูลีน" loading="lazy" src="img/fig4-16.png" style="width:463px"/><figcaption><span class="cap-no">รูปที่ 4.16</span> วงจรลอจิกสำหรับเป็นตัวอย่างในการสร้างนิพจน์บูลีน</figcaption></figure>
+<div data-widget="circuit416"></div><h3 id="s4-5-2"><span class="no">4.5.2</span> การสร้างตารางค่าความจริงจากวงจรลอจิก</h3>
+<p>เมื่อเราสามารถระบุนิพจน์บูลีนสำหรับวงจรลอจิกนั้น ๆ ได้แล้ว เราก็จะสามารถสร้างตารางค่าความจริงที่จะแสดงค่าเอาต์พุตจากกรณีต่าง ๆ ของอินพุตของวงจรได้ในลำดับถัดไป สำหรับวงจรในรูปที่ 4.16 นั้นมีอินพุตทั้งหมด 4 อินพุต ซึ่งกำกับด้วยตัวแปร 4 ตัว ได้แก่ A, B, C และ D ซึ่งทำให้มีกรณีที่เป็นไปได้เท่ากับ 2<sup>4</sup> = 16 กรณี</p>
+<p class="sub4"><span class="n">4.5.2.1</span>การประเมินนิพจน์</p>
+<p>การที่จะประเมินนิพจน์ <b>A(B + CD)</b> ให้เริ่มจากการหาค่าของตัวแปรต่าง ๆ ที่ทำให้นิพจน์บูลีนของวงจรมีค่าเป็น 1 ด้วยการใช้หลักเกณฑ์ของการบวกและการคูณ สำหรับกรณีนี้นิพจน์บูลีนจะมีค่าเท่ากับ 1 เฉพาะกรณีที่ A = 1 และ B + CD = 1 เนื่องจาก</p>
+<div class="expr">A(B + CD) = 1 · 1 = 1</div>
+<p>เมื่อพิจารณากรณีที่พจน์ B + CD มีค่าเป็น 1 ได้ก็ต่อเมื่อ B = 1 หรือ CD = 1 หรือทั้ง B และ CD มีค่าเท่ากับ 1 ดังแสดงให้เห็นต่อไปนี้</p>
+<div class="expr-block expr"><div>B + CD = 1 + 0 = 1</div><div>B + CD = 0 + 1 = 1</div><div>B + CD = 1 + 1 = 1</div></div>
+<p>พจน์ CD = 1 เป็นได้กรณีเดียว คือ C = 1 และ D = 1</p>
+<div class="note"><span class="note-tag">ข้อสรุป</span> นิพจน์ <b>A(B + CD) = 1</b>
+<ul class="conds">
+<li><span class="cno c1">1</span>เมื่อ A = 1 และ B = 1 ไม่ว่าค่าของ C กับ D จะเป็นอะไรก็ตาม</li>
+<li><span class="cno c2">2</span>เมื่อ A = 1 และ C = 1 และ D = 1 ไม่ว่า B จะเป็นอะไรก็ตาม</li>
+</ul>
+  และเมื่อกรณีที่กล่าวไปแล้วทั้งหมดได้ผลลัพธ์เป็น 1 แล้ว กรณีที่เหลือจะมีค่าเป็น 0 ทั้งหมด
+</div>
+<div class="keep">
+<p class="sub4"><span class="n">4.5.2.2</span>ใส่ผลลัพธ์จากการประเมินลงไปยังตารางค่าความจริง</p>
+<p>ขั้นแรกเริ่มจากการสร้างตารางจากกรณีอินพุตที่เป็นไปได้ทั้ง 16 กรณี ดังที่เห็นในตารางที่ 4.5</p>
+<div class="tcap solo"><span class="cap-no">ตารางที่ 4.5</span> ตารางค่าความจริงของวงจรลอจิกในรูปที่ 4.16</div>
+<div class="tbl-scroll"><div class="t45" id="t45">
+<div>
+<table class="tt">
+<thead><tr><th class="vr" colspan="4">INPUTS</th><th class="out">OUTPUT</th></tr>
+<tr><th>A</th><th>B</th><th>C</th><th class="vr">D</th><th class="out">A(B + CD)</th></tr></thead>
+<tbody id="t45body"></tbody>
+</table>
+</div>
+<div class="conds">
+<div class="cond k1" data-k="1"><span class="cno c1">1</span>เมื่อ A = 1 และ B = 1 ไม่ว่าค่าของ C กับ D จะเป็นอะไรก็ตาม</div>
+<div class="cond k2" data-k="2"><span class="cno c2">2</span>เมื่อ A = 1 และ C = 1 และ D = 1 ไม่ว่า B จะเป็นอะไรก็ตาม</div>
+</div>
+<svg class="arrows" id="t45svg" xmlns="http://www.w3.org/2000/svg"></svg>
+</div></div>
+</div>
+<p>จะเห็นว่าค่าเอาต์พุตที่เป็น 1 สามารถระบุได้ตามที่เราประเมินเอาไว้ในหัวข้อที่แล้ว (ลูกศรสีส้มแทนกรณี <span class="cno c1">1</span> และลูกศรสีฟ้าแทนกรณี <span class="cno c2">2</span> โดยแถว ABCD = 1111 เข้าเงื่อนไขทั้งสองกรณี) และเมื่อเราลง 1 ไปในเอาต์พุตตามกรณีที่เป็นไปได้ทั้งหมดแล้ว ก็จะเหลือกรณีที่เอาต์พุตเป็น 0 ทั้งหมด และเราก็จะได้ตารางค่าความจริงที่เสร็จสมบูรณ์ อันจะบ่งปฏิบัติการของวงจรลอจิกนั้น ๆ ได้อย่างถูกต้องโดยอาศัยพีชคณิตบูลีนดังที่ได้เรียนมาข้างต้น</p>
+
+<div data-widget="truthtable"></div></section><script>
+(function () {
+  // ตารางที่ 4.5: สร้างแถวจากการคำนวณ A(B + CD) จริง แล้ววาดลูกศรจากตำแหน่งแถวจริง
+  var body = document.getElementById('t45body');
+  var rows = [];
+  for (var n = 0; n < 16; n++) {
+    var A = n >> 3 & 1, B = n >> 2 & 1, C = n >> 1 & 1, D = n & 1;
+    var y = A & (B | (C & D));
+    var tr = document.createElement('tr');
+    if (y) tr.className = 'hit';
+    tr.innerHTML = '<td>' + A + '</td><td>' + B + '</td><td>' + C + '</td><td class="vr">' + D + '</td><td class="out">' + y + '</td>';
+    body.appendChild(tr);
+    rows.push({ el: tr, A: A, B: B, C: C, D: D, y: y });
+  }
+  var box = document.getElementById('t45');
+  var svg = document.getElementById('t45svg');
+  var c1 = document.querySelector('#t45 .cond.k1'), c2 = document.querySelector('#t45 .cond.k2');
+  function draw() {
+    var R = box.getBoundingClientRect();
+    var hits = rows.filter(function (r) { return r.y; });
+    var top = hits[0].el.getBoundingClientRect().top - R.top;
+    var bot = hits[hits.length - 1].el.getBoundingClientRect().bottom - R.top;
+    var mid = (top + bot) / 2;
+    var gap = 10;
+    var h1 = c1.offsetHeight, h2 = c2.offsetHeight;
+    var startY = mid - (h1 + gap + h2) / 2;
+    if (startY + h1 + gap + h2 > bot) startY = bot - (h1 + gap + h2);
+    c1.style.top = startY + 'px';
+    c2.style.top = (startY + h1 + gap) + 'px';
+    var W = R.width, H = R.height;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    var col = { 1: '#f26b1d', 2: '#1f8fd6' };
+    var s = '<defs>';
+    [1, 2].forEach(function (k) {
+      s += '<marker id="ah' + k + '" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="' + col[k] + '"/></marker>';
+    });
+    s += '</defs>';
+    function line(k, cond, r, dy) {
+      var cr = cond.getBoundingClientRect();
+      var x1 = cr.left - R.left - 1, y1 = cr.top - R.top + cond.offsetHeight / 2;
+      var cell = r.el.lastChild.getBoundingClientRect();
+      var x2 = (cell.left + cell.right) / 2 - R.left + 13, y2 = (cell.top + cell.bottom) / 2 - R.top + dy;
+      s += '<circle cx="' + x1 + '" cy="' + y1 + '" r="2.4" fill="' + col[k] + '"/>';
+      s += '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + col[k] + '" stroke-width="1.3" marker-end="url(#ah' + k + ')"/>';
+    }
+    rows.forEach(function (r) {
+      var k1 = r.A && r.B, k2 = r.A && r.C && r.D;
+      var both = k1 && k2;
+      if (k1) line(1, c1, r, both ? -2.6 : 0);
+      if (k2) line(2, c2, r, both ? 2.6 : 0);
+    });
+    svg.innerHTML = s;
+  }
+  draw();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+  window.addEventListener('load', draw); window.addEventListener('resize', draw);
+  window.addEventListener('beforeprint', draw);
+})();
+</script></div>
+
+    <section class="sec" id="summary">
+      <h2>สรุปท้ายบท</h2>
+      <div class="summary"><ul><li>พีชคณิตบูลีนเกิดจากผลงานของจอร์จ บูล (ค.ศ. 1854) และถูกนำมาใช้วิเคราะห์และออกแบบวงจรลอจิกโดยคล็อด แชนนอน (ค.ศ. 1938)</li><li>การบวกแบบบูลีนเทียบเท่ากับ OR (sum term เป็น 0 เมื่อทุก literal เป็น 0) ส่วนการคูณแบบบูลีนเทียบเท่ากับ AND (product term เป็น 1 เมื่อทุก literal เป็น 1)</li><li>กฎพื้นฐาน ได้แก่ กฎการสลับที่ A + B = B + A, AB = BA · กฎการเปลี่ยนกลุ่ม · กฎการกระจาย A(B + C) = AB + AC</li><li>หลักเกณฑ์ 12 ข้อ เช่น A + <span class="ov">A</span> = 1, A · <span class="ov">A</span> = 0, <span class="ov"><span class="ov">A</span></span> = A, A + AB = A, A + <span class="ov">A</span>B = A + B และ (A + B)(A + C) = A + BC ใช้จัดรูปและลดรูปสมการบูลีน</li><li>ทฤษฎีบทของ DeMorgan: <span class="ov">XY</span> = <span class="ov">X</span> + <span class="ov">Y</span> และ <span class="ov">X + Y</span> = <span class="ov">X</span><span class="ov">Y</span> แสดงความเทียบเท่าของ NAND กับ Negative-OR และ NOR กับ Negative-AND และใช้ได้กับตัวแปรหรือพจน์จำนวนเท่าใดก็ได้</li><li>การวิเคราะห์วงจรลอจิก: เขียนนิพจน์ของแต่ละเกทจากอินพุตไปยังเอาต์พุต แล้วประเมินนิพจน์เพื่อสร้างตารางค่าความจริงครบทั้ง 2<sup>n</sup> กรณี</li></ul></div>
+    </section>
+
+    <section class="sec" id="quiz">
+      <h2>แบบทดสอบท้ายบท</h2>
+      <p class="w-hint">เลือกคำตอบ ระบบจะเฉลยพร้อมคำอธิบายทันที (ไม่มีการบันทึกคะแนน ใช้สำหรับทบทวนด้วยตนเอง)</p>
+      <div class="quiz" id="quiz-box"></div>
+    </section>
+
+    <section class="sec" id="lab">
+  <h2>ปฏิบัติการสัปดาห์ที่ 5 · พิสูจน์ความเทียบเท่าของวงจร</h2>
+  <p>ตามแผนการสอนใน มคอ.3 — ใช้ไอซีตระกูล 74 ต่อวงจรสองแบบที่พีชคณิตบูลีนบอกว่า “เท่ากัน” แล้วยืนยันด้วยการวัดจริงครบทุกกรณีของอินพุต</p>
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="font-size:18px;margin-top:0">🧰 อุปกรณ์</h3>
+      <ul style="margin:0;padding-left:1.2em">
+        <li>ไอซี 7400, 7402, 7404, 7408, 7432</li>
+        <li>แผงทดลอง แหล่งจ่าย 5 V DIP switch 4 ตัว LED + ตัวต้านทาน</li>
+        <li>ตัวเก็บประจุ 0.1 µF ต่อไอซีทุกตัว</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="font-size:18px;margin-top:0">🧭 วิธีพิสูจน์</h3>
+      <ol style="margin:0;padding-left:1.2em">
+        <li>เขียนนิพจน์ของวงจรทั้งสองฝั่ง</li>
+        <li>สร้างตารางค่าความจริงที่คาดไว้ (ใช้แบบจำลองในหัวข้อ 4.3–4.5 ตรวจได้)</li>
+        <li>ต่อวงจรทั้งสองบนแผงเดียวกัน ป้อนอินพุตชุดเดียวกัน</li>
+        <li>บันทึก LED ของทั้งสองวงจรครบ 2ⁿ กรณี — ต้องเท่ากันทุกแถว</li>
+      </ol>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3 style="font-size:19px;margin-top:0">📋 ใบงานปฏิบัติการที่ 3 (สัปดาห์ที่ 5)</h3>
+    <ol>
+      <li><b>กฎการกระจาย:</b> ต่อ A(B + C) (7432 + 7408) เทียบกับ AB + AC (7408 สองตัว + 7432) ครบ 8 กรณี</li>
+      <li><b>หลักเกณฑ์ข้อที่ 10:</b> ต่อ A + AB แล้วเทียบกับการต่อสาย A ตรงไปที่เอาต์พุต</li>
+      <li><b>หลักเกณฑ์ข้อที่ 11:</b> ต่อ A + <span class="ov">A</span>B (7404 + 7408 + 7432) เทียบกับ A + B</li>
+      <li><b>ทฤษฎีบทของ DeMorgan:</b> ต่อ NAND (7400) เทียบกับ Negative-OR (7404 สองตัวเข้า 7432) และ NOR (7402) เทียบกับ Negative-AND (7404 + 7408)</li>
+      <li><b>วิเคราะห์วงจร:</b> ต่อวงจรในรูปที่ 4.16 วัดเอาต์พุตครบ 16 กรณี เปรียบเทียบกับตารางที่ 4.5</li>
+      <li><b>นับไอซี:</b> สำหรับข้อ 1 และ 3 นับจำนวนเกทและจำนวนตัวถังของวงจรก่อนและหลังลดรูป แล้วอภิปรายว่าการลดรูปช่วยอะไร (ปูทางสู่บทที่ 5)</li>
+    </ol>
+    <p class="w-hint" style="margin:0">ส่ง: นิพจน์ + ตารางค่าความจริงที่คาดไว้ + ตารางผลวัดจริง + สรุปว่าเทียบเท่ากันหรือไม่ (ประเมินในหมวดแบบฝึกหัดและรายงานผลการทดลอง 20%)</p>
+  </div>
+  <p class="w-hint">ใช้แบบจำลองการจัดขาไอซีใน <a href="../03/index.html#s3-7-1">บทที่ 3 หัวข้อ 3.7.1</a> วางแผนการต่อสายก่อนต่อวงจรจริง</p>
+</section>
+
+
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-top:48px;flex-wrap:wrap">
+      <a class="btn" href="../../index.html">← หน้ารายวิชา</a>
+      <a class="btn primary" href="slides.html">▶ ทบทวนด้วยสไลด์</a>
+    </div>
+  </main>
+</div>
+
+<footer class="footer">517 112 การออกแบบวงจรตรรกะเชิงเลข · ภาควิชาคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยศิลปากร · เนื้อหาจากเอกสารประกอบการสอน อ.อภิเษก หงษ์วิทยากร</footer>
+
+<script src="quiz.js"></script>
+<script>document.addEventListener("DOMContentLoaded", () => DLD.quiz(document.getElementById("quiz-box"), window.CH_QUIZ));</script>
+</body>
+</html>

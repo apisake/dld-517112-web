@@ -1,0 +1,9 @@
+*.md
+.DS_Store
+**/.DS_Store
+.do
+.git
+.gitignore
+README.md
+tools
+**/_test*.html

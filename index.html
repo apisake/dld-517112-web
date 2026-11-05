@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>517 112 การออกแบบวงจรตรรกะเชิงเลข</title>
+<meta name="description" content="สื่อการสอนออนไลน์รายวิชา 517 112 การออกแบบวงจรตรรกะเชิงเลข (Digital Logic Design) ภาควิชาคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยศิลปากร">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+<script src="assets/js/site.js"></script>
+<script src="assets/js/logic.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="index.html"><span class="chip">517 112</span><span>Digital Logic Design</span></a>
+  <span class="spacer"></span>
+  <a class="btn sm" href="#chapters">บทเรียน</a>
+  <a class="btn sm" href="#plan">แผนการสอน</a>
+  <button class="btn sm icon" data-theme-toggle title="สลับโหมดสว่าง/มืด" aria-label="สลับธีม">◐</button>
+</header>
+
+<div class="home-wrap">
+  <div class="hero">
+    <div class="ch-label">COURSE · ภาคการศึกษาที่ 2 ชั้นปีที่ 1</div>
+    <h1>517 112 การออกแบบวงจรตรรกะเชิงเลข</h1>
+    <div class="en">Digital Logic Design · 3(2-2-5) หน่วยกิต</div>
+    <div class="meta">
+      <span>วท.บ. วิทยาการคอมพิวเตอร์</span>
+      <span>วิชาเฉพาะด้าน (บังคับ)</span>
+      <span>อ.อภิเษก หงษ์วิทยากร</span>
+      <span>12 บท · 16 สัปดาห์</span>
+    </div>
+    <div class="hero-actions">
+      <a class="btn" href="chapters/01/index.html">เริ่มบทที่ 1 →</a>
+      <a class="btn ghost" href="chapters/01/slides.html">▶ สไลด์บทที่ 1</a>
+    </div>
+  </div>
+
+  <section style="margin-bottom:36px">
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="font-size:18px">คำอธิบายรายวิชา</h3>
+        <p style="margin:0 0 8px">ตรรกะเชิงเลขเบื้องต้น วงจรดิจิทัลและการประยุกต์ พีชคณิตแบบบูล สมการเชิงตรรกะ เทคนิคการลดรูปวงจรตรรกะ การวิเคราะห์และออกแบบวงจรเชิงผสมและเชิงลำดับ อุปกรณ์ตรรกะแบบโปรแกรมได้ การสังเคราะห์วงจรรวมด้วยภาษาอธิบายฮาร์ดแวร์เบื้องต้น</p>
+        <p style="margin:0;font-size:14.5px;color:var(--ink-3)">Introduction to digital logic. Digital circuits and applications. Boolean algebra. Digital logic expressions. Logic circuit minimization techniques. Analysis and design of combinational and sequential circuits. Programmable logic devices. Introduction to integrated circuit synthesis with hardware description language.</p>
+      </div>
+      <div class="card">
+        <h3 style="font-size:18px">การประเมินผล</h3>
+        <div class="bar" style="margin:6px 0 14px">
+          <div style="width:20%;background:#12b886">20%</div>
+          <div style="width:30%;background:#1f4fd6">30%</div>
+          <div style="width:20%;background:#e8590c">20%</div>
+          <div style="width:30%;background:#7c3aed">30%</div>
+        </div>
+        <ul style="margin:0;padding-left:1.1em;font-size:15.5px">
+          <li><b style="color:#12b886">20%</b> แบบฝึกหัดท้ายบท ปฏิบัติการ และรายงานผลการทดลอง (สัปดาห์ 2–15)</li>
+          <li><b style="color:#1f4fd6">30%</b> สอบกลางภาค บทที่ 1–6 (สัปดาห์ 8)</li>
+          <li><b style="color:#e8590c">20%</b> โครงงานกลุ่ม การนำเสนอ และสรุปบทความเทคนิคใหม่ (สัปดาห์ 7–15)</li>
+          <li><b style="color:#7c3aed">30%</b> สอบปลายภาค บทที่ 7–12 (สัปดาห์ 16)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="chapters" style="margin-bottom:40px">
+    <h2 style="font-size:26px">บทเรียน</h2>
+    <div class="ch-cards" id="ch-cards"></div>
+  </section>
+
+  <section id="plan" style="margin-bottom:40px">
+    <h2 style="font-size:26px">แผนการสอน</h2>
+    <div class="table-wrap">
+      <table class="data week-table">
+        <thead><tr><th>สัปดาห์</th><th>หัวข้อ</th><th>CLOs</th><th>กิจกรรม / ปฏิบัติการ</th></tr></thead>
+        <tbody id="plan-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="clo" style="margin-bottom:40px">
+    <h2 style="font-size:26px">ผลลัพธ์การเรียนรู้ที่คาดหวังของรายวิชา (CLOs)</h2>
+    <div class="table-wrap">
+      <table class="data">
+        <thead><tr><th>CLO</th><th>รายละเอียด</th><th>PLO</th></tr></thead>
+        <tbody id="clo-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section style="margin-bottom:20px">
+    <h2 style="font-size:26px">ตำราและเอกสารอ้างอิง</h2>
+    <div class="card">
+      <ul style="margin:0;padding-left:1.1em">
+        <li>อภิเษก หงษ์วิทยากร. <i>เอกสารประกอบการสอนรายวิชา 517 112 การออกแบบวงจรตรรกะเชิงเลข (Digital Logic Design)</i>. ภาควิชาคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยศิลปากร, 2569.</li>
+        <li>Thomas L. Floyd. <i>Digital Fundamentals</i>, 11th Edition. Pearson, 2015.</li>
+        <li>M. Morris Mano and Michael D. Ciletti. <i>Digital Design: With an Introduction to the Verilog HDL, VHDL, and SystemVerilog</i>, 6th Edition. Pearson, 2018.</li>
+        <li>David Money Harris and Sarah L. Harris. <i>Digital Design and Computer Architecture</i>, 2nd Edition. Morgan Kaufmann, 2012.</li>
+        <li>Stephen Brown and Zvonko Vranesic. <i>Fundamentals of Digital Logic with Verilog Design</i>, 3rd Edition. McGraw-Hill, 2014.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<footer class="footer">517 112 การออกแบบวงจรตรรกะเชิงเลข · ภาควิชาคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยศิลปากร วิทยาเขตพระราชวังสนามจันทร์</footer>
+
+<script src="assets/js/course.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const C = window.COURSE;
+  document.getElementById("ch-cards").innerHTML = C.chapters.map((c) => {
+    const ready = !!c.ready;
+    const href = `chapters/${String(c.no).padStart(2, "0")}/index.html`;
+    return `<a class="ch-card${ready ? "" : " soon"}" href="${ready ? href : "#"}"${ready ? "" : ' aria-disabled="true" tabindex="-1"'}>
+      <span class="status">${ready ? "พร้อมเรียน" : "เร็ว ๆ นี้"}</span>
+      <span class="num">${String(c.no).padStart(2, "0")}</span>
+      <span class="t">${c.th}</span>
+      <span class="s">${c.en} · สัปดาห์ ${c.weeks}</span>
+    </a>`;
+  }).join("");
+  const chap = (n) => C.chapters.find((c) => c.no === n);
+  document.getElementById("plan-body").innerHTML = C.weeks.map((w) => {
+    const links = (w.ch || []).filter((n) => chap(n) && chap(n).ready).map((n) => ` <a href="chapters/${String(n).padStart(2, "0")}/index.html">→ บทที่ ${n}</a>`).join("");
+    const exam = /สอบ/.test(w.topic);
+    return `<tr${exam ? ' style="background:var(--warn-soft)"' : ""}><td>${w.w}</td><td>${w.topic}${links}</td><td class="num">${w.clo || ""}</td><td>${w.act || ""}</td></tr>`;
+  }).join("");
+  document.getElementById("clo-body").innerHTML = C.clos.map((c, i) =>
+    `<tr><td class="num"><span class="clo-chip">CLO${i + 1}</span></td><td>${c[0]}</td><td class="num">${c[1]}</td></tr>`).join("");
+});
+</script>
+</body>
+</html>

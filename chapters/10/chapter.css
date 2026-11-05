@@ -1,0 +1,220 @@
+/* สร้างอัตโนมัติจาก <style> ใน source/content_chN.html โดย tools/build_chapter.py — อย่าแก้ด้วยมือ */
+.book .m { font-weight: bold; color: var(--pri); white-space: nowrap; }
+.book .expr { font-weight: bold; color: var(--pri); font-size: 18.0px; position: relative; margin: .35em 0 .7em; }
+.book .expr .m { font-size: inherit; }
+.book .expr.sm { font-size: 16.5px; }
+.book .expr.xs { font-size: 15.0px; }
+.book .ov { margin: 0 0.5px; line-height: .8; }
+.book .expr-block { margin: .3em 0 .8em 56.7px; display: block; font-weight: bold; color: var(--pri); font-size: 18.0px; }
+.book .expr-block > div { padding: 1.4px 0; }
+.book .expr-block.c { text-align: center; margin-left: 0; }
+.book .ans, .book .ans .m { color: var(--acc); }
+.book .callout .m { color: #fff; }
+.book ol.steps { list-style: none; padding-left: 0; margin: .3em 0 .6em; }
+.book ol.steps > li { margin-bottom: .25em; }
+.book ol.steps .expr { text-align: left; margin: .1em 0 .3em 56.7px; }
+.book .step { font: 700 14.2px "Prompt", var(--font); color: var(--acc2); margin-right: 7.1px; }
+.book .solution > .expr, .book .solution .expr.c { text-align: center; }
+.book .example > .expr { text-align: center; margin: .2em 0 .6em; }
+.book .sol-head { margin-bottom: 2.4px; }
+.book ol.nsteps { padding-left: 33.1px; margin: .3em 0 .9em; }
+.book ol.nsteps > li { margin-bottom: .3em; }
+.book ol.nsteps > li::marker { font: 700 13.5px "Prompt", var(--font); color: var(--acc); }
+.book p.sub4 { font: 600 16.2px "Prompt", var(--font); color: var(--pri); margin: 1em 0 .3em; }
+.book p.sub4 .n { color: var(--acc2); margin-right: 9.4px; }
+.book .ul { font-weight: bold; color: var(--pri); text-decoration: underline; text-underline-offset: 4.0px; text-decoration-thickness: 1.1px; }
+.book ol.rom { list-style: none; padding-left: 0; counter-reset: r; margin: .2em 0 .4em; }
+.book ol.rom > li { counter-increment: r; padding-left: 52.0px; text-indent: -52.0px; margin-bottom: .15em; }
+.book ol.rom > li::before { content: "(" counter(r, upper-roman) ")"; display: inline-block; width: 52.0px; text-indent: 0; font: 700 13.5px "Prompt", var(--font); color: var(--acc2); }
+.book ol.rom.c2 { display: grid; grid-template-columns: 1fr 1fr; grid-auto-flow: column; column-gap: 28.3px; }
+.book ol.rom.c2.r2 { grid-template-rows: repeat(2, auto); }
+.book ol.rom.c2.r4 { grid-template-rows: repeat(4, auto); }
+.book .pn { font: 700 13.5px "Prompt", var(--font); color: var(--acc2); margin-right: 9.4px; }
+.book .parts3 { display: flex; flex-wrap: wrap; gap: 4.7px 42.5px; font-size: 17.0px; margin: .1em 0 .5em 18.9px; }
+.book .exercise { margin: 1.3em 0 1.3em calc(-1 * var(--hang)); display: grid; grid-template-columns: var(--hang) 1fr; }
+.book .exercise .ex-title { font: 700 14.9px "Prompt", var(--font); color: var(--acc2); padding-top: 11.8px; border-top: 2.1px solid var(--acc2); margin-right: 18.9px; }
+.book .exercise .ex-body { grid-column: 2; padding: 9.4px 23.6px 11.8px 23.6px; border-top: 2.1px solid var(--acc2); background: var(--brand-soft); }
+.book .exercise .ex-body > p { margin: 0 0 .3em; text-indent: 0; }
+.book .exercise ol.num { padding-left: 33.1px; margin: 0; }
+.book .exercise ol.num > li::marker { font: 600 13.5px "Prompt", var(--font); color: var(--acc2); }
+.book table.tt { border-collapse: collapse; width: auto; margin: .4em 0 1em 18.9px; }
+.book table.tt th { font: 600 12.2px "Prompt", var(--font); color: var(--ink-2); letter-spacing: .04em; padding: 6.6px 17.0px; border-bottom: 2.1px solid var(--pri); text-align: center; white-space: nowrap; }
+.book table.tt thead tr:not(:last-child) th { border-bottom: 0.7px solid var(--line); color: var(--pri); }
+.book table.tt th.v { font: italic 700 12.0px "Times New Roman", serif; color: var(--pri); }
+.book table.tt td { font: 400 14.2px/1.5 "Prompt", var(--font); text-align: center; padding: 1.9px 17.0px; border-bottom: 0.7px solid var(--line); }
+.book table.tt td.out, .book table.tt th.out { color: var(--acc); }
+.book table.tt td.out { font-weight: 600; }
+.book table.tt th.vr, .book table.tt td.vr { border-right: 1.1px solid var(--pri); }
+.book table.tt td.term { font: 700 15.0px/1.2 "TH Sarabun New"; color: var(--pri); text-align: left; padding-left: 23.6px; min-width: 160.6px; }
+.book table.tt tr.hit td { background: var(--soft2); }
+.book .tcap.solo { padding-left: 0; }
+.book .tblock { margin: .6em 0 1em; }
+.book .tblock .tcap { margin-bottom: 4.7px; }
+.book table.bv { border-collapse: collapse; width: auto; margin: .3em auto .8em; }
+.book table.bv td { text-align: center; padding: 1.9px 14.2px; }
+.book table.bv tr:first-child td { font-weight: bold; color: var(--pri); font-size: 17.0px; border-bottom: 0.7px solid var(--line); }
+.book table.bv.sm tr:first-child td { font-size: 15.5px; padding: 1.9px 7.6px; }
+.book table.bv tr:last-child td { font: 600 14.2px "Prompt", var(--font); color: var(--acc); letter-spacing: .06em; padding-top: 4.7px; }
+.book table.nx { border-collapse: collapse; width: auto; margin: .3em auto .9em; }
+.book table.nx th { font-weight: bold; color: var(--pri); font-size: 17.0px; padding: 0.9px 18.9px 4.7px; border-bottom: 1.6px solid var(--pri); white-space: nowrap; }
+.book table.nx td { font: 400 14.2px/1.75 "Prompt", var(--font); text-align: center; padding: 0 18.9px; letter-spacing: .04em; }
+.book table.nx td .dup { display: inline-block; border: 1.3px solid var(--acc); border-radius: 50%; padding: 0 8.5px; line-height: 1.5; color: var(--acc); }
+.book .gsz { display: flex; gap: 28.3px; margin: .3em 0 .5em; }
+.book table.gs { border-collapse: collapse; width: auto; }
+.book table.gs th { font: 600 12.2px "Prompt", var(--font); color: #fff; background: var(--pri); padding: 6.1px 14.2px; text-align: center; }
+.book table.gs th.sub { background: var(--soft); color: var(--ink-2); }
+.book table.gs td { font-size: 15.0px; padding: 1.4px 14.2px; border-bottom: 0.7px solid var(--line); }
+.book table.gs td:first-child { font: 600 13.5px "Prompt", var(--font); color: var(--acc2); text-align: center; white-space: nowrap; }
+.book figure { margin: .8em 0 1em; }
+.book figure img { margin: 0; }
+.book figure.c img, .book figure.c svg { margin: 0 0 0 18.9px; display: block; }
+.book .example figure { margin: .4em 0 .6em; }
+.book .subrow { display: flex; justify-content: flex-start; padding-left: 18.9px; align-items: flex-end; gap: 56.7px; }
+.book .subrow .sub { text-align: center; }
+.book .subrow .sub img { display: block; margin: 0 auto; }
+.book .subcap { font-size: 14.0px; color: var(--ink-2); margin-top: 4.7px; text-align: center; line-height: 1.25; }
+.book .subcap b { font: 700 13.5px "Prompt", var(--font); color: var(--acc2); }
+.book .sublab { position: relative; height: 33.1px; }
+.book .sublab span { position: absolute; top: 0; transform: translateX(-50%); font: 700 13.5px "Prompt", var(--font); color: var(--acc2); }
+.book svg.kmap-svg { display: block; }
+.book .kpair { display: flex; justify-content: center; gap: 37.8px; align-items: flex-start; margin: .4em 0 .6em; }
+.book .solution p { margin-bottom: .35em; }
+.book .ab4 { display: grid; grid-template-columns: max-content max-content; gap: 4.7px 75.6px; font-size: 18.0px; font-weight: bold; margin: .2em 0 .5em 56.7px; }
+.book .example > * { min-width: 0; }
+.book table.bv.sm tr:first-child td { font-size: 15.0px; padding: 1.9px 10.4px; }
+.book table.nx th { padding: 0.9px 12.3px 4.7px; }
+.book table.nx td { padding: 0 12.3px; }
+.book table.bv.vt { margin: .3em 0 .8em 56.7px; }
+.book table.bv.vt tr td { border: 0; padding: 0.9px 9.4px; text-align: left; }
+.book table.bv.vt tr td:first-child { font: bold 17.0px "TH Sarabun New"; color: var(--pri); letter-spacing: 0; }
+.book table.bv.vt tr td:nth-child(2) { font: 400 14.9px "Prompt", var(--font); color: var(--ink-3); }
+.book table.bv.vt tr td:last-child { font: 600 14.2px "Prompt", var(--font); color: var(--acc); letter-spacing: .06em; }
+.book .nw { white-space: nowrap; }
+.book sup { line-height: 0; }
+.book .example > .q > p:first-child { margin-top: 0; padding-top: 9.4px; border-top: 2.1px solid var(--acc); }
+.book .example > .q > .expr { text-align: center; margin: .2em 0 .6em; }
+.book .example > .q > p:last-child { margin-bottom: .55em; }
+.book table.gs td { white-space: nowrap; }
+.book figure.c img { max-width: calc(100% - 18.9px); }
+.book .callout .callout-head { margin-bottom: 2.4px; }
+.book .callout p.thm { margin: 0; font-weight: bold; }
+.book .expr.aoi { font-size: 17.0px; margin-bottom: 1.6em; }
+.book .pos { display: inline-block; position: relative; border: 1.2px solid var(--ink-3); border-radius: 15.1px; padding: 0 6.6px; margin: 0 2.4px; }
+.book .pos-lab { position: absolute; left: 0; right: 0; top: 100%; margin-top: 2.8px; text-align: center; font: 600 11.5px/1 "Prompt", var(--font); color: var(--acc2); letter-spacing: .08em; }
+.book .sublab { margin: 3.8px 0 0 18.9px; height: 33.1px; }
+.book .sublab > span { font: 400 14.0px "TH Sarabun New"; color: var(--ink-2); white-space: nowrap; }
+.book figure.wide.c66 img { margin: 0 0 0 0; }
+.book figure.wide.c66 .sublab { margin-left: 0; }
+.book figure.wide.c66 figcaption { padding-left: var(--hang); }
+.book svg.struct-svg { display: block; margin: 0 0 0 75.6px; overflow: visible; }
+.book svg.struct-svg text.v { font: italic 26px "Times New Roman", serif; fill: var(--pri); text-anchor: middle; }
+.book svg.struct-svg text.op { font: 26px "Times New Roman", serif; fill: var(--pri); text-anchor: middle; }
+.book svg.struct-svg text.lb { font: 600 10.5px "Prompt", var(--font), sans-serif; fill: var(--acc2); letter-spacing: .06em; }
+.book svg.struct-svg .ln { fill: none; stroke: var(--acc2); stroke-width: 1.1; }
+.book svg.struct-svg .hd { fill: var(--acc2); }
+.book svg.struct-svg .bar { stroke: var(--pri); stroke-width: 1.4; }
+.book figure.struct { margin: .3em 0 .8em; }
+.book .strike { position: relative; display: inline-block; }
+.book .strike::after { content: ""; position: absolute; left: -35%; right: -35%; top: 48%; border-top: 1.6px solid var(--acc); transform: rotate(-58deg); }
+.book .expr-block .cont { padding-left: 33.1px; }
+.book ul.dash { list-style: none; padding-left: 37.8px; margin: .1em 0 .4em; }
+.book ul.dash > li::before { content: "–"; color: var(--acc); margin-right: 9.4px; }
+.book table.tt td.term .m { font-size: 15.0px; }
+.book .tt-row { justify-content: flex-start; gap: 47.2px; padding-left: 18.9px; }
+.book .tt-row table.tt { margin: .2em 0 .6em; }
+.book .tt-row { flex-wrap: nowrap; gap: 33.1px; }
+.book .tt-row table.tt th, .book .tt-row table.tt td { padding-left: 11.3px; padding-right: 11.3px; }
+.book .tt-row table.tt th:not(.v) { letter-spacing: 0; font-size: 8.5px; }
+.book .sublab span span { position: static; transform: none; }
+.book .sublab span .m { font: bold 15.0px/1.1 "TH Sarabun New"; color: var(--pri); }
+.book .sublab span .m span { font: inherit; line-height: .8; color: inherit; }
+.book .v8 { font: italic 12.0px "Times New Roman", serif; color: var(--pri); }
+.book table.tt td .v8 { font-size: 12.0px; }
+.book table.tt th .ov, .book table.tt td .ov { line-height: .9; }
+.book table.tt td.mean { font: 400 15.0px/1.25 "TH Sarabun New"; text-align: left; padding-left: 18.9px; padding-right: 18.9px; color: var(--ink); }
+.book table.tt th.mean { text-align: left; padding-left: 18.9px; vertical-align: bottom; }
+.book table.tt td.arr { font-size: 12.0px; font-weight: 700; color: var(--acc2); }
+.book table.tt tr.inv td, .book table.tt tr.inv td.out, .book table.tt tr.inv td.mean { color: #d62828; background: #fdecec; }
+.book table.tt tr.inv td.mean b { font: 700 12.2px "Prompt", var(--font); letter-spacing: .04em; }
+.book table.tt tfoot td { border-bottom: 0; text-align: left; font: 400 14.0px/1.3 "TH Sarabun New"; color: var(--ink-2); padding: 6.6px 17.0px 0; }
+.book table.tt tfoot td .k { display: inline-block; min-width: 33.1px; font-weight: bold; color: var(--pri); }
+.book table.tt tfoot td .k .v8 { font-size: 11.0px; }
+.book .subrow.c { justify-content: center; padding-left: 0; }
+.book .subrow.top { align-items: flex-start; }
+.book .subrow + .subrow { margin-top: 14.2px; }
+.book figure .subrow + figcaption { margin-top: 11.8px; }
+.book .ovlab { position: relative; height: 33.1px; margin-top: 4.7px; }
+.book .ovlab > span { position: absolute; top: 0; transform: translateX(-50%); font: 400 14.0px "TH Sarabun New"; color: var(--ink-2); white-space: nowrap; }
+.book .ovlab b { font: 700 13.5px "Prompt", var(--font); color: var(--acc2); }
+.book figure.cc img { margin: 0 auto; }
+.book figure.cc figcaption { text-align: center; }
+.book figure.cc .subrow { justify-content: center; padding-left: 0; }
+.book .example figure.cc figcaption { text-align: left; }
+.book ol.nsteps.sol > li { margin-bottom: .35em; }
+.book ol.nsteps.row3 { display: grid; grid-template-columns: repeat(3, max-content); column-gap: 66.1px; padding-left: 52.0px; }
+.book figure svg.fig { display: block; max-width: 100%; }
+.book figure.c svg.fig { margin: 0 0 0 18.9px; }
+.book figure.cc svg.fig, .book figure.wide svg.fig { margin: 0 auto; }
+.book .example figure svg.fig { margin: 0 0 0 9.4px; }
+.book .subrow .sub svg.fig { margin: 0 auto; }
+.book figure .stack + .stack { margin-top: 14.2px; }
+.book .sublab2 { font: 400 14.0px "TH Sarabun New"; color: var(--ink-2); margin: 2.4px 0 7.1px 18.9px; }
+.book .sublab2 b { font: 700 13.5px "Prompt", var(--font); color: var(--acc2); margin-right: 7.1px; }
+.book figure.wide .sublab2 { padding-left: var(--hang); margin-left: 0; }
+.book table.st { border-collapse: collapse; width: auto; margin: .5em 0 .9em 18.9px; font: 400 14.2px "Prompt", var(--font); }
+.book table.st th { background: var(--pri); color: #fff; font: 600 12.2px "Prompt", var(--font); padding: 6.1px 18.9px; text-align: center; }
+.book table.st th.sub, .book table.st th.sub2 { background: #4a5263; font-weight: 500; }
+.book table.st th.sub i, .book table.st th.sub2 i { font: italic 11.5px "Times New Roman", serif; }
+.book table.st td { text-align: center; padding: 3.3px 18.9px; border-bottom: 0.7px solid var(--line); }
+.book table.st td.sep, .book table.st th.sep { border-left: 1.6px solid var(--pri); }
+.book table.st th.sep { border-left-color: var(--ink-3); }
+.book .example table.st { margin-left: 9.4px; }
+.book table.tt.seq td:first-child { text-align: left; padding-left: 18.9px; padding-right: 28.3px; }
+.book table.tt th.v i, .book table.tt th .v i { font: italic 700 12.0px "Times New Roman", serif; }
+.book table.tt th.v sub { font: 600 10.8px "Prompt", var(--font); }
+.book table.tt tr.foot td { border-bottom: 0; text-align: left; font: 400 14.0px/1.3 "TH Sarabun New"; color: var(--ink-2); padding-top: 5.7px; }
+.book table.tt tr.foot td i { font: italic 12.0px "Times New Roman", serif; }
+.book .eq { display: block; margin: .25em 0 .6em 56.7px; font: italic 13.0px "Times New Roman", serif; color: var(--pri); }
+.book .eq .n { font-style: normal; }
+.book .eq-list { margin: .2em 0 .7em 56.7px; font: 13.0px/1.6 "Times New Roman", serif; color: var(--pri); }
+.book .eq-list i { font-size: 1em; }
+.book .seqline { display: block; margin: .2em 0 .6em 56.7px; font: 500 14.9px "Prompt", var(--font); color: var(--acc); letter-spacing: .03em; }
+.book p.stepT { margin-top: .8em; }
+.book .stepT b.st { font: 700 14.2px "Prompt", var(--font); color: var(--acc2); margin-right: 7.1px; }
+.book ul.bul { padding-left: 33.1px; margin: .2em 0 .8em; }
+.book ul.bul > li { margin-bottom: .3em; }
+.book ul.bul > li::marker { color: var(--acc); }
+.book .exercise ol.mcq { padding-left: 33.1px; margin: 0; }
+.book .exercise ol.mcq > li { margin-bottom: .35em; }
+.book .exercise ol.mcq > li::marker { font: 600 13.5px "Prompt", var(--font); color: var(--acc2); }
+.book .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28.3px; font-size: 15.5px; line-height: 1.3; margin: .1em 0 .2em; }
+.book .opts.c4 { grid-template-columns: repeat(4, 1fr); }
+.book .opts b { display: inline-block; width: 28.3px; font: 600 12.8px "Prompt", var(--font); color: var(--acc2); }
+.book .solution b.st-i { font: 700 14.2px "Prompt", var(--font); color: var(--acc2); margin-right: 7.1px; }
+.book .solution .eq-list { margin-left: 28.3px; }
+.book .opts > span { padding-left: 28.3px; text-indent: -28.3px; }
+.book .opts b { text-indent: 0; }
+.book .tabrow { display: flex; gap: 37.8px; align-items: flex-start; margin: .3em 0 .6em 18.9px; }
+.book .tabrow table.tt { margin: 0; }
+.book table.tt.ch td.out { text-align: left; font-weight: 400; }
+.book table.tt.ch td.out .ov, .book table.tt.ch td.out i { font-weight: 600; }
+.book table.tt td i { font: italic 12.0px "Times New Roman", serif; }
+.book table.tt th.mean, .book table.tt td.mean { text-align: left; }
+.book table.st td i, .book table.st th i { font: italic 11.5px "Times New Roman", serif; }
+.book table.st tr.hit td { background: var(--soft2); }
+.book table.st tr.inv td { color: #d62828; background: #fdecec; }
+.book table.st td { white-space: nowrap; }
+.book .redrow { display: flex; flex-wrap: wrap; gap: 9.4px 23.6px; margin: .3em 0 .7em 0; }
+.book .redrow .redt .sublab2 { margin-left: 0; }
+.book .redrow table.st { margin: 0; }
+.book .redrow table.st th, .book .redrow table.st td { padding-left: 10.4px; padding-right: 10.4px; }
+.book ol.dsteps { padding-left: 33.1px; margin: .3em 0 .8em; }
+.book ol.dsteps > li { margin-bottom: .25em; }
+.book ol.dsteps > li::marker { font: 700 13.5px "Prompt", var(--font); color: var(--acc); }
+.book .figpair { display: flex; gap: 28.3px; justify-content: flex-start; align-items: flex-end; padding-left: 18.9px; }
+.book .figpair .sub { text-align: center; }
+.book .big { font-size: 1.05em; }
+.book .eq-list .lbl { font: 400 14.0px "TH Sarabun New"; color: var(--ink-2); font-style: normal; margin-left: 18.9px; }
+.book table.tt.tl th, .book table.tt.tl td { padding-left: 11.3px; padding-right: 11.3px; }
+.book table.tt.tl td.mean { min-width: 141.8px; }
+.book table.tt.path td.mean { white-space: nowrap; }

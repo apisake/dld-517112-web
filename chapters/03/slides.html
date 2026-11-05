@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สไลด์ บทที่ 3 ลอจิกเกท · 517 112</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/slides.css">
+<script src="../../assets/js/site.js"></script>
+<script src="../../assets/js/logic.js"></script>
+<script src="../../assets/js/numbers.js"></script>
+<script src="../../assets/js/slides.js"></script>
+<script src="widgets.js"></script>
+<style>
+  .slide .gcard { display: grid; grid-template-rows: auto auto 1fr; gap: 6px; text-align: center; }
+  .slide .gcard img { height: 90px; object-fit: contain; background: #fff; border-radius: 8px; padding: 4px; }
+  .slide .tt { border-collapse: collapse; font: 600 20px var(--mono); margin: 0 auto; }
+  .slide .tt td, .slide .tt th { padding: 2px 12px; border-bottom: 1px solid var(--line); text-align: center; }
+  .slide .tt th { font: 600 15px var(--font); color: var(--ink-3); }
+  .slide .tt td.o { color: var(--accent); }
+  .slide table.data td, .slide table.data th { padding: 6px 12px; }
+</style>
+</head>
+<body class="deck" data-footer="517 112 · บทที่ 3 ลอจิกเกท" data-lesson="index.html">
+<div class="stage"><div class="canvas">
+
+<section class="slide title">
+  <div class="kicker">517 112 DIGITAL LOGIC DESIGN · สัปดาห์ที่ 4</div>
+  <h1>บทที่ 3<br>ลอจิกเกท</h1>
+  <div class="en">Logic Gates</div>
+  <div class="meta">CLO4 หลักการตรรกะเชิงเลข · CLO8 เลือกเกทพื้นฐาน · CLO9 เลือกไอซีให้เหมาะกับระดับแรงดัน<br>ปฏิบัติการ: ทดสอบเกทด้วยไอซีตระกูล 74 และอ่าน datasheet</div>
+  <aside class="notes">ช่วงแรก (สไลด์ 2–16) เป็นเกท 7 ชนิดในแง่ลอจิก ช่วงหลัง (สไลด์ 17 เป็นต้นไป, slides.html#17) เป็นไอซีจริงและคุณลักษณะทางไฟฟ้า ซึ่งใช้ตรงกับชั่วโมงปฏิบัติการ</aside>
+</section>
+
+<section class="slide">
+  <div class="kicker">บทที่ 3</div>
+  <h2>จุดประสงค์ และเนื้อหาในบทนี้</h2>
+  <div class="cols wide-r" style="align-items:start">
+    <div class="card" style="font-size:19px"><b>🎯 จุดประสงค์</b>
+      <ol style="margin-top:6px;line-height:1.45">
+        <li>เข้าใจ NOT, AND, OR</li><li>เข้าใจ NAND, NOR</li><li>เขียนสมการบูลีนของเกทได้</li><li>อธิบาย XOR, XNOR</li>
+        <li>จำสัญลักษณ์มาตรฐาน</li><li>สร้างผังเวลาอินพุต–เอาต์พุต</li><li>เลือกตระกูล/เบอร์ไอซีโดยพิจารณา noise margin, fan-out, เวลาหน่วง, กำลังไฟฟ้า</li>
+      </ol></div>
+    <ol style="font-size:23px;list-style:none;padding:0">
+      <li><span class="mono hl">3.1</span> อินเวอร์เตอร์</li><li><span class="mono hl">3.2</span> AND gate</li><li><span class="mono hl">3.3</span> OR gate</li>
+      <li><span class="mono hl">3.4</span> NAND gate</li><li><span class="mono hl">3.5</span> NOR gate</li><li><span class="mono hl">3.6</span> XOR และ XNOR</li>
+      <li><span class="mono hl">3.7</span> ตระกูลวงจรรวมดิจิทัลและคุณลักษณะทางไฟฟ้า</li>
+    </ol>
+  </div>
+  <aside class="notes">เชื่อมจากบทที่ 1 (NOT/AND/OR เบื้องต้น) และบทที่ 2 (1’s complement, การบวกบิต)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.1</span>อินเวอร์เตอร์ · สัญลักษณ์มาตรฐาน ANSI/IEEE 91-1984</h2>
+  <div class="cols">
+    <div><div class="figbox"><img src="img/fig3-1a.png" alt="สัญลักษณ์รูปทรงเฉพาะ" style="max-height:140px"></div><div class="cap">(ก) รูปทรงเฉพาะ (distinctive shape) + negation indicator ◦</div>
+      <div class="figbox" style="margin-top:12px"><img src="img/fig3-1b.png" alt="สัญลักษณ์โครงร่างสี่เหลี่ยม" style="max-height:140px"></div><div class="cap">(ข) โครงร่างสี่เหลี่ยม (rectangular outline) + polarity indicator ◺</div></div>
+    <ul class="small">
+      <li><b class="hl">ฟองน้ำ (bubble)</b> = negation indicator → การ complement</li>
+      <li class="frag">ฟองน้ำที่อินพุต → <b>active-LOW input</b> (0 คือสถานะ active)</li>
+      <li class="frag">ฟองน้ำที่เอาต์พุต → <b>active-LOW output</b></li>
+      <li class="frag">ไม่มีฟองน้ำ → <b>active-HIGH</b></li>
+      <li class="frag">สามเหลี่ยม (polarity indicator) มีความหมายเหมือนฟองน้ำ</li>
+    </ul>
+  </div>
+  <aside class="notes">ตำแหน่งฟองน้ำ/สามเหลี่ยมที่ต่างกันในรูปที่ 3.1 ไม่ได้ทำให้การทำงานของอินเวอร์เตอร์เปลี่ยน · ในวิชานี้ใช้สัญลักษณ์รูปทรงเฉพาะเป็นหลัก</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.1</span>ตารางค่าความจริง · ผังเวลา · สมการ</h2>
+  <div class="cols">
+    <div>
+      <table class="tt" style="margin:0 0 18px"><tr><th>อินพุต A</th><th>เอาต์พุต X</th></tr><tr><td>0 (LOW)</td><td class="o">1 (HIGH)</td></tr><tr><td>1 (HIGH)</td><td class="o">0 (LOW)</td></tr></table>
+      <p class="big frag" style="text-align:center">X = <span class="ov">A</span> <span class="small muted">(อ่าน “เอบาร์” / “น็อตเอ”)</span></p>
+      <p class="small frag"><b>ผังเวลา (timing diagram)</b> = กราฟรูปคลื่นตั้งแต่ 2 รูปขึ้นไปบนแกนเวลาเดียวกัน</p>
+    </div>
+    <div><div class="figbox"><img src="img/fig3-3.png" alt="รูปที่ 3.3" style="max-height:200px"></div><div class="cap">รูปที่ 3.3 ผังเวลาของอินเวอร์เตอร์</div>
+      <div class="figbox frag" style="margin-top:10px"><img src="img/fig3-6.png" alt="รูปที่ 3.6" style="max-height:120px"></div><div class="cap frag">รูปที่ 3.6 อินเวอร์เตอร์ 8 ตัวหา 1’s complement</div></div>
+  </div>
+  <aside class="notes">ตัวอย่างที่ 3.1: วาดเอาต์พุตของอินเวอร์เตอร์จากรูปที่ 3.4 — สถานะของเอาต์พุต active ที่ค่า 0 เพราะมีฟองน้ำที่เอาต์พุต</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.2</span>AND gate</h2>
+  <div class="cols">
+    <div>
+      <div class="figbox"><img src="img/fig3-8.png" alt="รูปที่ 3.8" style="max-height:220px"></div><div class="cap">รูปที่ 3.8 ทุกกรณีของ AND 2 อินพุต</div>
+      <p class="small frag" style="margin-top:12px">เป็น <b class="hl">1 เฉพาะเมื่ออินพุตทุกขาเป็น 1</b> · X = A·B = <b>AB</b></p>
+    </div>
+    <div>
+      <table class="tt"><tr><th>A</th><th>B</th><th>X</th></tr><tr><td>0</td><td>0</td><td class="o">0</td></tr><tr><td>0</td><td>1</td><td class="o">0</td></tr><tr><td>1</td><td>0</td><td class="o">0</td></tr><tr><td>1</td><td>1</td><td class="o">1</td></tr></table>
+      <div class="callout tip frag" style="font-size:20px;margin-top:16px"><b>N = 2<sup>n</sup></b> กรณี · 2 อินพุต = 4 · 3 อินพุต = 8 · 4 อินพุต = 16<br><span class="mini">การคูณแบบบูลีน 0·0=0 · 0·1=0 · 1·0=0 · 1·1=1</span></div>
+    </div>
+  </div>
+  <aside class="notes">ตัวอย่างที่ 3.2: ตารางค่าความจริง AND 3 อินพุต 8 แถว มี X = 1 แถวเดียว</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: ผังเวลาของ AND gate</h2>
+  <div class="body"><div data-widget="gatewave" data-gate="AND"></div></div>
+  <aside class="notes">ใช้โหมด “ลองวาดเอาต์พุตเอง” ให้นักศึกษาทายก่อน แล้วกดตรวจคำตอบ · เน้น: ต้องพิจารณาทุกช่วงเวลาที่อินพุตใดอินพุตหนึ่งเปลี่ยน (ตัวอย่างที่ 3.3–3.5)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.2.5</span>ประยุกต์: วงจรเตือนคาดเข็มขัดนิรภัย</h2>
+  <div class="cols wide-l">
+    <div class="figbox"><img src="img/fig3-14.png" alt="รูปที่ 3.14" style="max-height:330px"></div>
+    <ul class="small">
+      <li><b>A</b> = กุญแจสตาร์ท (HIGH เมื่อบิด)</li>
+      <li><b>B</b> = ช่องเสียบเข็มขัด (HIGH เมื่อ<u>ไม่</u>ได้เสียบ)</li>
+      <li><b>C</b> = timer (HIGH 30 วินาที)</li>
+      <li class="frag">เสียงดังเมื่อ <b class="acc">X = ABC = 1</b></li>
+    </ul>
+  </div>
+  <aside class="notes">ถามนำ: ถ้าต้องการให้เตือนตลอดจนกว่าจะคาดเข็มขัด (ไม่มี timer) ต้องแก้อย่างไร? → ตัด C ออก ใช้ AND 2 อินพุต</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.3</span>OR gate</h2>
+  <div class="cols">
+    <div>
+      <div class="figbox"><img src="img/fig3-16.png" alt="รูปที่ 3.16" style="max-height:220px"></div><div class="cap">รูปที่ 3.16 ทุกกรณีของ OR 2 อินพุต</div>
+      <p class="small frag" style="margin-top:12px">เป็น <b class="hl">0 เฉพาะเมื่ออินพุตทุกขาเป็น 0</b> · X = <b>A + B</b></p>
+    </div>
+    <div>
+      <table class="tt"><tr><th>A</th><th>B</th><th>X</th></tr><tr><td>0</td><td>0</td><td class="o">0</td></tr><tr><td>0</td><td>1</td><td class="o">1</td></tr><tr><td>1</td><td>0</td><td class="o">1</td></tr><tr><td>1</td><td>1</td><td class="o">1</td></tr></table>
+      <div class="callout warn frag" style="font-size:20px;margin-top:16px"><b>การบวกแบบบูลีน: 1 + 1 = 1</b> (ไม่มีตัวทด)<br><span class="mini">ต่างจากการบวกเลขไบนารี 1 + 1 = 10</span></div>
+    </div>
+  </div>
+  <aside class="notes">ประยุกต์ (รูปที่ 3.22): ระบบเตือนการบุกรุก — ประตู 1 บานและหน้าต่าง 2 บาน เปิดบานใดบานหนึ่งก็เตือน X = A + B + C</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: ผังเวลาของ OR gate</h2>
+  <div class="body"><div data-widget="gatewave" data-gate="OR"></div></div>
+  <aside class="notes">ตัวอย่างที่ 3.6–3.8 · ลองเปลี่ยนเป็น 3 อินพุต</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.4–3.5</span>NAND และ NOR</h2>
+  <div class="grid-2" style="font-size:20px">
+    <div class="card">
+      <div class="figbox"><img src="img/fig3-23a.png" alt="NAND" style="max-height:90px"></div>
+      <p style="margin:10px 0 4px"><b class="hl">NAND</b> = NOT ของ AND · X = <span class="ov">AB</span></p>
+      <p class="mini">เป็น <b>0</b> เฉพาะเมื่อทุกอินพุตเป็น 1</p>
+      <table class="tt"><tr><th>A</th><th>B</th><th>X</th></tr><tr><td>0</td><td>0</td><td class="o">1</td></tr><tr><td>0</td><td>1</td><td class="o">1</td></tr><tr><td>1</td><td>0</td><td class="o">1</td></tr><tr><td>1</td><td>1</td><td class="o">0</td></tr></table>
+    </div>
+    <div class="card frag">
+      <div class="figbox"><img src="img/fig3-28a.png" alt="NOR" style="max-height:90px"></div>
+      <p style="margin:10px 0 4px"><b class="hl">NOR</b> = NOT ของ OR · X = <span class="ov">A + B</span></p>
+      <p class="mini">เป็น <b>1</b> เฉพาะเมื่อทุกอินพุตเป็น 0</p>
+      <table class="tt"><tr><th>A</th><th>B</th><th>X</th></tr><tr><td>0</td><td>0</td><td class="o">1</td></tr><tr><td>0</td><td>1</td><td class="o">0</td></tr><tr><td>1</td><td>0</td><td class="o">0</td></tr><tr><td>1</td><td>1</td><td class="o">0</td></tr></table>
+    </div>
+  </div>
+  <aside class="notes">อภิปรายคำว่า active-LOW จากตัวอย่างที่ 3.9 — เอาต์พุตของ NAND “active” (= 0) เมื่อทุกอินพุตเป็น 1</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.4.3 · 3.5.3</span>Negative-OR ≡ NAND · Negative-AND ≡ NOR</h2>
+  <div class="grid-2" style="margin-bottom:16px">
+    <div class="figbox"><img src="img/fig3-27.png" alt="รูปที่ 3.27" style="max-height:110px"></div>
+    <div class="figbox frag"><img src="img/fig3-32.png" alt="รูปที่ 3.32" style="max-height:110px"></div>
+  </div>
+  <div class="grid-2 small">
+    <p><span class="ov">AB</span> = <span class="ov">A</span> + <span class="ov">B</span> — OR ที่มีอินพุต active-LOW</p>
+    <p class="frag"><span class="ov">A + B</span> = <span class="ov">A</span>·<span class="ov">B</span> — AND ที่มีอินพุต active-LOW</p>
+  </div>
+  <p class="small muted frag">ตารางค่าความจริงเท่ากันทุกแถว (ตารางที่ 3.5, 3.7) → ทฤษฎีบทของ DeMorgan ในบทที่ 4</p>
+  <aside class="notes">ใช้แบบจำลองถัดไปพิสูจน์ทีละแถว</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: วงจรเทียบเท่า</h2>
+  <div class="body"><div data-widget="equiv"></div></div>
+  <aside class="notes">สลับ A, B ครบ 4 กรณีทั้งสองคู่</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.6</span>XOR และ XNOR</h2>
+  <div class="grid-2" style="font-size:20px">
+    <div class="card">
+      <div class="figbox"><img src="img/fig3-33a.png" alt="XOR" style="max-height:80px"></div>
+      <p style="margin:10px 0 4px"><b class="hl">XOR</b> — 1 เมื่ออินพุต<b>ต่างกัน</b> · X = A ⊕ B</p>
+      <table class="tt"><tr><th>A</th><th>B</th><th>X</th></tr><tr><td>0</td><td>0</td><td class="o">0</td></tr><tr><td>0</td><td>1</td><td class="o">1</td></tr><tr><td>1</td><td>0</td><td class="o">1</td></tr><tr><td>1</td><td>1</td><td class="o">0</td></tr></table>
+    </div>
+    <div class="card frag">
+      <div class="figbox"><img src="img/fig3-35a.png" alt="XNOR" style="max-height:80px"></div>
+      <p style="margin:10px 0 4px"><b class="hl">XNOR</b> — 1 เมื่ออินพุต<b>เหมือนกัน</b> · X = <span class="ov">A ⊕ B</span></p>
+      <table class="tt"><tr><th>A</th><th>B</th><th>X</th></tr><tr><td>0</td><td>0</td><td class="o">1</td></tr><tr><td>0</td><td>1</td><td class="o">0</td></tr><tr><td>1</td><td>0</td><td class="o">0</td></tr><tr><td>1</td><td>1</td><td class="o">1</td></tr></table>
+    </div>
+  </div>
+  <p class="small frag" style="margin-top:12px">ประยุกต์ (รูปที่ 3.39): XOR = <b>ผลบวกของ 2 บิต (ไม่คิดตัวทด)</b> → หัวใจของวงจรบวกในบทที่ 7</p>
+  <aside class="notes">ในเล่มกำหนดให้ XOR/XNOR เป็นเกท 2 อินพุต · โยงกลับบทที่ 2: รหัสเกรย์ก็ใช้ “บวกโดยไม่สนตัวทด” = XOR</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: ผังเวลา XOR เทียบ XNOR</h2>
+  <div class="body"><div data-widget="gatewave" data-gate="XOR" data-compare="XNOR"></div></div>
+  <aside class="notes">สองแถวล่างเป็น complement กันเสมอ (รูปที่ 3.38)</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: สนามทดลองเกท 7 ชนิด</h2>
+  <div class="body"><div data-widget="gatelab"></div></div>
+  <aside class="notes">สลับแบบสัญลักษณ์ “โครงร่างสี่เหลี่ยม” ให้รู้จักเครื่องหมาย & , ≥1 , =1 , 1 ที่จะพบใน datasheet</aside>
+</section>
+
+<section class="slide">
+  <h2>สรุปเกท 7 ชนิด</h2>
+  <table class="data" style="font-size:21px;width:100%">
+    <tr><th>เกท</th><th>สมการ</th><th>X = 1 เมื่อ</th><th>A,B = 00</th><th>01</th><th>10</th><th>11</th><th>ไอซี</th></tr>
+    <tr><td><b>NOT</b></td><td><span class="ov">A</span></td><td>A = 0</td><td colspan="4">A=0 → 1 · A=1 → 0</td><td class="num">7404</td></tr>
+    <tr><td><b>AND</b></td><td>AB</td><td>ทุกอินพุตเป็น 1</td><td>0</td><td>0</td><td>0</td><td>1</td><td class="num">7408</td></tr>
+    <tr><td><b>OR</b></td><td>A + B</td><td>มีอินพุตใดเป็น 1</td><td>0</td><td>1</td><td>1</td><td>1</td><td class="num">7432</td></tr>
+    <tr><td><b>NAND</b></td><td><span class="ov">AB</span></td><td>มีอินพุตใดเป็น 0</td><td>1</td><td>1</td><td>1</td><td>0</td><td class="num">7400</td></tr>
+    <tr><td><b>NOR</b></td><td><span class="ov">A + B</span></td><td>ทุกอินพุตเป็น 0</td><td>1</td><td>0</td><td>0</td><td>0</td><td class="num">7402</td></tr>
+    <tr><td><b>XOR</b></td><td>A ⊕ B</td><td>อินพุตต่างกัน</td><td>0</td><td>1</td><td>1</td><td>0</td><td class="num">7486</td></tr>
+    <tr><td><b>XNOR</b></td><td><span class="ov">A ⊕ B</span></td><td>อินพุตเหมือนกัน</td><td>1</td><td>0</td><td>0</td><td>1</td><td class="num">—</td></tr>
+  </table>
+  <aside class="notes">ให้นักศึกษาถ่ายภาพสไลด์นี้ไว้ใช้ในชั่วโมงปฏิบัติการ</aside>
+</section>
+
+<!-- ===== 3.7 ===== -->
+<section class="slide section">
+  <div class="kicker">หัวข้อ 3.7</div>
+  <div class="no">IC</div>
+  <h2>ตระกูลวงจรรวมดิจิทัลและคุณลักษณะทางไฟฟ้า</h2>
+  <p class="muted">จาก 0/1 สู่แรงดัน กระแส เวลา และกำลังไฟฟ้าจริง · <span class="clo-chip">CLO9</span></p>
+  <aside class="notes">ช่วงนี้เตรียมตรงสำหรับปฏิบัติการ — ให้นักศึกษาเปิด datasheet ของ 74LS00 / 74HC00 ประกอบ</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.7.1</span>ไอซีฟังก์ชันคงที่ · ตัวถัง · การจัดขา</h2>
+  <div class="cols" style="align-items:start">
+    <ul class="small">
+      <li><b>DIP</b> ขาห่าง 2.54 มม. through-hole → breadboard</li>
+      <li><b>SOIC</b> 1.27 มม. surface mount</li>
+      <li><b>TSSOP</b> ≤ 0.65 มม.</li>
+      <li class="frag">ขา 1 อยู่ใกล้<b>รอยบาก/จุด</b> นับ<b>ทวนเข็มนาฬิกา</b> (มองจากด้านบน)</li>
+      <li class="frag">7400: ขา 14 = V<sub>CC</sub> · ขา 7 = GND · ชื่อขา 1A 1B 1Y = เกทตัวที่ 1</li>
+    </ul>
+    <table class="data frag" style="font-size:18px">
+      <tr><th>ฟังก์ชัน</th><th>เกท</th><th>ฟังก์ชัน</th><th>เกท</th></tr>
+      <tr><td class="num">00</td><td>NAND 2 × 4</td><td class="num">14</td><td>Schmitt NOT × 6</td></tr>
+      <tr><td class="num">02</td><td>NOR 2 × 4</td><td class="num">20</td><td>NAND 4 × 2</td></tr>
+      <tr><td class="num">04</td><td>NOT × 6</td><td class="num">27</td><td>NOR 3 × 3</td></tr>
+      <tr><td class="num">08</td><td>AND 2 × 4</td><td class="num">32</td><td>OR 2 × 4</td></tr>
+      <tr><td class="num">10</td><td>NAND 3 × 3</td><td class="num">86</td><td>XOR 2 × 4</td></tr>
+    </table>
+  </div>
+  <aside class="notes">ตารางที่ 3.10 · เตือน: บางเบอร์จัดขาต่างกัน เช่น 7402 (เอาต์พุตอยู่ขา 1, 4, 10, 13) — ตรวจ datasheet ทุกครั้ง</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: การจัดขาไอซี 74xx</h2>
+  <div class="body"><div data-widget="pinout"></div></div>
+  <aside class="notes">ปิดไฟเลี้ยงแล้วถามว่าเอาต์พุตเป็นอะไร → “ไม่มีความหมาย” · สลับไป 7402 ให้เห็นว่าขาเอาต์พุตย้ายตำแหน่ง</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.7.2</span>อ่านรหัสไอซี: SN74LVC00AD</h2>
+  <div class="calcbox" style="font:700 52px var(--mono);margin-bottom:20px;display:flex;gap:4px;justify-content:center">
+    <span style="color:#7c3aed">SN</span><span style="color:#0ea5e9">74</span><span style="color:#e8590c">LVC</span><span style="color:#12b886">00</span><span style="color:#64748b">A</span><span style="color:#db2777">D</span>
+  </div>
+  <div class="grid-3" style="font-size:18px">
+    <div class="card"><b style="color:#7c3aed">SN</b> ผู้ผลิต (TI)</div>
+    <div class="card"><b style="color:#0ea5e9">74</b> เกรดทั่วไป (54 = ทหาร −55…125 °C)</div>
+    <div class="card"><b style="color:#e8590c">LVC</b> ตระกูล → แรงดัน ระดับลอจิก ความเร็ว กำลัง</div>
+    <div class="card"><b style="color:#12b886">00</b> quad 2-input NAND</div>
+    <div class="card"><b style="color:#64748b">A</b> รุ่นปรับปรุง</div>
+    <div class="card"><b style="color:#db2777">D</b> ตัวถัง SOIC (N = DIP, PW = TSSOP)</div>
+  </div>
+  <p class="small muted" style="margin-top:14px">ตระกูลที่พบบ่อย: <b>74LS</b> (TTL) · <b>74HC</b> · <b>74HCT</b> (อินพุตระดับ TTL) · <b>74LVC</b> (≤ 3.3 V)</p>
+  <aside class="notes">ตารางที่ 3.11 · ให้นักศึกษาอ่านเบอร์บนไอซีที่ได้รับในห้องปฏิบัติการ แล้วถอดรหัสด้วยแบบจำลองในหน้าเนื้อหา</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.7.3</span>TTL vs CMOS · ระดับแรงดันลอจิก</h2>
+  <div class="cols" style="align-items:start">
+    <ul class="small">
+      <li><b>ไฟเลี้ยง:</b> TTL 5 V ±5% · 74HC 2–6 V · 74HCT 4.5–5.5 V · 74LVC 1.65–3.6 V</li>
+      <li class="frag"><b>กระแสอินพุต:</b> TTL มาก (โดยเฉพาะ LOW) · CMOS ระดับ µA</li>
+      <li class="frag"><b>กำลังไฟฟ้า:</b> TTL คงที่ · CMOS กินไฟเฉพาะขณะเปลี่ยนสถานะ</li>
+    </ul>
+    <table class="data frag" style="font-size:19px">
+      <tr><th>ตระกูล</th><th>V<sub>CC</sub></th><th>V<sub>IH</sub></th><th>V<sub>IL</sub></th><th>V<sub>OH</sub></th><th>V<sub>OL</sub></th></tr>
+      <tr><td>74LS</td><td>5</td><td>2.0</td><td>0.8</td><td>2.7</td><td>0.5</td></tr>
+      <tr><td>74HC</td><td>5</td><td>3.5</td><td>1.5</td><td>4.4</td><td>0.33</td></tr>
+      <tr><td>74HCT</td><td>5</td><td>2.0</td><td>0.8</td><td>4.4</td><td>0.33</td></tr>
+      <tr><td>74LVC</td><td>3.3</td><td>2.0</td><td>0.8</td><td>2.4</td><td>0.4</td></tr>
+    </table>
+  </div>
+  <aside class="notes">ตารางที่ 3.12 (ค่าตัวแทน หน่วย V) — ค่าจริงต้องใช้จาก datasheet ของเบอร์ที่ใช้เสมอ · โยงบทที่ 1: V<sub>IH(min)</sub>/V<sub>IL(max)</sub> คือ V<sub>H(min)</sub>/V<sub>L(max)</sub> ฝั่งอินพุต</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.7.4</span>Noise Margin</h2>
+  <div class="cols">
+    <div>
+      <div class="formula"><div class="eq">NM<sub>H</sub> = V<sub>OH(min)</sub> − V<sub>IH(min)</sub></div></div>
+      <div class="formula"><div class="eq">NM<sub>L</sub> = V<sub>IL(max)</sub> − V<sub>OL(max)</sub></div></div>
+      <p class="small frag">ต้อง<b>เป็นบวกทั้งคู่</b> จึงต่อกันได้ · ความทนทานต่อสัญญาณรบกวน = ค่าที่น้อยกว่า</p>
+    </div>
+    <div class="card frag" style="font-size:20px"><b>ตัวอย่างที่ 3.13</b> (สัญญาณรบกวน 0.5 V ขณะสาย LOW)<br>
+      74LS: NM<sub>H</sub> = 0.7 · NM<sub>L</sub> = <b class="acc">0.3 V</b> → 0.5 > 0.3 <b>อ่านผิดได้ ✗</b><br>
+      74HC: NM<sub>H</sub> = 0.9 · NM<sub>L</sub> = <b class="acc">1.17 V</b> → ยัง<b>ถูกต้อง ✓</b></div>
+  </div>
+  <aside class="notes">ใช้แบบจำลองถัดไปแสดงตัวอย่างที่ 3.13 ด้วยแถบสัญญาณรบกวน</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: Noise margin และการเชื่อมต่อต่างตระกูล</h2>
+  <div class="body"><div data-widget="noisemargin"></div></div>
+  <aside class="notes">ไล่ปุ่มกรณีในเล่ม: LVC→HC ✗ (NMH −1.1 V) แล้วเปลี่ยนเป็น LVC→HCT ✓ (หัวข้อ 3.7.7) · HC 5 V → HC 3.3 V แสดงคำเตือนแรงดันเกินพิกัด</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.7.5</span>Fan-out</h2>
+  <div class="cols">
+    <div>
+      <div class="formula"><div class="eq" style="font-size:24px">fan-out<sub>L</sub> = I<sub>OL(max)</sub> / I<sub>IL(max)</sub></div></div>
+      <div class="formula"><div class="eq" style="font-size:24px">fan-out<sub>H</sub> = I<sub>OH(max)</sub> / I<sub>IH(max)</sub></div></div>
+      <p class="small">fan-out = min (ปัดลง)</p>
+    </div>
+    <div class="card frag" style="font-size:20px"><b>ตัวอย่างที่ 3.14</b><br>
+      (I) 74LS → 74LS: 8/0.4 = 20 · 0.4/0.02 = 20 → <b class="acc">20</b><br>
+      (II) 74HC → 74LS: 4/0.4 = 10 · 4/0.02 = 200 → <b class="acc">10</b> (จำกัดด้วย LOW)
+      <p class="mini muted" style="margin:8px 0 0">CMOS: อินพุต ~1 µA → fan-out หลายพัน แต่ถูกจำกัดด้วยความจุอินพุต 3–10 pF</p></div>
+  </div>
+  <aside class="notes">แบบจำลองในหน้าเนื้อหาหัวข้อ 3.7.5 ให้ลากจำนวนโหลดเพื่อดูการเกินพิกัด</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.7.6</span>Propagation delay และกำลังไฟฟ้า</h2>
+  <div class="cols" style="align-items:start">
+    <div class="small">
+      <p><b>t<sub>PHL</sub></b>, <b>t<sub>PLH</sub></b> วัดที่จุด 50% ของขอบสัญญาณ · t<sub>p</sub> = (t<sub>PLH</sub> + t<sub>PHL</sub>)/2</p>
+      <p class="frag">74LS00: 9 ns, 10 ns → t<sub>p</sub> ≈ 9.5 ns · เวลาหน่วง<b>สะสม</b>ทุกชั้น</p>
+      <p class="frag">TTL ≈ 2 mW/เกท (คงที่) · CMOS <b>P<sub>D</sub> = (C<sub>PD</sub> + C<sub>L</sub>) V<sub>CC</sub>² f</b></p>
+    </div>
+    <div class="card frag" style="font-size:20px">74HC: 20 pF × 25 × 1 MHz = <b class="acc">0.5 mW</b><br>
+      5 V → 3.3 V: (3.3/5)² = <b class="acc">0.4356</b> เท่า (ลด ~56%)<br>
+      speed-power: 74LS 19 pJ · 74HC 4.5 pJ</div>
+  </div>
+  <aside class="notes">ลองแบบจำลองในหน้าเนื้อหาหัวข้อ 3.7.6: อินเวอร์เตอร์ต่ออนุกรม และเลื่อน V<sub>CC</sub></aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: Propagation delay สะสม</h2>
+  <div class="body"><div data-widget="propdelay"></div></div>
+  <aside class="notes">ตั้งเป็น 6 ชั้น ตรงกับข้อ 6 ของใบงานปฏิบัติการ (วัด t<sub>p</sub> ด้วย 7404)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.7.7–3.7.8</span>เชื่อม 3.3 V ⇄ 5 V · อินพุตที่ไม่ใช้ · ดีคัปปลิง</h2>
+  <div class="grid-2" style="font-size:19px">
+    <div class="card"><b class="hl">3.3 V → 5 V</b><br>74LVC (V<sub>OH</sub> 2.4) → 74HC (V<sub>IH</sub> 3.5): NM<sub>H</sub> = −1.1 ✗<br>→ รับด้วย <b>74HCT</b>: NM<sub>H</sub> = 0.4, NM<sub>L</sub> = 0.4 ✓</div>
+    <div class="card frag"><b class="hl">5 V → 3.3 V</b><br>ปัญหาคือ<b>แรงดันเกินพิกัด</b> (ไดโอดป้องกันอินพุต)<br>→ ใช้ <b>74LVC</b> (อินพุตทน 5.5 V) หรือ 74LVC1T45</div>
+    <div class="card frag"><b class="hl">อินพุตที่ไม่ใช้ ห้ามลอย</b><br>AND/NAND → V<sub>CC</sub> (TTL ผ่าน ~1 kΩ) · OR/NOR → GND · หรือต่อร่วมกับอินพุตที่ใช้</div>
+    <div class="card frag"><b class="hl">ดีคัปปลิง</b><br>0.1 µF เซรามิกคร่อม V<sub>CC</sub>–GND ใกล้ไอซี<b>ทุกตัว</b> + 10 µF ที่จุดจ่ายไฟของบอร์ด</div>
+  </div>
+  <aside class="notes">รูปที่ 3.44–3.45 · ในห้องปฏิบัติการตรวจทุกโต๊ะว่ามีตัวเก็บประจุ 0.1 µF</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">3.7.9</span>ขั้นตอนการเลือกไอซีลอจิก</h2>
+  <ol class="points" style="font-size:19px;gap:8px">
+    <li class="frag"><b>ฟังก์ชันและจำนวนเกท</b> — นับเกท เลือกเบอร์ที่ใช้ตัวถังน้อยที่สุด</li>
+    <li class="frag"><b>แรงดันไฟเลี้ยง</b> — 5 V: 74HC/HCT/LS · ≤ 3.3 V: 74LVC</li>
+    <li class="frag"><b>ความเข้ากันได้ของระดับลอจิก</b> — NM<sub>H</sub>, NM<sub>L</sub> > 0 และไม่เกินพิกัด</li>
+    <li class="frag"><b>สภาวะแวดล้อม</b> — เกรดอุณหภูมิ · สัญญาณรบกวน → Schmitt trigger (74HC14)</li>
+    <li class="frag"><b>ความเร็ว กำลังไฟฟ้า การขับโหลด</b> — t<sub>p</sub> สะสม, ไฟเลี้ยงต่ำสำหรับแบตเตอรี่, fan-out</li>
+    <li class="frag"><b>ตัวถัง</b> — DIP สำหรับทดลอง · SOIC/TSSOP สำหรับ PCB</li>
+  </ol>
+  <aside class="notes">ตัวอย่างที่ 3.15: ระบบพัดลมโรงงาน 3.3 V รับสัญญาณจาก 74HC 5 V → เลือก 74LVC32A + 74LVC08A เกรดอุตสาหกรรม −40…85 °C ตัวถัง SOIC, 0.1 µF, ต่ออินพุตเกทที่ไม่ใช้ลงกราวด์</aside>
+</section>
+
+<section class="slide">
+  <h2>เช็กความเข้าใจ</h2>
+  <div class="grid-2" style="font-size:21px;gap:16px">
+    <div class="card"><b>Q1</b> เกทใดให้ 0 เฉพาะเมื่อทุกอินพุตเป็น 1?<div class="frag acc" style="margin-top:6px">→ NAND</div></div>
+    <div class="card"><b>Q2</b> NAND ≡ วงจรใด?<div class="frag acc" style="margin-top:6px">→ Negative-OR (<span class="ov">A</span> + <span class="ov">B</span>)</div></div>
+    <div class="card"><b>Q3</b> 74LS → 74HC ที่ 5 V ต่อตรงได้หรือไม่?<div class="frag acc" style="margin-top:6px">→ ไม่ได้ NM<sub>H</sub> = 2.7 − 3.5 = −0.8 V → ใช้ 74HCT</div></div>
+    <div class="card"><b>Q4</b> อินพุตที่ไม่ใช้ของ AND ต่อที่ใด?<div class="frag acc" style="margin-top:6px">→ V<sub>CC</sub> (ให้เป็น 1)</div></div>
+  </div>
+  <aside class="notes">exit ticket ก่อนเข้าปฏิบัติการ · มอบหมายแบบฝึกหัดหัวข้อ 3.7 และแบบทดสอบท้ายบท</aside>
+</section>
+
+<section class="slide">
+  <div class="kicker">ปฏิบัติการสัปดาห์ที่ 4</div>
+  <h2>ทดสอบเกทด้วยไอซีตระกูล 74 และอ่าน datasheet</h2>
+  <ol class="small" style="line-height:1.7">
+    <li>ถอดรหัสเบอร์ไอซี + จดค่าทางไฟฟ้าจาก datasheet</li>
+    <li>ยืนยันตารางค่าความจริง 7400 / 7402 / 7404 / 7408 / 7432 / 7486</li>
+    <li>วัด V<sub>OH</sub>, V<sub>OL</sub> จริง แล้วคำนวณ NM<sub>H</sub>, NM<sub>L</sub></li>
+    <li>สร้าง NOT / AND / OR จาก NAND (7400 ตัวเดียว)</li>
+    <li>ผังเวลาบนออสซิลโลสโคป (clock 1 kHz + สวิตช์)</li>
+    <li>(เสริม) วัด t<sub>p</sub> ด้วยอินเวอร์เตอร์ 6 ชั้น</li>
+  </ol>
+  <p class="mini muted">รายละเอียดอยู่ท้ายหน้าเนื้อหาบทที่ 3 · ⚠️ ตรวจขา 14 = V<sub>CC</sub>, 7 = GND และ 0.1 µF ก่อนจ่ายไฟ</p>
+  <aside class="notes">ใบงานปฏิบัติการที่ 2</aside>
+</section>
+
+<section class="slide section">
+  <div class="kicker">สัปดาห์หน้า</div>
+  <div class="no">04</div>
+  <h2>พีชคณิตบูลีน</h2>
+  <p class="muted">กฎและหลักเกณฑ์ · ทฤษฎีบทของ DeMorgan · การวิเคราะห์วงจรด้วยพีชคณิตบูลีน <span class="clo-chip">CLO2</span> <span class="clo-chip">CLO4</span></p>
+  <aside class="notes">เตรียมตัว: ทบทวนวงจรเทียบเท่า NAND ≡ Negative-OR ซึ่งจะกลายเป็นทฤษฎีบทของ DeMorgan</aside>
+</section>
+
+</div></div>
+</body>
+</html>

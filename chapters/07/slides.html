@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สไลด์ บทที่ 7 วงจรคอมไบเนชันของฟังก์ชันต่าง ๆ · 517 112</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/slides.css">
+<script src="../../assets/js/site.js"></script>
+<script src="../../assets/js/logic.js"></script>
+<script src="../../assets/js/numbers.js"></script>
+<script src="../../assets/js/boolean.js"></script>
+<script src="../../assets/js/slides.js"></script>
+<script src="widgets.js"></script>
+<style>
+  .slide .eq { font: 700 24px var(--mono); }
+  .slide [data-widget=comparator] svg { max-height: 190px; }
+  .slide [data-widget=graycode] svg { max-height: 240px; }
+  .slide [data-widget=mux] svg { max-height: 400px; }
+  .slide table.tt7 td, .slide table.tt7 th { padding: 2px 12px; text-align: center; }
+</style>
+</head>
+<body class="deck" data-footer="517 112 · บทที่ 7 วงจรคอมไบเนชันของฟังก์ชันต่าง ๆ" data-lesson="index.html">
+<div class="stage"><div class="canvas">
+
+<section class="slide title">
+  <div class="kicker">517 112 DIGITAL LOGIC DESIGN · สัปดาห์ที่ 9–10</div>
+  <h1 style="font-size:64px">บทที่ 7<br>วงจรคอมไบเนชัน<br>ของฟังก์ชันต่าง ๆ</h1>
+  <div class="en">Combinational Logic Functions</div>
+  <div class="meta">CLO3 · CLO5 &nbsp;|&nbsp; ปฏิบัติการ: วงจรบวกและวงจรถอดรหัส · multiplexer และ 7-segment</div>
+  <aside class="notes">สัปดาห์ที่ 9: 7.1–7.5 (adder, comparator, decoder, encoder) · สัปดาห์ที่ 10: 7.6–7.8 (code converter, MUX, DEMUX) แล้วต่อบทที่ 8 · สัปดาห์ที่ 9 รับข้อเสนอโครงงานกลุ่ม</aside>
+</section>
+
+<section class="slide">
+  <div class="kicker">บทที่ 7</div>
+  <h2>จุดประสงค์</h2>
+  <ol style="font-size:21px;line-height:1.5">
+    <li>แยกแยะ half-adder กับ full-adder และใช้ full-adder สร้างวงจรบวกหลายบิตแบบขนาน</li>
+    <li>รู้จักวงจร comparator แบบต่าง ๆ</li>
+    <li>สร้างวงจร binary decoder พื้นฐาน · ใช้ BCD-to-7-segment decoder แสดงผลตัวเลข</li>
+    <li>ประยุกต์ decimal-to-BCD priority encoder กับแป้นพิมพ์อย่างง่าย</li>
+    <li>สร้างวงจรแปลง binary ⇄ Gray code</li>
+    <li>รู้จัก multiplexer และ demultiplexer</li>
+  </ol>
+  <aside class="notes">บทนี้คือ “ชิ้นส่วนสำเร็จรูป” (MSI) ที่ใช้ประกอบเป็นระบบคอมพิวเตอร์ — ALU ใช้ adder/comparator, หน่วยความจำ/I/O ใช้ decoder, บัสข้อมูลใช้ MUX</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.1.1</span>Half-adder</h2>
+  <div class="cols wide-r">
+    <div>
+      <div class="figbox"><img src="img/fig7-1.png" alt="รูปที่ 7.1" style="max-height:130px"></div><div class="cap">รูปที่ 7.1 สัญลักษณ์</div>
+      <div class="figbox frag" style="margin-top:14px"><img src="img/fig7-2.png" alt="รูปที่ 7.2" style="max-height:150px"></div><div class="cap frag">รูปที่ 7.2 ผังวงจร</div>
+    </div>
+    <div class="small">
+      <p>รับ 2 บิต (A, B) → ให้ <b>sum (Σ)</b> และ <b>carry (C<sub>out</sub>)</b></p>
+      <table class="data tt7"><tr><th>A</th><th>B</th><th>C<sub>out</sub></th><th>Σ</th></tr><tr><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>1</td><td>0</td><td>1</td></tr><tr><td>1</td><td>0</td><td>0</td><td>1</td></tr><tr><td>1</td><td>1</td><td>1</td><td>0</td></tr></table>
+      <p class="eq frag" style="margin-top:12px">Σ = A ⊕ B &nbsp;·&nbsp; C<sub>out</sub> = AB</p>
+    </div>
+  </div>
+  <aside class="notes">ให้นักศึกษาสังเกตคอลัมน์ Σ = XOR และ C_out = AND เอง ก่อนเปิดสมการ</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.1.2</span>Full-adder</h2>
+  <div class="cols wide-r">
+    <div>
+      <div class="figbox"><img src="img/fig7-3.png" alt="รูปที่ 7.3" style="max-height:130px"></div><div class="cap">รูปที่ 7.3 · มี input carry C<sub>in</sub></div>
+      <div class="figbox frag" style="margin-top:12px"><img src="img/fig7-6a.png" alt="รูปที่ 7.6 (ก)" style="max-height:200px"></div><div class="cap frag">รูปที่ 7.6 (ก) half-adder 2 ตัว + OR</div>
+    </div>
+    <div class="small">
+      <table class="data tt7" style="font-size:17px"><tr><th>A</th><th>B</th><th>C<sub>in</sub></th><th>C<sub>out</sub></th><th>Σ</th></tr>
+        <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr><tr><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr><tr><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td></tr><tr><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr><tr><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr><tr><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr><tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr></table>
+      <p class="eq frag" style="font-size:20px;margin-top:10px">Σ = (A ⊕ B) ⊕ C<sub>in</sub><br>C<sub>out</sub> = AB + (A ⊕ B)C<sub>in</sub></p>
+    </div>
+  </div>
+  <aside class="notes">สมการที่ 7.3–7.4 · รูปที่ 7.5 คือวงจรสมบูรณ์ — ส่วนที่ระบายพื้นแต่ละส่วนคือ half-adder</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: Full-adder จาก half-adder 2 ตัว</h2>
+  <div class="body"><div data-widget="adder" data-mode="full"></div></div>
+  <aside class="notes">ตัวอย่างที่ 7.1: (ก) 1,0,0 → Σ=1, C=0 · (ข) 1,1,0 → Σ=0, C=1 · (ค) 1,0,1 → Σ=0, C=1 — ให้นักศึกษาทายก่อนกด</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.2</span>Parallel binary adder</h2>
+  <div class="cols">
+    <div><div class="figbox"><img src="img/fig7-7.png" alt="รูปที่ 7.7" style="max-height:220px"></div><div class="cap">รูปที่ 7.7 adder 2 บิต · C<sub>out</sub> บิตต่ำ → C<sub>in</sub> บิตสูง</div></div>
+    <div class="small">
+      <p><b>ตัวอย่างที่ 7.2</b> 101 + 011 ด้วย adder 3 บิต</p>
+      <div class="figbox frag"><img src="img/ch7-ex2.png" alt="ตัวอย่างที่ 7.2" style="max-height:250px"></div>
+      <p class="frag">ผล: Σ<sub>4</sub>Σ<sub>3</sub>Σ<sub>2</sub>Σ<sub>1</sub> = <b>1000</b> (5 + 3 = 8)</p>
+    </div>
+  </div>
+  <aside class="notes">FA1 (LSB) ต่อ C_in ลงกราวด์ = 0 · ตัวทดเกิดทุกบิต — ชี้ให้เห็นว่าบิตสูงต้องรอบิตต่ำ</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.2.1</span>Parallel adder ขนาด 4 บิต</h2>
+  <div class="figbox"><img src="img/fig7-8.png" alt="รูปที่ 7.8" style="max-height:210px"></div><div class="cap">รูปที่ 7.8 (ก) วงจรลอจิก (ข) สัญลักษณ์ · 4 บิต = nibble</div>
+  <div class="grid-2" style="font-size:19px;margin-top:10px">
+    <div class="card frag"><b>ตารางที่ 7.3</b> ใช้ตารางของ full-adder ทีละบิต n = 1 → 4 โดย C<sub>n−1</sub> มาจากบิตก่อนหน้า</div>
+    <div class="card frag"><b>ตย. 7.3</b> 1100 + 1100: n=1,2 → 0 · n=3 → Σ=0, C=1 · n=4 → Σ=1, C<sub>4</sub>=1 → <b>11000</b></div>
+  </div>
+  <aside class="notes">ไอซีจริง: 74LS283 (4-bit binary full adder with fast carry)</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: ตัวทดส่งต่อทีละบิต (ripple carry)</h2>
+  <div class="body"><div data-widget="paradder" data-layout="side"></div></div>
+  <aside class="notes">กด “ตย. 7.3” แล้วกด “ทีละขั้น” 4 ครั้ง ให้นักศึกษาบอกค่า Σ_n และ C_n ก่อนกดแต่ละครั้ง</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.2.3</span>การขยายวงจรบวก (cascade)</h2>
+  <div class="cols">
+    <div><div class="figbox"><img src="img/fig7-9.png" alt="รูปที่ 7.9" style="max-height:250px"></div><div class="cap">รูปที่ 7.9 adder 8 บิต</div></div>
+    <div><div class="figbox"><img src="img/fig7-10.png" alt="รูปที่ 7.10" style="max-height:150px"></div><div class="cap">รูปที่ 7.10 adder 16 บิต</div>
+      <div class="callout tip frag" style="font-size:19px;margin-top:14px">C<sub>4</sub> (output carry) ของชุดบิตต่ำ → C<sub>0</sub> (input carry) ของชุดบิตสูง</div></div>
+  </div>
+  <aside class="notes">ยิ่งต่อยาว carry ยิ่งต้องผ่านหลายชั้น → ช้าลง (โยงเรื่อง propagation delay บทที่ 3) — look-ahead carry เป็นความรู้เสริม</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.3</span>Comparator: ตรวจความเท่ากัน</h2>
+  <div class="body"><div data-widget="comparator" data-mode="2"></div></div>
+  <aside class="notes">ตัวอย่างที่ 7.4: (I) 10 กับ 10 → A = B · (II) 11 กับ 10 → A ≠ B · ถามต่อ: ขยายเป็น 4 บิตต้องเพิ่มอะไร (XOR 4 ตัว + AND 4 อินพุต)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.3.2</span>ตรวจความไม่เท่ากัน: A &gt; B, A = B, A &lt; B</h2>
+  <div class="cols wide-r">
+    <div><div class="figbox"><img src="img/fig7-13.png" alt="รูปที่ 7.13" style="max-height:300px"></div><div class="cap">รูปที่ 7.13 comparator 4 บิต</div></div>
+    <div class="small">
+      <p>เริ่มจาก<b>บิตที่มีนัยสำคัญสูงสุด</b> (A<sub>3</sub>, B<sub>3</sub>)</p>
+      <ul>
+        <li class="frag">A<sub>3</sub> = 1, B<sub>3</sub> = 0 → <b>A &gt; B</b></li>
+        <li class="frag">A<sub>3</sub> = 0, B<sub>3</sub> = 1 → <b>A &lt; B</b></li>
+        <li class="frag">A<sub>3</sub> = B<sub>3</sub> → ตรวจบิตถัดไป ทำซ้ำจนถึง LSB</li>
+      </ul>
+      <p class="frag muted">ลองในแบบจำลองหน้าก่อน: กด “4 บิต: ความไม่เท่ากัน”</p>
+    </div>
+  </div>
+  <aside class="notes">ไอซีจริง: 7485 (4-bit magnitude comparator) มีขา cascade input สำหรับต่อขยาย</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.4.1</span>Decoder ไบนารีพื้นฐาน</h2>
+  <div class="figbox"><img src="img/fig7-14.png" alt="รูปที่ 7.14" style="max-height:170px"></div><div class="cap">รูปที่ 7.14 ถอดรหัส 1001 (active-HIGH)</div>
+  <div class="cols" style="margin-top:8px">
+    <div class="small">
+      <p>ตรวจจับ<b>รหัสเดียว</b>: complement เฉพาะบิตที่เป็น 0 แล้ว AND</p>
+      <p class="eq" style="font-size:20px">X = A<sub>3</sub><span class="ov">A<sub>2</sub></span><span class="ov">A<sub>1</sub></span>A<sub>0</sub></p>
+      <p class="frag">ใช้ NAND แทน AND → เอาต์พุต <b>active-LOW</b> (เป็น 0 เมื่อพบรหัส)</p>
+    </div>
+    <div class="small frag">
+      <p><b>ตัวอย่างที่ 7.5</b> ถอดรหัส 1011</p>
+      <div class="figbox"><img src="img/ch7-ex5.png" alt="ตัวอย่างที่ 7.5" style="max-height:130px"></div>
+      <p class="eq" style="font-size:20px">X = A<sub>3</sub><span class="ov">A<sub>2</sub></span>A<sub>1</sub>A<sub>0</sub></p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: Decoder 4-line-to-16-line</h2>
+  <div class="body"><div data-widget="decoder"></div></div>
+  <aside class="notes">1-of-16 decoder ต้องใช้เกทถอดรหัส 16 ชุด (2⁴) · สลับ active-HIGH/LOW แล้วดูเอาต์พุตทั้ง 16 ขา (ตารางที่ 7.4)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.4.2–7.4.4</span>สัญลักษณ์และการประยุกต์ใช้ decoder</h2>
+  <div class="grid-3" style="align-items:start">
+    <div><div class="figbox"><img src="img/fig7-15.png" alt="รูปที่ 7.15" style="max-height:330px"></div><div class="cap">รูปที่ 7.15 1-of-16 (BIN/DEC)</div></div>
+    <div class="frag"><div class="figbox"><img src="img/fig7-16.png" alt="รูปที่ 7.16" style="max-height:330px"></div><div class="cap">รูปที่ 7.16 เลือกพอร์ต I/O ด้วย port address</div></div>
+    <div class="frag"><div class="figbox"><img src="img/fig7-17.png" alt="รูปที่ 7.17" style="max-height:330px"></div><div class="cap">รูปที่ 7.17 BCD-to-decimal — 10 เอาต์พุต<br>1010–1111 ไม่ใช่ BCD</div></div>
+  </div>
+  <aside class="notes">7.4.3: คอมพิวเตอร์ส่ง port address บนบัส decoder เปิดพอร์ตที่ตรงกันเพียงพอร์ตเดียว · รูปที่ 7.18 แสดงผังเวลาของ BCD decoder</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: BCD-to-decimal decoder</h2>
+  <div class="body"><div data-widget="decoder" data-mode="bcd"></div></div>
+  <aside class="notes">ป้อน 1010–1111 แล้วชี้ว่าไม่มีเอาต์พุตใดทำงาน (ตารางที่ 7.5)</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px"><span class="no">7.4.5</span>BCD-to-7-segment decoder</h2>
+  <div class="body"><div data-widget="seg7"></div></div>
+  <aside class="notes">รูปที่ 7.19–7.20 · 74LS47 เอาต์พุต active-LOW ใช้กับ common anode · ถาม: เลข 6 และ 9 ต่างกันที่ segment ใด (6 มี e · 9 ไม่มี e)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.5</span>Encoder: Decimal-to-BCD</h2>
+  <div class="cols">
+    <div><div class="figbox"><img src="img/fig7-22.png" alt="รูปที่ 7.22" style="max-height:300px"></div><div class="cap">รูปที่ 7.22 ใช้ OR gate 4 ตัว</div></div>
+    <div class="small">
+      <p>ทำงาน<b>ตรงข้าม</b>กับ decoder: 10 อินพุต → BCD 4 บิต</p>
+      <p class="mono frag" style="font-size:20px;line-height:1.7">A<sub>3</sub> = 8 + 9<br>A<sub>2</sub> = 4 + 5 + 6 + 7<br>A<sub>1</sub> = 2 + 3 + 6 + 7<br>A<sub>0</sub> = 1 + 3 + 5 + 7 + 9</p>
+      <p class="frag">ไม่ต้องต่ออินพุต 0 — ไม่กดปุ่มใดก็ได้ 0000</p>
+    </div>
+  </div>
+  <aside class="notes">ตารางที่ 7.7 · รูปที่ 7.23 ใช้กับแป้นกดตัวเลข</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: แป้นกดตัวเลข + encoder</h2>
+  <div class="body"><div data-widget="encoder"></div></div>
+  <aside class="notes">กด 3 กับ 4 พร้อมกันในโหมด OR → 0111 = 7 (ผิด) · สลับเป็น priority → 0100 = 4 · ไอซีจริง 74147 เป็น priority encoder</aside>
+</section>
+
+<section class="slide section">
+  <div class="kicker">สัปดาห์ที่ 10</div>
+  <div class="no">7.6</div>
+  <h2>วงจรแปลงรหัส · Multiplexer · Demultiplexer</h2>
+  <p class="muted">ทบทวน: adder · comparator · decoder · encoder</p>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.6</span>วงจรแปลงรหัส Binary ⇄ Gray</h2>
+  <div class="grid-2" style="align-items:start">
+    <div><div class="figbox"><img src="img/fig7-24.png" alt="รูปที่ 7.24" style="max-height:250px"></div><div class="cap">รูปที่ 7.24 Binary → Gray</div>
+      <p class="mono small" style="text-align:center">G<sub>3</sub> = B<sub>3</sub> · G<sub>i</sub> = B<sub>i+1</sub> ⊕ B<sub>i</sub></p></div>
+    <div class="frag"><div class="figbox"><img src="img/fig7-25.png" alt="รูปที่ 7.25" style="max-height:250px"></div><div class="cap">รูปที่ 7.25 Gray → Binary</div>
+      <p class="mono small" style="text-align:center">B<sub>3</sub> = G<sub>3</sub> · B<sub>i</sub> = B<sub>i+1</sub> ⊕ G<sub>i</sub></p></div>
+  </div>
+  <aside class="notes">ทบทวนบทที่ 2 หัวข้อรหัสเกรย์ · Gray → Binary ใช้บิตไบนารีที่เพิ่งได้ (ต่อเป็นทอด) ไม่ใช่บิต Gray</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: ตัวอย่างที่ 7.6</h2>
+  <div class="body"><div data-widget="graycode"></div></div>
+  <aside class="notes">(I) 0101 → 0111 · (II) 1011 → 1101</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.7</span>Multiplexer (data selector)</h2>
+  <div class="cols wide-r">
+    <div><div class="figbox"><img src="img/fig7-26.png" alt="รูปที่ 7.26" style="max-height:240px"></div><div class="cap">รูปที่ 7.26 1-of-4 MUX</div></div>
+    <div class="small">
+      <p>หลายแหล่งข้อมูล → <b>สายเส้นเดียว</b> · ขา data-select S<sub>1</sub>S<sub>0</sub> เลือกช่อง</p>
+      <table class="data tt7" style="font-size:18px"><tr><th>S<sub>1</sub></th><th>S<sub>0</sub></th><th>Input selected</th></tr><tr><td>0</td><td>0</td><td>D<sub>0</sub></td></tr><tr><td>0</td><td>1</td><td>D<sub>1</sub></td></tr><tr><td>1</td><td>0</td><td>D<sub>2</sub></td></tr><tr><td>1</td><td>1</td><td>D<sub>3</sub></td></tr></table>
+      <p class="frag mono" style="font-size:17px;margin-top:10px">Y = D<sub>0</sub><span class="ov">S<sub>1</sub></span><span class="ov">S<sub>0</sub></span> + D<sub>1</sub><span class="ov">S<sub>1</sub></span>S<sub>0</sub> + D<sub>2</sub>S<sub>1</sub><span class="ov">S<sub>0</sub></span> + D<sub>3</sub>S<sub>1</sub>S<sub>0</sub></p>
+      <p class="frag tiny muted">AND 3 อินพุต 4 ตัว · OR 4 อินพุต 1 ตัว · inverter 2 ตัว (รูปที่ 7.27)</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: 1-of-4 MUX</h2>
+  <div class="body"><div data-widget="mux" data-layout="side"></div></div>
+  <aside class="notes">ชี้ว่า AND gate ทำหน้าที่เป็น “ประตู” — มีเพียงตัวเดียวที่เปิดตาม S1S0</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">7.7</span>MUX กับอินพุตที่เป็นพัลส์</h2>
+  <div class="cols wide-r">
+    <div><div class="figbox"><img src="img/fig7-28.png" alt="รูปที่ 7.28" style="max-height:440px"></div><div class="cap">รูปที่ 7.28</div></div>
+    <div class="small">
+      <p>S<sub>1</sub>S<sub>0</sub> เปลี่ยนตามลำดับ 00 → 01 → 10 → 11</p>
+      <p class="frag">เอาต์พุต Y = รูปคลื่นของ D<sub>0</sub>, D<sub>1</sub>, D<sub>2</sub>, D<sub>3</sub> ตามช่วงเวลาที่ถูกเลือก</p>
+      <p class="frag">ใช้ส่งข้อมูลหลายช่องบนสายเดียวแบบ<b>แบ่งเวลา</b></p>
+    </div>
+  </div>
+  <aside class="notes">ใบงานปฏิบัติการที่ 7 ข้อ 3: ดูผลนี้บนออสซิลโลสโคปด้วย 74LS153</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px"><span class="no">7.8</span>Demultiplexer (data distributor)</h2>
+  <div class="body"><div data-widget="mux" data-mode="demux" data-layout="side"></div></div>
+  <aside class="notes">รูปที่ 7.29 · DEMUX ใช้ขา data input ร่วมกับ AND ทุกตัว — วงจรเหมือน decoder ที่มีขา enable (74LS138 ใช้ได้ทั้งสองแบบ)</aside>
+</section>
+
+<section class="slide">
+  <h2>สรุปท้ายบท</h2>
+  <ul style="font-size:20px;line-height:1.5">
+    <li class="frag">Half-adder: Σ = A ⊕ B, C<sub>out</sub> = AB · Full-adder เพิ่ม C<sub>in</sub> = half-adder 2 ตัว + OR</li>
+    <li class="frag">Parallel adder: C<sub>out</sub> บิตต่ำ → C<sub>in</sub> บิตสูง · ขยายด้วยการ cascade</li>
+    <li class="frag">Comparator: XOR/XNOR + AND ตรวจ A = B · ความไม่เท่ากันเริ่มจาก MSB</li>
+    <li class="frag">Decoder: n อินพุต → 2<sup>n</sup> เอาต์พุต · 1-of-16, BCD-to-decimal, BCD-to-7-segment</li>
+    <li class="frag">Encoder: ตรงข้ามกับ decoder · decimal-to-BCD ด้วย OR · priority encoder สำหรับแป้นกด</li>
+    <li class="frag">Binary ⇄ Gray ด้วย XOR · MUX เลือกหลาย → หนึ่ง · DEMUX กระจายหนึ่ง → หลาย</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <div class="kicker">ปฏิบัติการสัปดาห์ที่ 9–10</div>
+  <h2>ใบงานปฏิบัติการที่ 6–7</h2>
+  <div class="grid-2" style="font-size:19px;align-items:start">
+    <div class="card"><b>ใบงานที่ 6 · วงจรบวกและถอดรหัส</b>
+      <ol style="margin:6px 0 0;padding-left:1.2em"><li>Half/full-adder (7486, 7408, 7432)</li><li>74LS283 บวก 4 บิต (ตย. 7.3)</li><li>Comparator 2 บิต + 7485</li><li>ถอดรหัส 1011 · 74LS138 ขับ LED</li></ol></div>
+    <div class="card"><b>ใบงานที่ 7 · MUX และ 7-segment</b>
+      <ol style="margin:6px 0 0;padding-left:1.2em"><li>74LS47 + 7-segment common anode</li><li>74LS147 priority encoder → 7447</li><li>74LS153 เลือกสัญญาณ 4 แหล่ง</li><li>74LS138 เป็น DEMUX</li><li>74LS151 สร้างฟังก์ชัน 3 ตัวแปร</li></ol></div>
+  </div>
+  <div class="callout note frag" style="font-size:18px;margin-top:12px">👥 โครงงานกลุ่ม: ส่ง<b>ข้อเสนอโครงงาน</b>สัปดาห์ที่ 9 (CLO11) — block diagram ใช้วงจรในบทนี้ได้</div>
+</section>
+
+<section class="slide section">
+  <div class="kicker">ต่อไป · สัปดาห์ที่ 10–11</div>
+  <div class="no">08</div>
+  <h2>วงจรแลทช์และฟลิปฟลอป</h2>
+  <p class="muted">จากวงจรคอมไบเนชัน (ไม่มีหน่วยความจำ) สู่วงจรเชิงลำดับที่ “จำ” สถานะได้</p>
+</section>
+
+</div></div>
+</body>
+</html>

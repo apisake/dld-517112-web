@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สไลด์ บทที่ 6 การวิเคราะห์วงจรลอจิกแบบคอมไบเนชัน · 517 112</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/slides.css">
+<script src="../../assets/js/site.js"></script>
+<script src="../../assets/js/logic.js"></script>
+<script src="../../assets/js/numbers.js"></script>
+<script src="../../assets/js/boolean.js"></script>
+<script src="../../assets/js/slides.js"></script>
+<script src="widgets.js"></script>
+<style>
+  .slide .eq { font: 700 24px var(--mono); }
+  .slide [data-widget=sopcircuit] svg { max-height: 220px; }
+</style>
+</head>
+<body class="deck" data-footer="517 112 · บทที่ 6 การวิเคราะห์วงจรลอจิกแบบคอมไบเนชัน" data-lesson="index.html">
+<div class="stage"><div class="canvas">
+
+<section class="slide title">
+  <div class="kicker">517 112 DIGITAL LOGIC DESIGN · สัปดาห์ที่ 7</div>
+  <h1 style="font-size:64px">บทที่ 6<br>การวิเคราะห์วงจรลอจิก<br>แบบคอมไบเนชัน</h1>
+  <div class="en">Combinational Logic Analysis</div>
+  <div class="meta">CLO3 · CLO5 · CLO10 · CLO11 &nbsp;|&nbsp; ปฏิบัติการ: ออกแบบวงจรคอมไบเนชันจากโจทย์ · มอบหมายโครงงานกลุ่ม</div>
+  <aside class="notes">บทสุดท้ายก่อนสอบกลางภาค (สัปดาห์ที่ 8 สอบบทที่ 1–6) · ท้ายคาบมอบหมายโครงงานกลุ่ม</aside>
+</section>
+
+<section class="slide">
+  <div class="kicker">บทที่ 6</div>
+  <h2>จุดประสงค์</h2>
+  <ol style="font-size:23px;line-height:1.6">
+    <li>วิเคราะห์วงจร AND-OR, AND-OR-Invert, XOR, XNOR</li>
+    <li>ใช้ AND-OR และ AND-OR-Invert สร้างวงจรตามนิพจน์ SOP และ POS</li>
+    <li>เขียนนิพจน์เอาต์พุตและสร้างตารางค่าความจริงของวงจรคอมไบเนชัน</li>
+    <li>ออกแบบวงจรคอมไบเนชันจาก<b>นิพจน์บูลีน</b>และจาก<b>ตารางค่าความจริง</b></li>
+  </ol>
+  <aside class="notes">ต่อยอดจากบทที่ 4 (วิเคราะห์วงจร) และบทที่ 5 (ลดรูป)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">6.1.1</span>วงจร AND-OR</h2>
+  <div class="cols wide-r">
+    <div><div class="figbox"><img src="img/fig6-1.png" alt="รูปที่ 6.1" style="max-height:250px"></div><div class="cap">รูปที่ 6.1</div></div>
+    <div class="small">
+      <p class="eq">X = AB + CD</p>
+      <p>วงจรของนิพจน์ <b>SOP</b>: AND ทีละพจน์ แล้ว OR</p>
+      <div class="callout tip frag" style="font-size:20px"><b>ข้อสรุป:</b> X = HIGH เมื่อ A และ B เป็น HIGH <b>หรือ</b> C และ D เป็น HIGH</div>
+    </div>
+  </div>
+  <aside class="notes">ตารางที่ 6.1 มีคอลัมน์ผลระหว่างทาง AB และ CD — สอนให้ใส่คอลัมน์ระหว่างทางทุกครั้งที่วิเคราะห์</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ตัวอย่างที่ 6.1: เตือนระดับสารเคมี 3 ถัง</h2>
+  <div class="body"><div data-widget="tankalarm"></div></div>
+  <aside class="notes">ให้นักศึกษาออกแบบเองก่อน 3 นาที: ต้องการเตือนเมื่อต่ำ “สองถัง” → จับคู่ AB, AC, BC → OR · ถาม: ถ้าต่ำทั้งสามถังเตือนไหม?</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">6.1.2</span>AND-OR-Invert</h2>
+  <div class="cols wide-r">
+    <div><div class="figbox"><img src="img/fig6-2.png" alt="รูปที่ 6.2" style="max-height:250px"></div><div class="cap">รูปที่ 6.2</div></div>
+    <div class="small">
+      <p class="eq">X = <span class="ov">AB + CD</span></p>
+      <p class="frag">= (<span class="ov">AB</span>)(<span class="ov">CD</span>) = (<span class="ov">A</span> + <span class="ov">B</span>)(<span class="ov">C</span> + <span class="ov">D</span>) → <b>POS</b></p>
+      <div class="callout tip frag" style="font-size:20px"><b>ข้อสรุป:</b> X = <b>LOW</b> เมื่อ A และ B เป็น HIGH หรือ C และ D เป็น HIGH (กลับค่าเอาต์พุตของตารางที่ 6.1)</div>
+    </div>
+  </div>
+  <aside class="notes">AOI เป็นไอซีจริง เช่น 74LS51 (dual AND-OR-Invert) — ข้อมูลเสริม</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: AND-OR ⇄ AND-OR-Invert</h2>
+  <div class="body"><div data-widget="aoi" data-layout="side"></div></div>
+  <aside class="notes">สลับโหมดแล้วให้สังเกตว่าคอลัมน์ X ของตารางกลับค่าทุกแถว</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">6.1.3–6.1.4</span>XOR และ XNOR จากเกทพื้นฐาน</h2>
+  <div class="grid-2" style="font-size:20px">
+    <div class="card"><div class="figbox"><img src="img/fig6-3.png" alt="รูปที่ 6.3" style="max-height:160px"></div><p class="eq" style="margin:8px 0 0">X = A<span class="ov">B</span> + <span class="ov">A</span>B = A ⊕ B</p><span class="muted">NOT 2 · AND 2 · OR 1 · HIGH เมื่ออินพุตต่างกัน</span></div>
+    <div class="card frag"><div class="figbox"><img src="img/fig6-4.png" alt="รูปที่ 6.4" style="max-height:160px"></div><p class="eq" style="margin:8px 0 0">X = <span class="ov">A</span><span class="ov">B</span> + AB</p><span class="muted">complement ของ XOR · HIGH เมื่ออินพุตเหมือนกัน</span></div>
+  </div>
+  <aside class="notes">พิสูจน์ XNOR: complement(A<span class="ov">B</span> + <span class="ov">A</span>B) = (<span class="ov">A</span> + B)(A + <span class="ov">B</span>) = <span class="ov">A</span><span class="ov">B</span> + AB (ตรงกับตัวอย่างที่ 4.7)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">6.1.5</span>สร้างวงจรจากนิพจน์บูลีน</h2>
+  <div class="cols" style="align-items:start">
+    <div class="small">
+      <p><b>X = AB + CDE</b> → AND 2 อินพุต + AND 3 อินพุต → OR</p>
+      <div class="figbox"><img src="img/fig6-5.png" alt="รูปที่ 6.5" style="max-height:150px"></div>
+    </div>
+    <div class="small frag">
+      <p><b>X = AB(C<span class="ov">D</span> + EF)</b> = ABC<span class="ov">D</span> + ABEF</p>
+      <div class="figbox"><img src="img/fig6-6.png" alt="รูปที่ 6.6" style="max-height:200px"></div>
+      <p class="tiny muted" style="margin-top:6px">รูป SOP มีจำนวนชั้นของเกทน้อยกว่า → <b>propagation delay</b> น้อยกว่า</p>
+    </div>
+  </div>
+  <aside class="notes">ลำดับการปฏิบัติการ: NOT → AND → OR ตามโครงสร้างนิพจน์ · โยงบทที่ 3 หัวข้อ 3.7.6 เรื่อง delay สะสม</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">6.1.5</span>สร้างวงจรจากตารางค่าความจริง</h2>
+  <ol class="small">
+    <li>หาแถวที่ X = 1 → พจน์การคูณ (1 = ตัวแปร, 0 = complement)</li>
+    <li class="frag">OR ทุกพจน์ → นิพจน์ SOP</li>
+    <li class="frag">(ลดรูปด้วยแผนผังคาร์โนห์ถ้าทำได้)</li>
+    <li class="frag">วาดวงจร: inverter → AND → OR · เลือกไอซี</li>
+  </ol>
+  <div class="grid-3 frag" style="font-size:19px">
+    <div class="card"><b>ตารางที่ 6.3</b><br>011, 100<br><span class="mono"><span class="ov">A</span>BC + A<span class="ov">B</span><span class="ov">C</span></span></div>
+    <div class="card"><b>ตย. 6.2</b><br>011, 101, 110<br><span class="mono"><span class="ov">A</span>BC + A<span class="ov">B</span>C + AB<span class="ov">C</span></span></div>
+    <div class="card"><b>ตย. 6.3</b> “3 ใน 4”<br>0111, 1011, 1101, 1110<br>NOT 4 · AND 4 ตัว · OR 1</div>
+  </div>
+  <aside class="notes">ตัวอย่างที่ 6.4: ลดรูปด้วย DeMorgan ได้ A + B + C + D · ตัวอย่างที่ 6.5: แผนผังคาร์โนห์ได้ <span class="ov">B</span><span class="ov">C</span> + A<span class="ov">C</span><span class="ov">D</span></aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: สร้างวงจร AND-OR อัตโนมัติ</h2>
+  <div class="body"><div data-widget="sopcircuit" data-expr="A'BC + AB'C + ABC'"></div></div>
+  <aside class="notes">กดตัวอย่าง 6.3 แล้วกด “ลดรูป” — สังเกตว่าลดรูปไม่ได้ (ทุกพจน์ไม่ติดกันในแผนผังคาร์โนห์) · ตัวอย่าง 6.5 ลดจาก 4 พจน์เหลือ 2 พจน์ · แท็บตารางค่าความจริงสำหรับโจทย์ออกแบบ</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">6.2</span>วงจรคอมไบเนชันกับอินพุตที่เป็นพัลส์</h2>
+  <div class="cols">
+    <div><div class="figbox"><img src="img/ch6-ex6.png" alt="ตัวอย่างที่ 6.6" style="max-height:330px"></div><div class="cap">ตัวอย่างที่ 6.6</div></div>
+    <div class="small">
+      <p>ตารางค่าความจริง<b>ไม่เปลี่ยน</b> แม้อินพุตเปลี่ยนตามเวลา</p>
+      <p class="frag">หาเอาต์พุต<b>ทีละช่วงเวลา</b> ผ่านสัญญาณระหว่างทาง</p>
+      <p class="frag eq" style="font-size:20px">X = <span class="ov">A(B + C)</span> = <span class="ov">AB + AC</span></p>
+      <p class="frag">X = LOW เมื่อ A·B = 1 หรือ A·C = 1</p>
+    </div>
+  </div>
+  <aside class="notes">ตัวอย่างที่ 6.7–6.9: ฝึกหาสัญญาณระหว่างทาง (Y1, Y2…) ก่อนหาเอาต์พุต</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: ผังเวลาพร้อมสัญญาณระหว่างทาง</h2>
+  <div class="body"><div data-widget="waveckt"></div></div>
+  <aside class="notes">ตย. 6.7 คือ XNOR ที่สร้างจากเกท · คลิกเปลี่ยนรูปคลื่นอินพุตแล้วให้นักศึกษาทายเอาต์พุตก่อน</aside>
+</section>
+
+<section class="slide">
+  <h2>สรุปท้ายบท</h2>
+  <ul style="font-size:21px;line-height:1.55">
+    <li class="frag">AND-OR = SOP (X = AB + CD) · AND-OR-Invert = <span class="ov">AB + CD</span> ≡ POS (<span class="ov">A</span> + <span class="ov">B</span>)(<span class="ov">C</span> + <span class="ov">D</span>)</li>
+    <li class="frag">XOR = A<span class="ov">B</span> + <span class="ov">A</span>B (ต่างกัน) · XNOR = <span class="ov">A</span><span class="ov">B</span> + AB (เหมือนกัน)</li>
+    <li class="frag">สร้างวงจรจากนิพจน์: แยกพจน์ย่อย → NOT → AND → OR</li>
+    <li class="frag">SOP ลดจำนวนชั้นของเกท → ลด propagation delay</li>
+    <li class="frag">จากตารางค่าความจริง: แถวที่ X = 1 → พจน์การคูณ → OR · ลดรูปด้วย DeMorgan / แผนผังคาร์โนห์</li>
+    <li class="frag">อินพุตเป็นพัลส์: ตารางค่าความจริงคงเดิม หาเอาต์พุตทีละช่วงเวลา</li>
+  </ul>
+  <aside class="notes">ทบทวนบทที่ 1–6 สำหรับสอบกลางภาคสัปดาห์หน้า</aside>
+</section>
+
+<section class="slide">
+  <div class="kicker">ปฏิบัติการสัปดาห์ที่ 7</div>
+  <h2>ออกแบบวงจรคอมไบเนชันจากโจทย์</h2>
+  <div class="callout note" style="font-size:20px">โจทย์ → ตารางค่าความจริง → SOP → แผนผังคาร์โนห์ → วงจร + เลือกไอซี → ต่อจริง → ทดสอบครบทุกกรณี</div>
+  <ol class="small" style="line-height:1.7">
+    <li>เตือนระดับสารเคมี (ตย. 6.1) ด้วย 7408 + 7432</li>
+    <li>Majority voter 3 อินพุต — เหมือนข้อ 1 หรือไม่?</li>
+    <li>“3 ใน 4” (ตย. 6.3) ลดรูปก่อนต่อ</li>
+    <li>XOR จากเกทพื้นฐานเทียบ 7486 + ดูผังเวลาบนออสซิลโลสโคป</li>
+    <li>แปลงข้อ 1 เป็น NAND-NAND ด้วย 7400</li>
+  </ol>
+  <aside class="notes">ใบงานปฏิบัติการที่ 5</aside>
+</section>
+
+<section class="slide">
+  <div class="kicker">PBL · 20%</div>
+  <h2>มอบหมายโครงงานกลุ่ม</h2>
+  <div class="cols" style="align-items:start">
+    <div class="small">
+      <p>กลุ่มละ 3–4 คน · ออกแบบวงจรดิจิทัลขนาดเล็ก ต่อจริงหรือจำลอง/Verilog</p>
+      <ul class="tiny"><li>ระบบเตือนภัยจากเซนเซอร์หลายตัว</li><li>เครื่องลงคะแนน + 7-segment</li><li>เกมทายเลข / ลูกเต๋าดิจิทัล</li><li>นาฬิกา / ตัวจับเวลา</li><li>ตัวควบคุมไฟจราจร</li></ul>
+    </div>
+    <table class="data" style="font-size:17px">
+      <tr><th>สัปดาห์</th><th>งาน</th><th>CLO</th></tr>
+      <tr><td>7</td><td>ตั้งทีม · <b>แบ่งงานเป็นงานย่อย</b> · มอบหมาย</td><td>10</td></tr>
+      <tr><td>9</td><td>ข้อเสนอโครงงาน — ทุกคนเข้าใจเป้าหมายตรงกัน</td><td>11</td></tr>
+      <tr><td>12</td><td>รายงานความก้าวหน้าและปัญหา</td><td>12</td></tr>
+      <tr><td>15</td><td>นำเสนอผลงาน + สรุปบทความเทคนิคใหม่</td><td>12, 13</td></tr>
+    </table>
+  </div>
+  <aside class="notes">ประเมินตามสภาพจริง: ผลงานวงจร · การทำงานเป็นทีม · รายงานความก้าวหน้า · การนำเสนอ (มคอ.3 หมวด 5) · ให้แต่ละกลุ่มส่งรายชื่อและหัวข้อเบื้องต้นภายในคาบนี้</aside>
+</section>
+
+<section class="slide section">
+  <div class="kicker">สัปดาห์ที่ 8</div>
+  <div class="no">MID</div>
+  <h2>สอบกลางภาค · บทที่ 1–6 (30%)</h2>
+  <p class="muted">ข้อเขียน: วิเคราะห์ ลดรูป และออกแบบวงจร · ทบทวนด้วยแบบทดสอบท้ายบทบนเว็บทุกบท</p>
+  <aside class="notes">หลังสอบกลางภาค สัปดาห์ที่ 9 เริ่มบทที่ 7 วงจรคอมไบเนชันของฟังก์ชันต่าง ๆ</aside>
+</section>
+
+</div></div>
+</body>
+</html>

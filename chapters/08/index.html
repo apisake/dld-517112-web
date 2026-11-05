@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>บทที่ 8 วงจรแลทช์ และฟลิปฟลอป · 517 112</title>
+<meta name="description" content="517 112 การออกแบบวงจรตรรกะเชิงเลข — บทที่ 8 วงจรแลทช์ และฟลิปฟลอป (Latches and Flip-Flops)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Prompt:wght@400;600;700&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/book.css">
+<link rel="stylesheet" href="chapter.css">
+<script src="../../assets/js/site.js"></script>
+<script src="../../assets/js/logic.js"></script>
+<script src="../../assets/js/numbers.js"></script>
+<script src="../../assets/js/boolean.js"></script>
+<script src="widgets.js"></script>
+</head>
+<body>
+<!-- สร้างอัตโนมัติด้วย web/tools/build_chapter.py — แก้เนื้อหาที่ source/content_ch8.html หรือ chapter.json แล้วรันใหม่ -->
+<header class="topbar">
+  <a class="brand" href="../../index.html"><span class="chip">517 112</span><span>Digital Logic Design</span></a>
+  <span class="crumb">/ บทที่ 8 วงจรแลทช์ และฟลิปฟลอป</span>
+  <span class="spacer"></span>
+  <a class="btn sm" href="slides.html">▶ สไลด์</a>
+  <button class="btn sm icon" data-theme-toggle title="สลับโหมดสว่าง/มืด" aria-label="สลับธีม">◐</button>
+</header>
+
+<div class="layout">
+  <nav class="toc-side" aria-label="สารบัญบทที่ 8">
+    <h4>บทที่ 8</h4>
+    <ol><li><a href="#overview">ภาพรวมและจุดประสงค์</a></li><li><a href="#s8-1">8.1 วงจรแลทช์ (Latch)</a></li><li class="sub"><a href="#s8-1-1">8.1.1 S-R (Set-Reset) Latch</a></li><li class="sub"><a href="#s8-1-2">8.1.2 วงจร Gated S-R Latch</a></li><li class="sub"><a href="#s8-1-3">8.1.3 วงจร Gated D Latch</a></li><li><a href="#s8-2">8.2 วงจร Edge-Triggered Flip-Flop</a></li><li class="sub"><a href="#s8-2-1">8.2.1 วงจร Edge-Triggered S-R Flip-Flop</a></li><li class="sub"><a href="#s8-2-2">8.2.2 การทำงานของ Edge-Triggering โดยส…</a></li><li class="sub"><a href="#s8-2-3">8.2.3 วงจร Edge-Triggered D Flip-Flop</a></li><li class="sub"><a href="#s8-2-4">8.2.4 วงจร Edge-Triggered J-K Flip-Flop</a></li><li class="sub"><a href="#s8-2-5">8.2.5 วงจร Flip-Flop ที่มีขาสัญญาณในกา…</a></li><li><a href="#s8-3">8.3 การประยุกต์ใช้วงจรฟลิปฟลอป</a></li><li class="sub"><a href="#s8-3-1">8.3.1 วงจรเก็บข้อมูลแบบขนาน (Parallel …</a></li><li class="sub"><a href="#s8-3-2">8.3.2 วงจรหารความถี่ (Frequency Divisi…</a></li><li class="sub"><a href="#s8-3-3">8.3.3 วงจรนับ (Counter)</a></li><li><a href="#summary">สรุปท้ายบท</a></li><li><a href="#quiz">แบบทดสอบท้ายบท</a></li><li><a href="#lab">ปฏิบัติการ</a></li></ol>
+    <div class="side-actions">
+      <a class="btn primary" href="slides.html">▶ เปิดสไลด์บรรยาย</a>
+      <a class="btn" href="../../index.html">← หน้ารายวิชา</a>
+    </div>
+  </nav>
+
+  <main class="lesson">
+    <div class="hero">
+      <div class="ch-label">CHAPTER 08 · สัปดาห์ที่ 10–11</div>
+      <h1>วงจรแลทช์ และฟลิปฟลอป</h1>
+      <div class="en">Latches and Flip-Flops</div>
+      <div class="meta"><span>บรรยาย 3 ชม. + ปฏิบัติการ 3 ชม.</span><span>CLO5</span><span>CLO8</span><span>3 หัวข้อ · 11 แบบจำลองเชิงโต้ตอบ</span></div>
+      <div class="hero-actions">
+        <a class="btn" href="slides.html">▶ สไลด์บรรยาย</a>
+        <a class="btn ghost" href="#quiz">แบบทดสอบท้ายบท</a>
+        <a class="btn ghost" href="#lab">ใบงานปฏิบัติการ</a>
+      </div>
+    </div>
+
+    <section id="overview">
+      <div class="grid-2">
+        <div class="card objectives">
+          <h3 style="font-size:18px">🎯 จุดประสงค์ของบทเรียน</h3>
+          <ol><li>สามารถใช้เกทในการสร้างวงจรแลทช์พื้นฐาน</li><li>อธิบายความแตกต่างระหว่าง S-R latch กับ D latch ได้</li><li>เข้าใจความแตกต่างระหว่างแลทช์กับฟลิปฟลอป</li><li>อธิบายได้ว่า S-R FF, D FF และ J-K FF ต่างกันอย่างไร</li><li>สามารถประยุกต์ใช้ฟลิปฟลอปสำหรับงานพื้นฐานต่าง ๆ ได้</li></ol>
+        </div>
+        <div class="card">
+          <h3 style="font-size:18px">🧭 ความเชื่อมโยงกับ มคอ.3</h3>
+          <p style="margin:0 0 8px"><span class="clo-chip">CLO5</span> อธิบายการทำงานของวงจรตรรกะพื้นฐานทั้งแบบวงจรผสมและวงจรเชิงลำดับในการนำไปใช้เป็นองค์ประกอบของระบบคอมพิวเตอร์</p><p style="margin:0 0 8px"><span class="clo-chip">CLO8</span> เลือกเกทพื้นฐานที่เหมาะสมสำหรับสร้างวงจรขนาดเล็กเพื่อการใช้งานตามวัตถุประสงค์</p>
+          <p style="margin:0;font-size:15px;color:var(--ink-2)"><b>กิจกรรม:</b> บรรยาย / PBL · สัปดาห์ที่ 10: วงจรแลทช์ · สัปดาห์ที่ 11: edge-triggered flip-flop · ปฏิบัติการ: ฟลิปฟลอปและวงจรหารความถี่<br><b>การประเมิน:</b> แบบฝึกหัดและรายงานผลการทดลอง (20%) · สอบปลายภาค (30%)</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="book">
+<section class="sec"><h2 id="s8-1"><span class="no">8.1</span> วงจรแลทช์ (Latch)</h2>
+<p class="lead">วงจรแลทช์เป็นอุปกรณ์ที่ใช้ในการจัดเก็บข้อมูลแบบชั่วคราว (<em>temporary storage</em>) ซึ่งมีสถานะเสถียรภาพอยู่ 2 สถานะ (เรียกว่า <strong>bistable</strong>) โดยมีลักษณะการทำงานคล้ายกับฟลิปฟลอปที่เป็น bistable ที่สามารถคงอยู่ในสถานะใดสถานะหนึ่งด้วยการใช้การป้อนสัญญาณกลับ (<em>feedback</em>) โดยการนำเอาเอาต์พุตที่ได้ย้อนกลับมาป้อนเข้ายังขาอินพุตตรงกันข้าม แต่ความแตกต่างหลักระหว่างแลทช์กับฟลิปฟลอปนั้นจะอยู่ที่วิธีการที่ใช้สำหรับการเปลี่ยนแปลงสถานะการทำงาน ซึ่งจะกล่าวถึงต่อไปในรายละเอียดภายหลัง</p>
+<h3 id="s8-1-1"><span class="no">8.1.1</span> S-R (Set-Reset) Latch</h3>
+<p>แลทช์เป็นอุปกรณ์ลอจิกแบบ bistable หรือที่เรียกว่า <em>multivibrator</em> สำหรับ S-R latch แบบ active-HIGH นั้นสามารถสร้างโดยการใช้ <span class="gate">NOR</span> gate มาต่อไขว้กันดังรูปที่ 8.1 (ก) ส่วน <span class="nw"><span class="ov"><i>S</i></span>-<span class="ov"><i>R</i></span></span> latch แบบ active-LOW นั้นจะใช้ <span class="gate">NAND</span> gate ต่อแบบไขว้กันดังรูปที่ 8.1 (ข) ให้สังเกตว่าเอาต์พุตของเกทหนึ่งจะต่อเข้ากับอินพุตของเกทอีกตัวหนึ่ง ซึ่งเราเรียกลักษณะนี้ว่า<strong>การป้อนกลับ</strong> (<em>feedback</em>) ซึ่งเป็นคุณลักษณะของวงจรแลทช์และฟลิปฟลอปทั้งหมด</p>
+<figure class="c">
+<div class="subrow" style="gap:76px">
+<div class="sub"><img alt="รูปที่ 8.1 วงจร S-R (Set-Reset) Latch ทั้งสองแบบ" loading="lazy" src="img/fig8-1a.png" style="width:203px"/><div class="subcap"><b>(ก)</b> S-R latch ที่มีอินพุตแบบ active-HIGH</div></div>
+<div class="sub"><img alt="รูปที่ 8.1 วงจร S-R (Set-Reset) Latch ทั้งสองแบบ" loading="lazy" src="img/fig8-1b.png" style="width:206px"/><div class="subcap"><b>(ข)</b> <span class="nw"><span class="ov"><i>S</i></span>-<span class="ov"><i>R</i></span></span> latch ที่มีอินพุตแบบ active-LOW</div></div>
+</div>
+<figcaption><span class="cap-no">รูปที่ 8.1</span> วงจร S-R (Set-Reset) Latch ทั้งสองแบบ</figcaption>
+</figure>
+<p>ทั้งสองวงจรนี้จะมีสัญลักษณ์ลอจิกแสดงไว้ในรูปที่ 8.2 ให้สังเกตที่ขาอินพุตของแลทช์แต่ละตัวที่เขียนต่างกันระหว่าง active-HIGH กับ active-LOW เพื่อเป็นการบ่งให้เห็นความแตกต่าง</p>
+<figure class="c">
+<div class="subrow" style="gap:76px">
+<div class="sub"><img alt="รูปที่ 8.2 สัญลักษณ์ลอจิกของ S-R (Set-Reset) Latch ทั้งสองแบบ" loading="lazy" src="img/fig8-2a.png" style="width:170px"/><div class="subcap"><b>(ก)</b> S-R latch ที่มีอินพุตแบบ active-HIGH</div></div>
+<div class="sub"><img alt="รูปที่ 8.2 สัญลักษณ์ลอจิกของ S-R (Set-Reset) Latch ทั้งสองแบบ" loading="lazy" src="img/fig8-2b.png" style="width:187px"/><div class="subcap"><b>(ข)</b> <span class="nw"><span class="ov"><i>S</i></span>-<span class="ov"><i>R</i></span></span> latch ที่มีอินพุตแบบ active-LOW</div></div>
+</div>
+<figcaption><span class="cap-no">รูปที่ 8.2</span> สัญลักษณ์ลอจิกของ S-R (Set-Reset) Latch ทั้งสองแบบ</figcaption>
+</figure>
+<p>สำหรับการทำงานของวงจรแลทช์ทั้งสองแบบนั้นสามารถสรุปได้ดังตารางที่ 8.1 สำหรับ S-R latch ที่มีอินพุตแบบ active-HIGH และตารางที่ 8.2 สำหรับ <span class="nw"><span class="ov"><i>S</i></span>-<span class="ov"><i>R</i></span></span> latch ที่มีอินพุตแบบ active-LOW</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 8.1</span> ตารางค่าความจริงของ S-R latch ที่มีอินพุตแบบ active-HIGH</div>
+<div class="tbl-scroll"><table class="tt">
+<thead>
+<tr><th class="vr" colspan="2">อินพุต</th><th class="out vr" colspan="2">เอาต์พุต</th><th class="mean" rowspan="2">ความหมาย</th></tr>
+<tr><th class="v">S</th><th class="v vr">R</th><th class="v out">Q</th><th class="v out vr"><span class="ov">Q</span></th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td class="vr">0</td><td class="out">NC</td><td class="out vr">NC</td><td class="mean">ไม่มีการเปลี่ยนแปลง แลทช์คงสภาวะปัจจุบัน</td></tr>
+<tr><td>0</td><td class="vr">1</td><td class="out">0</td><td class="out vr">1</td><td class="mean">แลทช์อยู่สภาวะ RESET</td></tr>
+<tr><td>1</td><td class="vr">0</td><td class="out">1</td><td class="out vr">0</td><td class="mean">แลทช์อยู่สภาวะ SET</td></tr>
+<tr class="inv"><td>1</td><td class="vr">1</td><td class="out">0</td><td class="out vr">0</td><td class="mean">สภาวะที่ไม่ถูกต้อง (<b>Invalid</b>)</td></tr>
+</tbody>
+</table></div>
+</div>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 8.2</span> ตารางค่าความจริงของ <span class="nw"><span class="ov"><i>S</i></span>-<span class="ov"><i>R</i></span></span> latch ที่มีอินพุตแบบ active-LOW</div>
+<div class="tbl-scroll"><table class="tt">
+<thead>
+<tr><th class="vr" colspan="2">อินพุต</th><th class="out vr" colspan="2">เอาต์พุต</th><th class="mean" rowspan="2">ความหมาย</th></tr>
+<tr><th class="v"><span class="ov">S</span></th><th class="v vr"><span class="ov">R</span></th><th class="v out">Q</th><th class="v out vr"><span class="ov">Q</span></th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td class="vr">1</td><td class="out">NC</td><td class="out vr">NC</td><td class="mean">ไม่มีการเปลี่ยนแปลง แลทช์คงสภาวะปัจจุบัน</td></tr>
+<tr><td>0</td><td class="vr">1</td><td class="out">1</td><td class="out vr">0</td><td class="mean">แลทช์อยู่สภาวะ SET</td></tr>
+<tr><td>1</td><td class="vr">0</td><td class="out">0</td><td class="out vr">1</td><td class="mean">แลทช์อยู่สภาวะ RESET</td></tr>
+<tr class="inv"><td>0</td><td class="vr">0</td><td class="out">1</td><td class="out vr">1</td><td class="mean">สภาวะที่ไม่ถูกต้อง (<b>Invalid</b>)</td></tr>
+</tbody>
+</table></div>
+</div>
+<p>วงจรทั้งสองมีความแตกต่างกันที่ขาอินพุต แต่สิ่งสำคัญจะถูกบ่งเอาไว้ในชื่อของแลทช์ ตัวย่อ <i>S</i> มาจาก <strong>SET</strong> ซึ่งหมายถึงการ set ให้เอาต์พุต <i>Q</i> มีค่าเป็น 1 เมื่อขา <i>S</i> เป็น “active” และ <i>R</i> มาจาก <strong>RESET</strong> ซึ่งเมื่อขานี้ถูก “active” เมื่อใดก็จะให้เอาต์พุต <i>Q</i> มีค่าเป็น 0 คำว่า active ในที่นี้ถ้าเป็น active-HIGH หมายถึงว่าให้ป้อนอินพุตเป็น 1 แต่ถ้าเป็น active-LOW จะหมายถึงต้องป้อนอินพุตให้เป็น 0</p>
+<p>เมื่อกล่าวถึงเอาต์พุต เราจะเห็นว่ามีทั้ง <i>Q</i> และ <span class="ov"><i>Q</i></span> ซึ่งจะเห็นว่าสองขานี้จะมี<span class="ul">ค่าที่ตรงกันข้ามเสมอ</span> เว้นแต่ว่ากรณีที่เป็น invalid สองขานี้จะมีพฤติกรรมที่ไม่ตรงกับที่ระบุเอาไว้ (พิจารณาจากตารางทั้งสองด้านบน) ซึ่งกรณี invalid นี้เองที่เป็นจุดบกพร่องของวงจรแลทช์ ตัวอย่างต่อไปจะเห็นการทำงานของวงจรแลทช์ที่ทำงานกับสัญญาณที่ป้อนเข้ายังอินพุตทั้งสองของ <span class="nw"><span class="ov"><i>S</i></span>-<span class="ov"><i>R</i></span></span> latch ที่มีอินพุตแบบ active-LOW</p>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 8.1</span></div>
+<p>ถ้าสัญญาณ <span class="ov"><i>S</i></span> และ <span class="ov"><i>R</i></span> เป็นดังผังเวลาตามรูปข้างล่าง เมื่อป้อนเข้าที่ <span class="nw"><span class="ov"><i>S</i></span>-<span class="ov"><i>R</i></span></span> latch ที่มีอินพุตแบบ active-LOW แล้วจะได้ผลลัพธ์ที่ขาสัญญาณ <i>Q</i> เป็นอย่างไร สมมติว่าสัญญาณ <i>Q</i> เริ่มต้นเป็น LOW</p>
+<figure><div class="subrow" style="gap:43px; align-items:center; padding-left:9px">
+<img alt="" loading="lazy" src="img/ch8-ex1.png" style="width:425px"/>
+<img alt="" loading="lazy" src="img/fig8-2b.png" style="width:146px"/>
+</div></figure>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>การพิจารณาให้ดูการเปลี่ยนแปลงของสัญญาณอินพุตแต่ละตัว เมื่อมีการเปลี่ยนแปลงของ <span class="ov"><i>S</i></span> ซึ่งเปลี่ยนจาก 1 เป็น 0 เป็นการ enable ขา <span class="ov"><i>S</i></span> ทำให้เกิดสภาวะ SET จึงทำให้ <i>Q</i> เป็น 1 แต่เมื่อ <span class="ov"><i>S</i></span> เปลี่ยนกลับเป็น 1 ผลลัพธ์ของ <i>Q</i> จะคงสภาพเดิมไม่เปลี่ยนแปลงไป (เนื่องจากทั้ง <span class="ov"><i>S</i></span> และ <span class="ov"><i>R</i></span> เป็น 1 ทั้งคู่) จนกระทั่งขา <span class="ov"><i>R</i></span> มีการเปลี่ยนจาก 1 เป็น 0 ซึ่งเป็นการ enable ขา <span class="ov"><i>R</i></span> อันเป็นการทำให้เกิดสภาวะ RESET ซึ่งทำให้เอาต์พุต <i>Q</i> มีค่าเป็น 0 และจะดำเนินการอย่างนี้ไปตามเงื่อนไขการเปลี่ยนแปลงของขาอินพุตทั้งสองนี้ อย่างไรก็ตามในผังเวลานี้ไม่มีกรณีที่เป็น invalid เกิดขึ้น เนื่องจาก <span class="ov"><i>S</i></span> และ <span class="ov"><i>R</i></span> ไม่เคยเป็น 0 พร้อมกัน</p>
+</details>
+</div>
+<div data-widget="srlatch"></div><h3 id="s8-1-2"><span class="no">8.1.2</span> วงจร Gated S-R Latch</h3>
+<p>เป็นการเพิ่มขาควบคุมการทำงานของวงจรแลทช์ขึ้นมา เรียกขานี้ว่าขา <strong>EN</strong> โดยการใช้วงจรเกทมาขวางเอาไว้ดังรูปที่ 8.3 (ก) ที่แสดงผังวงจรลอจิกของ gated S-R latch ซึ่งจะมีสัญลักษณ์ของวงจรดังกล่าวนี้แสดงให้เห็นใน (ข) การทำงานของวงจรนี้จะเหมือนกับ S-R latch ธรรมดาเมื่อสัญญาณที่ขา EN เป็น 1 (เนื่องจากเป็นอินพุตแบบ active-HIGH) แต่เมื่อขา EN เป็น 0 เมื่อใดนั้น เอาต์พุตที่ได้จะไม่มีการเปลี่ยนสถานะใด ๆ จากเวลาก่อนหน้านี้ ดูได้จากผังเวลาตัวอย่าง (ค) เพื่อประกอบความเข้าใจ</p>
+<figure class="c">
+<div class="subrow" style="gap:85px">
+<div class="sub"><img alt="รูปที่ 8.3 วงจร gated S-R latch" loading="lazy" src="img/fig8-3a.png" style="width:293px"/><div class="subcap"><b>(ก)</b> ผังวงจร</div></div>
+<div class="sub"><img alt="รูปที่ 8.3 วงจร gated S-R latch" loading="lazy" src="img/fig8-3b.png" style="width:170px"/><div class="subcap"><b>(ข)</b> สัญลักษณ์ลอจิก</div></div>
+</div>
+<div class="subrow"><div class="sub"><img alt="รูปที่ 8.3 วงจร gated S-R latch" loading="lazy" src="img/fig8-3c.png" style="width:491px"/><div class="subcap"><b>(ค)</b> ผังเวลาตัวอย่างแสดงการทำงาน</div></div></div>
+<figcaption><span class="cap-no">รูปที่ 8.3</span> วงจร gated S-R latch</figcaption>
+</figure>
+<div data-widget="ffwave" data-type="gsr"></div><h3 id="s8-1-3"><span class="no">8.1.3</span> วงจร Gated D Latch</h3>
+<p class="brk">วงจรนี้มีความแตกต่างจาก gated S-R latch ที่ได้กล่าวไปในหัวข้อที่แล้ว คือขาสัญญาณอินพุต (ไม่นับขา <i>EN</i>) จะมีเพียงขาเดียวที่ชื่อ <i>D</i> (มาจากคำว่า <em>Data Input</em>) รูปที่ 8.4 เป็นการแสดงผังวงจร สัญลักษณ์ และผังเวลาตัวอย่างที่แสดงการทำงานของวงจร ให้พิจารณาจาก (ก) ว่าตามจริงแล้ววงจร gated D latch นั้นเหมือนกับวงจร gated S-R latch เพียงแต่สัญญาณขาเข้าแทนที่จะบ่งว่าเป็น <i>S</i> กับ <i>R</i> กลับเป็นขา <i>D</i> ซึ่งต่อตรงแทน <i>S</i> ในขณะที่นำเอา inverter มาวางไว้เพื่อทำการกลับบิต <i>D</i> แล้วป้อนแทนที่ <i>R</i> ดังนั้นขา <i>S</i> กับ <i>R</i> เดิมจะไม่เคยเป็นสัญญาณเดียวกันเลยจากลักษณะการเชื่อมต่อวงจรดังกล่าว ดูส่วนผังสัญญาณแสดงการทำงานใน (ค) เพื่อประกอบความเข้าใจ และอภิปรายเกี่ยวกับตัวอักษร <i>D</i> ที่มาจากคำว่า Data Input ว่ามีความหมายอย่างไร</p>
+<figure class="c" style="margin-bottom:0">
+<div class="subrow" style="gap:76px">
+<div class="sub"><img alt="" loading="lazy" src="img/fig8-4a.png" style="width:284px"/><div class="subcap"><b>(ก)</b> ผังวงจร</div></div>
+<div class="sub"><img alt="" loading="lazy" src="img/fig8-4b.png" style="width:156px"/><div class="subcap"><b>(ข)</b> สัญลักษณ์ลอจิก</div></div>
+</div>
+</figure>
+<figure class="c" style="margin-top:19px">
+<div class="subrow"><div class="sub"><img alt="รูปที่ 8.4 วงจร gated D latch" loading="lazy" src="img/fig8-4c.png" style="width:472px"/><div class="subcap"><b>(ค)</b> ผังเวลาตัวอย่างแสดงการทำงาน</div></div></div>
+<figcaption><span class="cap-no">รูปที่ 8.4</span> วงจร gated D latch</figcaption>
+</figure>
+<div data-widget="ffwave" data-type="dlatch"></div></section><section class="sec"><h2 id="s8-2"><span class="no">8.2</span> วงจร Edge-Triggered Flip-Flop</h2>
+<p class="lead">ฟลิปฟลอปเป็นอุปกรณ์ที่เป็น <strong>synchronous bistable</strong> ซึ่งคำว่า synchronous หมายถึงการที่เอาต์พุตจะมีการเปลี่ยนแปลงสภาวะก็ต่อเมื่อถึงจุดเวลาหนึ่งเวลาใดของอินพุต <i>CLK</i> ซึ่งเป็นสัญญาณนาฬิกาในการควบคุมการทำงานตามจังหวะการทำงานที่สอดคล้องกัน</p>
+<p><strong>Edge-triggered flip-flop</strong> นั้นจะเป็นการที่เอาต์พุตของวงจรจะมีการเปลี่ยนแปลงสถานะตามเงื่อนไขของอินพุตที่กำหนด ณ ช่วงเวลาขอบขาขึ้น (<em>positive edge</em> หรือ <em>rising edge</em>) หรือช่วงเวลาขอบขาลง (<em>negative edge</em> หรือ <em>falling edge</em>) ของลูกคลื่นสัญญาณนาฬิกา ในที่นี้จะกล่าวถึงฟลิปฟลอปแบบ edge-triggered อยู่ 3 ประเภท ได้แก่</p>
+<ol class="nsteps row3">
+<li>S-R flip-flop</li>
+<li>D flip-flop</li>
+<li>J-K flip-flop</li>
+</ol>
+<p>สัญลักษณ์ของฟลิปฟลอปทั้งสามแบบแสดงให้เห็นดังรูปที่ 8.5</p>
+<figure class="c"><img alt="รูปที่ 8.5 สัญลักษณ์ลอจิกของวงจร edge-triggered flip-flop แบบต่าง ๆ ด้านบนเป็นแบบ positive edge-triggered ส่วนด้านล่างเป็นแบบ negative edge-triggered" loading="lazy" src="img/fig8-5.png" style="width:510px"/>
+<div class="ovlab" style="width:510px; margin-left:19px"><span style="left:17%"><b>(ก)</b> S-R FF</span><span style="left:50%"><b>(ข)</b> D FF</span><span style="left:86%"><b>(ค)</b> J-K FF</span></div>
+<figcaption><span class="cap-no">รูปที่ 8.5</span> สัญลักษณ์ลอจิกของวงจร edge-triggered flip-flop แบบต่าง ๆ ด้านบนเป็นแบบ positive edge-triggered ส่วนด้านล่างเป็นแบบ negative edge-triggered</figcaption></figure>
+<p>จากสัญลักษณ์ลอจิกของฟลิปฟลอปด้านบนนี้จะพบว่ามีความแตกต่างจากวงจรแลทช์ตรงที่ฟลิปฟลอปจะมีขาอินพุตขาหนึ่งซึ่งมีรูปสามเหลี่ยมเล็ก ๆ กำกับอยู่พร้อมตัวอักษร <i>C</i> (clock) ซึ่งเรียกว่า <strong>dynamic input indicator</strong> และความแตกต่างกันของวงจรด้านบนซึ่งเป็นแบบ positive edge-triggered กับ negative edge-triggered นั้นคือวงกลม bubble ที่ปรากฏอยู่กับวงจรแบบ negative edge-triggered ต่อไปเราจะมาทำความรู้จักกับฟลิปฟลอปแต่ละประเภทกัน</p>
+<h3 id="s8-2-1"><span class="no">8.2.1</span> วงจร Edge-Triggered S-R Flip-Flop</h3>
+<p>ขาสัญญาณ <i>S</i> และ <i>R</i> ของวงจรนี้เราเรียกว่าเป็นขาอินพุตแบบ <strong>synchronous</strong> เนื่องจากขาอินพุตจะส่งผลเป็นเงื่อนไขในการสร้างสัญญาณเอาต์พุต ณ จุดเวลาขอบขาสัญญาณนาฬิกาเท่านั้น (จะขึ้นหรือลงอยู่ที่ว่าเป็นแบบ positive edge-triggered หรือ negative edge-triggered) การทำงานของวงจรนี้จะมีผลลัพธ์ตามตารางที่ 8.3</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 8.3</span> ตารางค่าความจริงของ positive edge-triggered S-R flip-flop</div>
+<div class="tbl-scroll"><table class="tt">
+<thead>
+<tr><th class="vr" colspan="3">อินพุต</th><th class="out vr" colspan="2">เอาต์พุต</th><th class="mean" rowspan="2">ความหมาย</th></tr>
+<tr><th class="v">S</th><th class="v">R</th><th class="vr">CLK</th><th class="v out">Q</th><th class="v out vr"><span class="ov">Q</span></th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="vr">X</td><td class="out"><span class="v8">Q</span><sub>0</sub></td><td class="out vr"><span class="ov v8">Q</span><sub>0</sub></td><td class="mean">ไม่มีการเปลี่ยนแปลงสภาวะ (NC)</td></tr>
+<tr><td>0</td><td>1</td><td class="vr arr">↑</td><td class="out">0</td><td class="out vr">1</td><td class="mean">RESET</td></tr>
+<tr><td>1</td><td>0</td><td class="vr arr">↑</td><td class="out">1</td><td class="out vr">0</td><td class="mean">SET</td></tr>
+<tr class="inv"><td>1</td><td>1</td><td class="vr arr">↑</td><td class="out">?</td><td class="out vr">?</td><td class="mean"><b>Invalid</b></td></tr>
+</tbody>
+<tfoot><tr><td colspan="6"><span class="k">↑</span> = สัญญาณนาฬิกาเปลี่ยนจาก LOW เป็น HIGH<br/><span class="k">X</span> = ไม่มีผลกระทบใด ๆ (“don’t care”)<br/><span class="k"><span class="v8">Q</span><sub>0</sub></span> = ระดับสัญญาณเอาต์พุตก่อนการเปลี่ยนแปลงของสัญญาณนาฬิกา</td></tr></tfoot>
+</table></div>
+</div>
+<p>ผังเวลาตัวอย่างในรูปที่ 8.6 จะแสดงให้เห็นถึงการทำงานของ positive edge-triggered S-R flip-flop เพื่อใช้สำหรับประกอบการทำความเข้าใจ</p>
+<figure class="c"><img alt="รูปที่ 8.6 ผังเวลาตัวอย่างแสดงการทำงานของ positive edge-triggered S-R flip-flop" loading="lazy" src="img/fig8-6.png" style="width:558px"/><figcaption><span class="cap-no">รูปที่ 8.6</span> ผังเวลาตัวอย่างแสดงการทำงานของ positive edge-triggered S-R flip-flop</figcaption></figure>
+<p>จากผังเวลานี้เราจะเห็นว่าสัญญาณเอาต์พุตจะมีการเปลี่ยนแปลงที่สอดคล้องกับเงื่อนไขที่เป็นไปตามตารางค่าความจริงของวงจร โดยการเปลี่ยนแปลงจะเกิดขึ้น ณ จุดเวลาของขอบขาขึ้นของสัญญาณนาฬิกาเท่านั้น เราจะเห็นว่าจุดของการพิจารณาในรูปจะถูกกำกับด้วยเส้นประ ลักษณะคล้ายกันนี้จะเกิดขึ้นกับวงจร negative edge-triggered flip-flop เพียงแต่จุดพิจารณาการเปลี่ยนแปลงจะเป็นที่ขอบขาลงของสัญญาณนาฬิกาเท่านั้น</p>
+<div data-widget="ffwave" data-type="srff"></div><h3 id="s8-2-2"><span class="no">8.2.2</span> การทำงานของ Edge-Triggering โดยสังเขป</h3>
+<p class="brk">วงจรที่เห็นในรูปที่ 8.7 เป็นวงจรแบบง่ายที่ให้เห็นถึงโครงสร้างของวงจร edge-triggered S-R flip-flop ซึ่งจะเห็นได้ว่าในส่วนของวงจรดังกล่าวเป็นการเพิ่มเติมเพียงเล็กน้อยจากวงจร gated S-R latch คือส่วนที่มีชื่อว่า <strong>Pulse transition detector</strong> ซึ่งเป็นส่วนของวงจรที่จะทำการตรวจจับการเปลี่ยนแปลงระดับสัญญาณพัลส์ที่เข้ามา (ในที่นี้คือการนำเข้าสัญญาณนาฬิกา) คือเอาต์พุตของวงจรนี้จะทำการส่งเอาต์พุตที่ active ออกมาเมื่อจับขอบขาสัญญาณที่ระบุ (positive edge หรือ negative edge) เอาไว้ได้ ซึ่งสัญญาณ active นี้จะส่งออกมาทางเอาต์พุตเป็นช่วงระยะเวลาเพียงสั้น ๆ ที่เพียงพอต่อการควบคุมให้เกิดผลลัพธ์ไปยังขา <i>Q</i> ตามที่กำหนดไว้ในการทำงานของฟลิปฟลอป</p>
+<figure class="c"><img alt="รูปที่ 8.7 โครงสร้างการทำงานแบบง่ายของ positive edge-triggered flip-flop" loading="lazy" src="img/fig8-7.png" style="width:472px"/><figcaption><span class="cap-no">รูปที่ 8.7</span> โครงสร้างการทำงานแบบง่ายของ positive edge-triggered flip-flop</figcaption></figure>
+<h3 id="s8-2-3"><span class="no">8.2.3</span> วงจร Edge-Triggered D Flip-Flop</h3>
+<p>วงจร D flip-flop เป็นวงจรที่มีประโยชน์ในการจัดเก็บข้อมูลขนาด 1 บิต (0 หรือ 1) และวงจรนี้สร้างได้ด้วยการเพิ่ม inverter เข้าไปที่ S-R flip-flop เพียง 1 ตัวดังที่แสดงให้เห็นในรูปที่ 8.8</p>
+<figure class="c"><img alt="รูปที่ 8.8 วงจร positive edge-triggered D flip-flop สร้างด้วยการเพิ่ม inverter เข้าไปที่ S-R flip-flop" loading="lazy" src="img/fig8-8.png" style="width:350px"/><figcaption><span class="cap-no">รูปที่ 8.8</span> วงจร positive edge-triggered D flip-flop สร้างด้วยการเพิ่ม inverter เข้าไปที่ S-R flip-flop</figcaption></figure>
+<p>จะเห็นว่าวงจรดังกล่าวนี้ถ้าไม่นับขาสัญญาณนาฬิกาจะมีอินพุตเพียงขา <i>D</i> อินพุตเดียว สำหรับวงจร positive edge-triggered D flip-flop จะมีการทำงานตามตารางค่าความจริงที่แสดงในตารางที่ 8.4</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 8.4</span> ตารางค่าความจริงของ positive edge-triggered D flip-flop</div>
+<div class="tbl-scroll"><table class="tt">
+<thead>
+<tr><th class="vr" colspan="2">อินพุต</th><th class="out vr" colspan="2">เอาต์พุต</th><th class="mean" rowspan="2">ความหมาย</th></tr>
+<tr><th class="v">D</th><th class="vr">CLK</th><th class="v out">Q</th><th class="v out vr"><span class="ov">Q</span></th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td class="vr arr">↑</td><td class="out">1</td><td class="out vr">0</td><td class="mean">SET (เก็บค่า 1)</td></tr>
+<tr><td>0</td><td class="vr arr">↑</td><td class="out">0</td><td class="out vr">1</td><td class="mean">RESET (เก็บค่า 0)</td></tr>
+</tbody>
+<tfoot><tr><td colspan="5"><span class="k">↑</span> = สัญญาณนาฬิกาเปลี่ยนจาก LOW เป็น HIGH</td></tr></tfoot>
+</table></div>
+</div>
+<p>ถ้าขา <i>D</i> เป็น HIGH และมีสัญญาณนาฬิกาป้อนเข้าในวงจร วงจรฟลิปฟลอปจะทำการเก็บค่า 1 เมื่อพัลส์สัญญาณนาฬิกาเปลี่ยนจาก LOW เป็น HIGH (positive edge) แต่ถ้าระดับสัญญาณที่ขา <i>D</i> ถูกป้อนเป็น LOW ค่า 0 ก็จะถูกจัดเก็บเอาไว้แทนเมื่อถึง positive edge</p>
+<p>ผังเวลาในรูปที่ 8.9 แสดงให้เห็นตัวอย่างการทำงานของวงจร positive edge-triggered D flip-flop เพื่อใช้ประกอบความเข้าใจ</p>
+<figure class="c"><img alt="รูปที่ 8.9 ผังเวลาตัวอย่างแสดงการทำงานของ positive edge-triggered D flip-flop" loading="lazy" src="img/fig8-9.png" style="width:491px"/><figcaption><span class="cap-no">รูปที่ 8.9</span> ผังเวลาตัวอย่างแสดงการทำงานของ positive edge-triggered D flip-flop</figcaption></figure>
+<div data-widget="ffwave" data-type="dff"></div><h3 id="s8-2-4"><span class="no">8.2.4</span> วงจร Edge-Triggered J-K Flip-Flop</h3>
+<p>วงจร J-K flip-flop เป็นวงจรที่มีการนำไปใช้งานกันอย่างแพร่หลายเนื่องจากฟังก์ชันที่อเนกประสงค์ของมัน โดยจะทำงานได้คล้ายกับ S-R flip-flop ในส่วนของการ SET, RESET และ No Change (โดยที่ <i>J</i> จะเป็นการ SET และ <i>K</i> จะเป็นการ RESET) สิ่งที่แตกต่างก็คือไม่มี invalid state เหมือนกับ S-R flip-flop แต่จะเป็น state ที่เรียกว่า <strong>Toggle</strong> ซึ่งจะเป็นการสลับสภาวะจากเดิม ถ้า <i>Q</i> เคยเป็น 0 เมื่อ toggle จะทำให้เอาต์พุต <i>Q</i> เป็น 1 แต่ถ้าเคยเป็น 1 การ toggle ก็จะทำให้เอาต์พุตเป็น 0 ตารางที่ 8.5 แสดงตารางค่าความจริงของ positive edge-triggered J-K flip-flop โดยการทำงานของวงจรนี้จะแสดงให้เห็นในรูปที่ 8.10 (ก) ซึ่งเป็นผังเวลาตัวอย่างเพื่อประกอบความเข้าใจ พร้อมสัญลักษณ์ลอจิกใน (ข)</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 8.5</span> ตารางค่าความจริงของ positive edge-triggered J-K flip-flop</div>
+<div class="tbl-scroll"><table class="tt">
+<thead>
+<tr><th class="vr" colspan="3">อินพุต</th><th class="out vr" colspan="2">เอาต์พุต</th><th class="mean" rowspan="2">ความหมาย</th></tr>
+<tr><th class="v">J</th><th class="v">K</th><th class="vr">CLK</th><th class="v out">Q</th><th class="v out vr"><span class="ov">Q</span></th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="vr arr">↑</td><td class="out"><span class="v8">Q</span><sub>0</sub></td><td class="out vr"><span class="ov v8">Q</span><sub>0</sub></td><td class="mean">ไม่มีการเปลี่ยนแปลงสภาวะ (NC)</td></tr>
+<tr><td>0</td><td>1</td><td class="vr arr">↑</td><td class="out">0</td><td class="out vr">1</td><td class="mean">RESET</td></tr>
+<tr><td>1</td><td>0</td><td class="vr arr">↑</td><td class="out">1</td><td class="out vr">0</td><td class="mean">SET</td></tr>
+<tr><td>1</td><td>1</td><td class="vr arr">↑</td><td class="out"><span class="ov v8">Q</span><sub>0</sub></td><td class="out vr"><span class="v8">Q</span><sub>0</sub></td><td class="mean">Toggle</td></tr>
+</tbody>
+<tfoot><tr><td colspan="6"><span class="k">↑</span> = สัญญาณนาฬิกาเปลี่ยนจาก LOW เป็น HIGH<br/><span class="k"><span class="v8">Q</span><sub>0</sub></span> = ระดับสัญญาณเอาต์พุตก่อนการเปลี่ยนแปลงของสัญญาณนาฬิกา</td></tr></tfoot>
+</table></div>
+</div>
+<figure class="c">
+<div class="subrow" style="gap:47px; align-items:flex-end">
+<div class="sub"><img alt="รูปที่ 8.10 (ก) ผังเวลาตัวอย่างแสดงการทำงานของ positive edge-triggered J-K flip-flop (ข) สัญลักษณ์ลอจิกของ positive edge-triggered J-K flip-flop" loading="lazy" src="img/fig8-10a.png" style="width:444px"/><div class="subcap"><b>(ก)</b></div></div>
+<div class="sub"><img alt="รูปที่ 8.10 (ก) ผังเวลาตัวอย่างแสดงการทำงานของ positive edge-triggered J-K flip-flop (ข) สัญลักษณ์ลอจิกของ positive edge-triggered J-K flip-flop" loading="lazy" src="img/fig8-10b.png" style="width:132px; margin-bottom:28px"/><div class="subcap"><b>(ข)</b></div></div>
+</div>
+<figcaption><span class="cap-no">รูปที่ 8.10</span> (ก) ผังเวลาตัวอย่างแสดงการทำงานของ positive edge-triggered J-K flip-flop (ข) สัญลักษณ์ลอจิกของ positive edge-triggered J-K flip-flop</figcaption>
+</figure>
+<p>สำหรับตารางค่าความจริงของ negative edge-triggered J-K flip-flop นั้นจะมีความคล้ายกัน เพียงแต่การเปลี่ยนแปลงจะเกิดขึ้นที่ขอบขาลงแทน โดยจะมีตารางค่าความจริงดังตารางที่ 8.6 และมีผังเวลาตัวอย่างแสดงการทำงานของ negative edge-triggered J-K flip-flop ในรูปที่ 8.11 (ก) พร้อมสัญลักษณ์ลอจิกใน (ข)</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 8.6</span> ตารางค่าความจริงของ negative edge-triggered J-K flip-flop</div>
+<div class="tbl-scroll"><table class="tt">
+<thead>
+<tr><th class="vr" colspan="3">อินพุต</th><th class="out vr" colspan="2">เอาต์พุต</th><th class="mean" rowspan="2">ความหมาย</th></tr>
+<tr><th class="v">J</th><th class="v">K</th><th class="vr">CLK</th><th class="v out">Q</th><th class="v out vr"><span class="ov">Q</span></th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="vr arr">↓</td><td class="out"><span class="v8">Q</span><sub>0</sub></td><td class="out vr"><span class="ov v8">Q</span><sub>0</sub></td><td class="mean">ไม่มีการเปลี่ยนแปลงสภาวะ (NC)</td></tr>
+<tr><td>0</td><td>1</td><td class="vr arr">↓</td><td class="out">0</td><td class="out vr">1</td><td class="mean">RESET</td></tr>
+<tr><td>1</td><td>0</td><td class="vr arr">↓</td><td class="out">1</td><td class="out vr">0</td><td class="mean">SET</td></tr>
+<tr><td>1</td><td>1</td><td class="vr arr">↓</td><td class="out"><span class="ov v8">Q</span><sub>0</sub></td><td class="out vr"><span class="v8">Q</span><sub>0</sub></td><td class="mean">Toggle</td></tr>
+</tbody>
+<tfoot><tr><td colspan="6"><span class="k">↓</span> = สัญญาณนาฬิกาเปลี่ยนจาก HIGH เป็น LOW<br/><span class="k"><span class="v8">Q</span><sub>0</sub></span> = ระดับสัญญาณเอาต์พุตก่อนการเปลี่ยนแปลงของสัญญาณนาฬิกา</td></tr></tfoot>
+</table></div>
+</div>
+<figure class="c">
+<div class="subrow" style="gap:38px; align-items:flex-end">
+<div class="sub"><img alt="รูปที่ 8.11 (ก) ผังเวลาตัวอย่างแสดงการทำงานของ negative edge-triggered J-K flip-flop (ข) สัญลักษณ์ลอจิกของ negative edge-triggered J-K flip-flop" loading="lazy" src="img/fig8-11a.png" style="width:416px"/><div class="subcap"><b>(ก)</b></div></div>
+<div class="sub"><img alt="รูปที่ 8.11 (ก) ผังเวลาตัวอย่างแสดงการทำงานของ negative edge-triggered J-K flip-flop (ข) สัญลักษณ์ลอจิกของ negative edge-triggered J-K flip-flop" loading="lazy" src="img/fig8-11b.png" style="width:208px; margin-bottom:28px"/><div class="subcap"><b>(ข)</b></div></div>
+</div>
+<figcaption><span class="cap-no">รูปที่ 8.11</span> (ก) ผังเวลาตัวอย่างแสดงการทำงานของ negative edge-triggered J-K flip-flop (ข) สัญลักษณ์ลอจิกของ negative edge-triggered J-K flip-flop</figcaption>
+</figure>
+<div data-widget="ffwave" data-type="jkff"></div><h3 id="s8-2-5"><span class="no">8.2.5</span> วงจร Flip-Flop ที่มีขาสัญญาณในการทำ Asynchronous Preset และ Clear</h3>
+<p>สำหรับวงจร flip-flop ที่ได้เรียนมาในข้างต้น ขาอินพุตต่าง ๆ ไม่ว่าจะเป็น S-R, D และ J-K ต่างก็เรียกว่าเป็นขาสัญญาณอินพุตแบบ synchronous เนื่องจากข้อมูลขาเข้าจะถูกถ่ายทอดไปยังเอาต์พุตของ flip-flop นั้น ๆ เฉพาะเวลาที่มีการ trigger ด้วยขอบขาที่ระบุเอาไว้เท่านั้น ซึ่งจะทำงาน synchronize กับสัญญาณนาฬิกาเสมอ</p>
+<p>สำหรับ IC ของวงจร flip-flop ส่วนใหญ่จะเพิ่มขาอินพุตที่เป็น <strong>asynchronous</strong> ด้วย ซึ่งอินพุตดังกล่าวนี้จะมีผลต่อสภาวะของ flip-flop โดยไม่ขึ้นกับจังหวะสัญญาณนาฬิกา ปกติแล้วจะเป็นขาที่เรียกว่า <strong>preset</strong> (PRE) และขา <strong>clear</strong> (CLR) หรือบางผู้ผลิตเรียกชื่อว่า direct set (<i>S</i><sub>D</sub>) และขา direct reset (<i>R</i><sub>D</sub>) ถ้าทำการป้อนระดับสัญญาณ active ที่ขา preset จะทำให้เอาต์พุตของ flip-flop เป็น 1 ในขณะที่เมื่อป้อนระดับสัญญาณ active ที่ขา clear จะทำให้เอาต์พุตเป็น 0 รูปที่ 8.12 แสดงสัญลักษณ์ลอจิกของ J-K flip-flop ที่มีขา preset และ clear ในรูปนี้มีขาอินพุตเป็น active-LOW กำกับโดย bubble ที่ขาสัญญาณ ทั้งสองขานี้จะต้องมีสัญญาณเป็น HIGH เมื่อต้องการทำงานในแบบ synchronous</p>
+<figure class="c"><img alt="รูปที่ 8.12 สัญลักษณ์ลอจิกของ J-K flip-flop ที่มีขาอินพุต preset และ clear แบบ active-LOW" loading="lazy" src="img/fig8-12.png" style="width:180px"/><figcaption><span class="cap-no">รูปที่ 8.12</span> สัญลักษณ์ลอจิกของ J-K flip-flop ที่มีขาอินพุต preset และ clear แบบ active-LOW</figcaption></figure>
+<p>ส่วนรูปที่ 8.13 แสดงผังวงจรของ edge-triggered J-K flip-flop ที่มีขาอินพุต preset <span class="nw">(<span class="ov">PRE</span>)</span> กับ clear <span class="nw">(<span class="ov">CLR</span>)</span> จะเห็นว่าการเชื่อมต่อของขาอินพุตทั้งสองนี้จะทำให้เกิดผลลัพธ์ที่ไม่สนใจขาสัญญาณอินพุตแบบ synchronous อันได้แก่ <i>J</i>, <i>K</i> และสัญญาณนาฬิกาเลย</p>
+<figure class="c"><img alt="รูปที่ 8.13 ผังวงจรลอจิกของ J-K flip-flop ที่มีขาอินพุต preset และ clear แบบ active-LOW" loading="lazy" src="img/fig8-13.png" style="width:454px"/><figcaption><span class="cap-no">รูปที่ 8.13</span> ผังวงจรลอจิกของ J-K flip-flop ที่มีขาอินพุต preset และ clear แบบ active-LOW</figcaption></figure>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 8.2</span></div>
+<p>สำหรับ positive edge-triggered J-K flip-flop ที่มี preset กับ clear ในรูป จงเขียนผังเวลาแสดงสัญญาณ <i>Q</i> เมื่อสัญญาณอินพุตเป็นไปตามที่ระบุ ทั้งนี้ให้ <i>Q</i> เริ่มต้นเป็น LOW</p>
+<figure><img alt="" loading="lazy" src="img/ch8-ex2.png" style="width:463px; margin-left:9px"/></figure>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<ol class="nsteps sol">
+<li>ระหว่างสัญญาณนาฬิกาลูกที่ 1, 2 และ 3 สัญญาณ <span class="ov">PRE</span> เป็น LOW ทำให้ฟลิปฟลอปอยู่ที่สภาวะ SET (1) โดยไม่สนใจสัญญาณที่ขา <i>J</i> และ <i>K</i> ที่เป็นสัญญาณแบบ synchronous เลย</li>
+<li>สำหรับสัญญาณนาฬิกาลูกที่ 4, 5, 6 และ 7 จะอยู่ในสถานะ toggle เนื่องจาก <i>J</i> และ <i>K</i> เป็น HIGH ทั้งคู่ (ดูที่วงจร) และในขณะนั้นขา <span class="ov">PRE</span> และ <span class="ov">CLR</span> เป็น HIGH ทั้งคู่</li>
+<li>สำหรับสัญญาณนาฬิกาลูกที่ 8 และ 9 ขา <span class="ov">CLR</span> เป็น LOW ทำให้ฟลิปฟลอปมีสถานะเป็น RESET (0) โดยไม่สนใจสัญญาณแบบ synchronous ว่าจะเป็นอย่างไร</li>
+</ol>
+</details>
+</div>
+<div data-widget="ffwave" data-type="jkpc"></div><div data-widget="ffwave" data-type="cmp"></div></section><section class="sec"><h2 id="s8-3"><span class="no">8.3</span> การประยุกต์ใช้วงจรฟลิปฟลอป</h2>
+<p class="lead">ในหัวข้อนี้จะกล่าวถึงการประยุกต์ใช้วงจรฟลิปฟลอป 3 แบบเพื่อให้เห็นเป็นแนวทางก่อน ส่วนในบทถัดไปจะลงไปในรายละเอียดของเรื่องวงจรนับ (<em>counter</em>) และวงจรรีจิสเตอร์</p>
+<h3 id="s8-3-1"><span class="no">8.3.1</span> วงจรเก็บข้อมูลแบบขนาน (Parallel Data Storage)</h3>
+<p>ระบบดิจิทัลทั่วไปนั้นจำเป็นที่จะต้องมีหน่วยทำงานที่ทำหน้าที่ในการจัดเก็บข้อมูลหลาย ๆ บิต โดยการใช้ฟลิปฟลอปหลาย ๆ ตัวสำหรับปฏิบัติการนี้ ในรูปที่ 8.14 (ก) จะเป็นการแสดงการใช้ฟลิปฟลอปจำนวน 4 ตัว โดยแต่ละสายสัญญาณที่ต่อขนานกัน 4 เส้นนี้จะต่อเข้ากับขาสัญญาณ <i>D</i> ของฟลิปฟลอปแต่ละตัว โดยที่จะทำการเชื่อมต่อขาสัญญาณนาฬิกาของทั้ง 4 ตัวเข้าด้วยกัน เพื่อให้ทุก ๆ ตัวทำการ trigger การทำงานพร้อม ๆ กัน ในตัวอย่างนี้จะใช้ positive edge-triggered flip-flop ซึ่งข้อมูลขาเข้าที่อินพุต <i>D</i> จะถูกเก็บเอาไว้พร้อม ๆ กันที่ขอบขาขึ้นของสัญญาณนาฬิกาดังที่แสดงให้เห็นในรูปส่วน (ข) และจะเห็นว่าขาสัญญาณ reset (<i>R</i>) ต่อเข้ากับขา <span class="ov">CLR</span> ร่วมกัน เพื่อใช้สำหรับการ reset ค่าของฟลิปฟลอปให้เป็น 0 ได้พร้อมกันทั้งหมด</p>
+<figure class="c">
+<div class="subrow" style="gap:66px; align-items:flex-end">
+<div class="sub"><img alt="รูปที่ 8.14 ตัวอย่างของการใช้ฟลิปฟลอปเพื่อนำมาทำวงจรเก็บข้อมูลแบบขนาน" loading="lazy" src="img/fig8-14a.png" style="width:246px"/><div class="subcap"><b>(ก)</b></div></div>
+<div class="sub"><img alt="รูปที่ 8.14 ตัวอย่างของการใช้ฟลิปฟลอปเพื่อนำมาทำวงจรเก็บข้อมูลแบบขนาน" loading="lazy" src="img/fig8-14b.png" style="width:198px"/><div class="subcap"><b>(ข)</b></div></div>
+</div>
+<figcaption><span class="cap-no">รูปที่ 8.14</span> ตัวอย่างของการใช้ฟลิปฟลอปเพื่อนำมาทำวงจรเก็บข้อมูลแบบขนาน</figcaption>
+</figure>
+<p>ที่เห็นนี้เป็นเพียงตัวอย่างเล็ก ๆ ที่ใช้ฟลิปฟลอปมาทำเป็นรีจิสเตอร์สำหรับการจัดเก็บข้อมูลสำหรับระบบดิจิทัล รายละเอียดเรื่องของรีจิสเตอร์จะถูกกล่าวถึงในบทต่อ ๆ ไป</p>
+<div data-widget="pregister"></div><h3 id="s8-3-2"><span class="no">8.3.2</span> วงจรหารความถี่ (Frequency Division)</h3>
+<p>การประยุกต์ใช้นี้เป็นการนำฟลิปฟลอปไปลดความถี่ของสัญญาณพัลส์ที่มีคาบคงที่ ซึ่งถูกป้อนเข้ามาที่ขาสัญญาณนาฬิกาของ J-K flip-flop โดยให้มี <i>J</i> และ <i>K</i> เป็น 1 ทั้งคู่เพื่อทำงานแบบ toggle ซึ่งจะทำให้เอาต์พุตที่ขา <i>Q</i> ได้สัญญาณสี่เหลี่ยมที่มีความถี่เป็นครึ่งหนึ่งของสัญญาณนาฬิกาที่ป้อนเข้ามา ดังนั้นเมื่อเราใช้ฟลิปฟลอป 1 ตัว เราจะได้วงจรที่เรียกว่า <strong>divide-by-2</strong> ดังที่เห็นในรูปที่ 8.15 ซึ่งจะเห็นผังเวลาแสดงการทำงานที่กำกับไว้ในรูปนี้ด้วย</p>
+<figure class="c">
+<img alt="รูปที่ 8.15 การใช้ J-K flip-flop สำหรับทำวงจร divide-by-2 ที่จะได้สัญญาณนาฬิกาที่มีความถี่เป็นครึ่งหนึ่ง" loading="lazy" src="img/fig8-15a.png" style="width:170px; margin-left:123px"/>
+<img alt="รูปที่ 8.15 การใช้ J-K flip-flop สำหรับทำวงจร divide-by-2 ที่จะได้สัญญาณนาฬิกาที่มีความถี่เป็นครึ่งหนึ่ง" loading="lazy" src="img/fig8-15b.png" style="width:369px; margin-top:14px"/>
+<figcaption><span class="cap-no">รูปที่ 8.15</span> การใช้ J-K flip-flop สำหรับทำวงจร divide-by-2 ที่จะได้สัญญาณนาฬิกาที่มีความถี่เป็นครึ่งหนึ่ง</figcaption>
+</figure>
+<p>เมื่อเราต้องการหารความถี่เพิ่มขึ้นไปอีก ก็เพียงเพิ่มฟลิปฟลอปไปอีกตัวหนึ่ง โดยใช้เอาต์พุตจากฟลิปฟลอปตัวแรกไปป้อนที่ขา clock ของฟลิปฟลอปตัวที่สองดังที่แสดงให้เห็นในรูปที่ 8.16 ความถี่ที่ได้จาก <i>Q</i><sub>A</sub> จะถูกหาร 2 ด้วยฟลิปฟลอป B ซึ่งจะทำให้สัญญาณที่ได้จาก <i>Q</i><sub>B</sub> มีความถี่เป็น 1/4 ของสัญญาณนาฬิกาดั้งเดิม ขอให้รับทราบว่าในรูปผังเวลานี้จะไม่กล่าวถึง propagation delay ที่เกิดขึ้นจริง</p>
+<figure class="c"><img alt="รูปที่ 8.16 ตัวอย่างการใช้ J-K flip-flop สองตัวเพื่อสร้างเป็นวงจรหาร 4 โดยเอาต์พุตที่ Q A จะมีความถี่เป็น 1/2 และ Q B จะมีความถี่เป็น 1/4 ของสัญญาณนาฬิกา CLK ที่ป้อนตั้งต้น" loading="lazy" src="img/fig8-16.png" style="width:274px"/><figcaption><span class="cap-no">รูปที่ 8.16</span> ตัวอย่างการใช้ J-K flip-flop สองตัวเพื่อสร้างเป็นวงจรหาร 4 โดยเอาต์พุตที่ <i>Q</i><sub>A</sub> จะมีความถี่เป็น 1/2 และ <i>Q</i><sub>B</sub> จะมีความถี่เป็น 1/4 ของสัญญาณนาฬิกา CLK ที่ป้อนตั้งต้น</figcaption></figure>
+<p>ดังนั้นถ้าเราต่อวงจรโดยใช้ฟลิปฟลอปในลักษณะนี้เพิ่มขึ้นเรื่อย ๆ เราจะได้การหารความถี่แบบ 2<sup><i>n</i></sup> โดยที่ <i>n</i> เป็นจำนวนของฟลิปฟลอปที่ใช้ ยกตัวอย่างเช่น เมื่อเราใช้ฟลิปฟลอป 3 ตัวเราจะได้ความถี่หาร 8 และเมื่อใช้ฟลิปฟลอป 4 ตัวเราจะได้ความถี่หาร 16 เป็นต้น</p>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 8.3</span></div>
+<p>จงเขียนผังเวลาคลื่นสัญญาณของวงจรในรูป เมื่อสัญญาณนาฬิกาขาเข้าเป็นสัญญาณสี่เหลี่ยมที่มีความถี่ 8 kHz ป้อนเข้ายังขา clock ของฟลิปฟลอป A</p>
+<figure><img alt="" loading="lazy" src="img/ch8-ex3a.png" style="width:491px; margin-left:9px"/></figure>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>เมื่อต่อฟลิปฟลอป 3 ตัวเข้าด้วยกันดังภาพ เราจะทำการหารความถี่ด้วย 8 (2<sup>3</sup> = 8) และสัญญาณ <i>f</i><sub>out</sub> จะเขียนได้ดังผังเวลาแสดงสัญญาณ ซึ่งจะได้เป็นความถี่ <span class="ans">1 kHz</span> <span class="nw">(ฟลิปฟลอปนี้</span>เป็นแบบ positive edge-triggered ดังนั้นทุกการเปลี่ยนจะพิจารณาที่ขอบขาขึ้นดังที่กำกับในรูปด้วยเส้นประ)</p>
+<figure><img alt="" loading="lazy" src="img/ch8-ex3b.png" style="width:520px"/></figure>
+</details>
+</div>
+<div data-widget="freqdiv"></div><h3 id="s8-3-3"><span class="no">8.3.3</span> วงจรนับ (Counter)</h3>
+<p>วงจรนับเป็นวงจรสำคัญในการใช้งานประยุกต์ของฟลิปฟลอปอย่างมาก และเรื่องนี้จะถูกกล่าวในบทถัดไป รูปที่ 8.17 แสดงตัวอย่างของวงจรชนิดนี้ซึ่งใช้ negative edge-triggered J-K flip-flop จำนวน 2 ตัว โดยที่ทั้งสองจะเริ่มที่ RESET ฟลิปฟลอป A จะ toggle สัญญาณเอาต์พุตที่ขอบขาลงในแต่ละพัลส์ ขา <i>Q</i> ของฟลิปฟลอป A จะไปป้อนเป็นสัญญาณนาฬิกาของฟลิปฟลอป B ซึ่งทุกครั้งที่ <i>Q</i><sub>A</sub> ทำการ toggle จาก HIGH เป็น LOW ฟลิปฟลอป B ก็จะทำการ toggle ทำให้ได้ผลลัพธ์เป็นดังผังเวลาดังรูป</p>
+<figure class="c"><img alt="รูปที่ 8.17 การใช้ฟลิปฟลอปเพื่อสร้างวงจรนับไบนารีขนาด 2 บิต" loading="lazy" src="img/fig8-17.png" style="width:397px"/><figcaption><span class="cap-no">รูปที่ 8.17</span> การใช้ฟลิปฟลอปเพื่อสร้างวงจรนับไบนารีขนาด 2 บิต</figcaption></figure>
+<p>จากรูปเมื่อเราสังเกตดู จะได้ผลลัพธ์ที่ <i>Q</i><sub>A</sub> และ <i>Q</i><sub>B</sub> ที่เกิดแบบรูปไบนารีที่เวียนซ้ำกันเป็นลำดับ <span class="bits">00</span> <span class="bits">01</span> <span class="bits">10</span> <span class="bits">11</span> ซึ่งเป็นการนับ 0 ถึง 3 วนไปเรื่อย ๆ สำหรับรูปที่ 8.18 เป็นวงจรนับ 0–7 ด้วยการใช้ฟลิปฟลอปมาต่อกัน 3 ตัว</p>
+<figure class="c"><img alt="รูปที่ 8.18 วงจรนับไบนารีขนาด 3 บิตที่นับตั้งแต่ 0 จนถึง 7" loading="lazy" src="img/fig8-18.png" style="width:435px"/><figcaption><span class="cap-no">รูปที่ 8.18</span> วงจรนับไบนารีขนาด 3 บิตที่นับตั้งแต่ 0 จนถึง 7</figcaption></figure>
+
+<div data-widget="freqdiv" data-mode="count" data-n="3"></div></section></div>
+
+    <section class="sec" id="summary">
+      <h2>สรุปท้ายบท</h2>
+      <div class="summary"><ul><li>แลทช์เป็นอุปกรณ์ bistable ที่ใช้การป้อนกลับเก็บข้อมูลชั่วคราว S-R latch แบบ active-HIGH สร้างจาก NOR gate ส่วน <span class="nw"><span class="ov"><i>S</i></span>-<span class="ov"><i>R</i></span></span> latch แบบ active-LOW สร้างจาก NAND gate ทั้งคู่มีสภาวะ invalid เป็นจุดบกพร่อง</li><li>Gated latch เพิ่มขา EN ควบคุมการทำงาน ส่วน gated D latch ใช้ inverter ทำให้ <i>S</i> และ <i>R</i> ไม่เคยเป็นค่าเดียวกัน จึงไม่มีสภาวะ invalid</li><li>ฟลิปฟลอปเป็น synchronous bistable ที่เปลี่ยนสถานะเฉพาะที่ขอบขาขึ้นหรือขอบขาลงของสัญญาณนาฬิกา (สัญลักษณ์มี dynamic input indicator และมี bubble สำหรับแบบ negative edge-triggered)</li><li>D flip-flop เก็บข้อมูล 1 บิต ส่วน J-K flip-flop ทำงาน SET, RESET และ NC ได้เหมือน S-R flip-flop แต่กรณี <i>J</i> = <i>K</i> = 1 จะ toggle แทนสภาวะ invalid</li><li>ขา asynchronous preset <span class="nw">(<span class="ov">PRE</span>)</span> และ clear <span class="nw">(<span class="ov">CLR</span>)</span> กำหนดเอาต์พุตเป็น 1 หรือ 0 ได้ทันทีโดยไม่ขึ้นกับสัญญาณนาฬิกาและอินพุต <i>J</i>, <i>K</i></li><li>การประยุกต์ใช้ฟลิปฟลอป ได้แก่ การเก็บข้อมูลแบบขนาน การหารความถี่ด้วย 2<sup><i>n</i></sup> เมื่อต่อฟลิปฟลอป <i>n</i> ตัว และวงจรนับไบนารี</li></ul></div>
+    </section>
+
+    <section class="sec" id="quiz">
+      <h2>แบบทดสอบท้ายบท</h2>
+      <p class="w-hint">เลือกคำตอบ ระบบจะเฉลยพร้อมคำอธิบายทันที (ไม่มีการบันทึกคะแนน ใช้สำหรับทบทวนด้วยตนเอง)</p>
+      <div class="quiz" id="quiz-box"></div>
+    </section>
+
+    <section class="sec" id="lab">
+  <h2>ปฏิบัติการสัปดาห์ที่ 11 · ฟลิปฟลอปและวงจรหารความถี่</h2>
+  <p>ตามแผนการสอนใน มคอ.3 สัปดาห์ที่ 10 เริ่มเรื่องแลทช์ (ร่วมกับปฏิบัติการ MUX และ 7-segment ของบทที่ 7) และสัปดาห์ที่ 11 ปฏิบัติการฟลิปฟลอป — บันทึกผังเวลาที่วัดได้เทียบกับแบบจำลองบนเว็บทุกข้อ</p>
+
+  <div class="card">
+    <h3 style="font-size:19px;margin-top:0">📋 ใบงานปฏิบัติการที่ 8 (สัปดาห์ที่ 11) · แลทช์ ฟลิปฟลอป และวงจรหารความถี่</h3>
+    <ol>
+      <li><b>S-R latch:</b> ต่อ <span class="ov">S</span>-<span class="ov">R</span> latch ด้วย NAND 2 ตัว (7400) และ S-R latch ด้วย NOR 2 ตัว (7402) ทดสอบครบทุกกรณีของตารางที่ 8.1–8.2 · ลองสร้างสภาวะ invalid แล้วปล่อยอินพุตพร้อมกัน สังเกตผล</li>
+      <li><b>สวิตช์กันเด้ง (debounce):</b> ใช้ <span class="ov">S</span>-<span class="ov">R</span> latch จากข้อ 1 กับสวิตช์ 2 ทาง ป้อนให้วงจรนับ เทียบกับการต่อสวิตช์ตรง (อภิปรายว่าทำไมต้องใช้แลทช์)</li>
+      <li><b>D latch กับ D flip-flop:</b> ป้อน D และสัญญาณนาฬิกาชุดเดียวกันให้ D latch (7475) และ D flip-flop (7474) วัด Q ทั้งสองบนออสซิลโลสโคปและเทียบกับแบบจำลอง “แลทช์ ⇄ ฟลิปฟลอป”</li>
+      <li><b>J-K flip-flop:</b> ใช้ 74LS76 หรือ 74LS112 ทดสอบ SET, RESET, NC, toggle ด้วยสวิตช์ที่ผ่านวงจรกันเด้ง และทดสอบขา <span class="ov">PRE</span> / <span class="ov">CLR</span> (ตัวอย่างที่ 8.2)</li>
+      <li><b>วงจรหารความถี่:</b> ต่อ J-K flip-flop 3 ตัวแบบ toggle ป้อนนาฬิกา 8 kHz วัดความถี่ที่ Q<sub>A</sub>, Q<sub>B</sub>, Q<sub>C</sub> (ตัวอย่างที่ 8.3) แล้วต่อ Q ทั้งสามเข้า LED เพื่อดูการนับ 0–7 ที่ความถี่ต่ำ</li>
+    </ol>
+    <p class="w-hint" style="margin:0">ส่ง: ผังวงจรพร้อมเบอร์ไอซีและขา · ผังเวลาที่วัดได้ · ตารางผลการทดลอง · คำตอบคำถามท้ายการทดลอง (ประเมินในหมวดแบบฝึกหัดและรายงานผลการทดลอง 20%)</p>
+  </div>
+
+  <div class="card" style="margin-top:16px;border-left:5px solid var(--accent)">
+    <h3 style="font-size:19px;margin-top:0">👥 โครงงานกลุ่ม · เตรียมรายงานความก้าวหน้า (สัปดาห์ที่ 12 · CLO12)</h3>
+    <p style="margin:0">ถ้าโครงงานต้อง “จำ” สถานะ (นับคะแนน เก็บค่า ตัวจับเวลา) ให้ระบุว่าจะใช้ฟลิปฟลอปชนิดใดและสัญญาณนาฬิกามาจากไหน · เตรียมรายงานความก้าวหน้าและปัญหาที่พบสำหรับสัปดาห์ที่ 12</p>
+  </div>
+</section>
+
+
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-top:48px;flex-wrap:wrap">
+      <a class="btn" href="../../index.html">← หน้ารายวิชา</a>
+      <a class="btn primary" href="slides.html">▶ ทบทวนด้วยสไลด์</a>
+    </div>
+  </main>
+</div>
+
+<footer class="footer">517 112 การออกแบบวงจรตรรกะเชิงเลข · ภาควิชาคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยศิลปากร · เนื้อหาจากเอกสารประกอบการสอน อ.อภิเษก หงษ์วิทยากร</footer>
+
+<script src="quiz.js"></script>
+<script>document.addEventListener("DOMContentLoaded", () => DLD.quiz(document.getElementById("quiz-box"), window.CH_QUIZ));</script>
+</body>
+</html>

@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>บทที่ 3 ลอจิกเกท · 517 112</title>
+<meta name="description" content="517 112 การออกแบบวงจรตรรกะเชิงเลข — บทที่ 3 ลอจิกเกท (Logic Gates)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Prompt:wght@400;600;700&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/book.css">
+
+<script src="../../assets/js/site.js"></script>
+<script src="../../assets/js/logic.js"></script>
+<script src="../../assets/js/numbers.js"></script>
+<script src="../../assets/js/boolean.js"></script>
+<script src="widgets.js"></script>
+</head>
+<body>
+<!-- สร้างอัตโนมัติด้วย web/tools/build_chapter.py — แก้เนื้อหาที่ source/content_ch3.html หรือ chapter.json แล้วรันใหม่ -->
+<header class="topbar">
+  <a class="brand" href="../../index.html"><span class="chip">517 112</span><span>Digital Logic Design</span></a>
+  <span class="crumb">/ บทที่ 3 ลอจิกเกท</span>
+  <span class="spacer"></span>
+  <a class="btn sm" href="slides.html">▶ สไลด์</a>
+  <button class="btn sm icon" data-theme-toggle title="สลับโหมดสว่าง/มืด" aria-label="สลับธีม">◐</button>
+</header>
+
+<div class="layout">
+  <nav class="toc-side" aria-label="สารบัญบทที่ 3">
+    <h4>บทที่ 3</h4>
+    <ol><li><a href="#overview">ภาพรวมและจุดประสงค์</a></li><li><a href="#s3-1">3.1 อินเวอร์เตอร์ (Inverter)</a></li><li class="sub"><a href="#s3-1-1">3.1.1 Negation Indicator และ Polarity …</a></li><li class="sub"><a href="#s3-1-2">3.1.2 ตารางค่าความจริงของอินเวอร์เตอร์…</a></li><li class="sub"><a href="#s3-1-3">3.1.3 การปฏิบัติการของอินเวอร์เตอร์</a></li><li class="sub"><a href="#s3-1-4">3.1.4 ผังเวลา (Timing Diagrams)</a></li><li class="sub"><a href="#s3-1-5">3.1.5 การแสดงสมการลอจิกของอินเวอร์เตอร…</a></li><li class="sub"><a href="#s3-1-6">3.1.6 การประยุกต์ใช้อินเวอร์เตอร์</a></li><li><a href="#s3-2">3.2 AND gate</a></li><li class="sub"><a href="#s3-2-1">3.2.1 การปฏิบัติการของ AND gate</a></li><li class="sub"><a href="#s3-2-2">3.2.2 ตารางค่าความจริงของ AND gate</a></li><li class="sub"><a href="#s3-2-3">3.2.3 การปฏิบัติการของ AND gate กับอิน…</a></li><li class="sub"><a href="#s3-2-4">3.2.4 การแสดงสมการลอจิกของ AND gate</a></li><li class="sub"><a href="#s3-2-5">3.2.5 การประยุกต์ใช้ AND gate</a></li><li><a href="#s3-3">3.3 OR gate</a></li><li class="sub"><a href="#s3-3-1">3.3.1 การปฏิบัติการของ OR gate</a></li><li class="sub"><a href="#s3-3-2">3.3.2 ตารางค่าความจริงของ OR gate</a></li><li class="sub"><a href="#s3-3-3">3.3.3 การปฏิบัติการของ OR gate กับอินพ…</a></li><li class="sub"><a href="#s3-3-4">3.3.4 การแสดงสมการลอจิกของ OR gate</a></li><li class="sub"><a href="#s3-3-5">3.3.5 การประยุกต์ใช้ OR gate</a></li><li><a href="#s3-4">3.4 NAND gate</a></li><li class="sub"><a href="#s3-4-1">3.4.1 การปฏิบัติการของ NAND gate</a></li><li class="sub"><a href="#s3-4-2">3.4.2 การปฏิบัติการของ NAND gate กับอิ…</a></li><li class="sub"><a href="#s3-4-3">3.4.3 Negative-OR วงจรที่เทียบเท่ากับ …</a></li><li class="sub"><a href="#s3-4-4">3.4.4 การแสดงสมการลอจิกของ NAND gate</a></li><li><a href="#s3-5">3.5 NOR gate</a></li><li class="sub"><a href="#s3-5-1">3.5.1 การปฏิบัติการของ NOR gate</a></li><li class="sub"><a href="#s3-5-2">3.5.2 การปฏิบัติการของ NOR gate กับอิน…</a></li><li class="sub"><a href="#s3-5-3">3.5.3 Negative-AND วงจรที่เทียบเท่ากับ…</a></li><li class="sub"><a href="#s3-5-4">3.5.4 การแสดงสมการลอจิกของ NOR gate</a></li><li><a href="#s3-6">3.6 XOR (Exclusive-OR) และ XNOR (Exc…</a></li><li class="sub"><a href="#s3-6-1">3.6.1 XOR gate</a></li><li class="sub"><a href="#s3-6-2">3.6.2 XNOR gate</a></li><li class="sub"><a href="#s3-6-3">3.6.3 การปฏิบัติการกับอินพุตที่เป็นรูป…</a></li><li class="sub"><a href="#s3-6-4">3.6.4 การประยุกต์ใช้งาน</a></li><li><a href="#s3-7">3.7 ตระกูลวงจรรวมดิจิทัลและคุณลักษณะ…</a></li><li class="sub"><a href="#s3-7-1">3.7.1 ไอซีลอจิกแบบฟังก์ชันคงที่และตัวถ…</a></li><li class="sub"><a href="#s3-7-2">3.7.2 การอ่านรหัสไอซีอนุกรม 74</a></li><li class="sub"><a href="#s3-7-3">3.7.3 TTL และ CMOS: แรงดันไฟเลี้ยงและร…</a></li><li class="sub"><a href="#s3-7-4">3.7.4 ขอบเขตของสัญญาณรบกวน (Noise Marg…</a></li><li class="sub"><a href="#s3-7-5">3.7.5 ความสามารถในการขับโหลด (Fan-out)</a></li><li class="sub"><a href="#s3-7-6">3.7.6 Propagation Delay และกำลังไฟฟ้า</a></li><li class="sub"><a href="#s3-7-7">3.7.7 การเชื่อมต่อระหว่างลอจิก 3.3 V แ…</a></li><li class="sub"><a href="#s3-7-8">3.7.8 อินพุตที่ไม่ใช้งานและตัวเก็บประจ…</a></li><li class="sub"><a href="#s3-7-9">3.7.9 หลักการเลือกไอซีให้เหมาะกับแรงดั…</a></li><li><a href="#summary">สรุปท้ายบท</a></li><li><a href="#quiz">แบบทดสอบท้ายบท</a></li><li><a href="#lab">ปฏิบัติการสัปดาห์ที่ 4</a></li></ol>
+    <div class="side-actions">
+      <a class="btn primary" href="slides.html">▶ เปิดสไลด์บรรยาย</a>
+      <a class="btn" href="../../index.html">← หน้ารายวิชา</a>
+    </div>
+  </nav>
+
+  <main class="lesson">
+    <div class="hero">
+      <div class="ch-label">CHAPTER 03 · สัปดาห์ที่ 4</div>
+      <h1>ลอจิกเกท</h1>
+      <div class="en">Logic Gates</div>
+      <div class="meta"><span>บรรยาย 2 ชม. + ปฏิบัติการ 2 ชม.</span><span>CLO4</span><span>CLO8</span><span>CLO9</span><span>PLO10 · PLO13</span><span>7 หัวข้อ · 14 แบบจำลองเชิงโต้ตอบ</span></div>
+      <div class="hero-actions">
+        <a class="btn" href="slides.html">▶ สไลด์บรรยาย</a>
+        <a class="btn ghost" href="#quiz">แบบทดสอบท้ายบท</a>
+        <a class="btn ghost" href="#lab">ใบงานปฏิบัติการ</a>
+      </div>
+    </div>
+
+    <section id="overview">
+      <div class="grid-2">
+        <div class="card objectives">
+          <h3 style="font-size:18px">🎯 จุดประสงค์ของบทเรียน</h3>
+          <ol><li>เข้าใจปฏิบัติการของเกทพื้นฐาน ได้แก่ อินเวอร์เตอร์ (Inverter หรือ NOT gate) AND gate และ OR gate</li><li>เข้าใจปฏิบัติการของ NAND gate และ NOR gate</li><li>สามารถเขียนสมการ<span style="white-space:nowrap">บูลีนของเกท</span> NOT, AND, OR, NAND และ NOR ได้</li><li>อธิบายปฏิบัติการของเกท XOR และ XNOR ได้</li><li>จดจำรูปแบบและสัญลักษณ์มาตรฐานของเกทต่าง ๆ ได้</li><li>สร้างผังเวลา (timing diagram) ที่แสดงความสัมพันธ์เชิงเวลาระหว่างอินพุตกับเอาต์พุตของเกทชนิดต่าง ๆ ได้</li><li>เลือกตระกูลและเบอร์ไอซีลอจิกให้เหมาะกับระดับแรงดันไฟเลี้ยงและสภาวะแวดล้อมการทำงาน โดยพิจารณา noise margin, fan-out, เวลาหน่วง และกำลังไฟฟ้าได้</li></ol>
+        </div>
+        <div class="card">
+          <h3 style="font-size:18px">🧭 ความเชื่อมโยงกับ มคอ.3</h3>
+          <p style="margin:0 0 8px"><span class="clo-chip">CLO4</span> อธิบายหลักการตรรกะเชิงเลขเบื้องต้นในการนำไปใช้สร้างวงจรดิจิทัลและการประยุกต์ใช้ในการสร้างระบบคอมพิวเตอร์</p><p style="margin:0 0 8px"><span class="clo-chip">CLO8</span> เลือกเกทพื้นฐานที่เหมาะสมสำหรับสร้างวงจรขนาดเล็กเพื่อการใช้งานตามวัตถุประสงค์</p><p style="margin:0 0 8px"><span class="clo-chip">CLO9</span> เลือกไอซีที่เหมาะกับระดับแรงดันไฟฟ้าในสภาวะแวดล้อมการทำงาน</p>
+          <p style="margin:0;font-size:15px;color:var(--ink-2)"><b>กิจกรรม:</b> บรรยาย · ปฏิบัติการ: ทดสอบเกทพื้นฐานด้วยไอซีตระกูล 74 และอ่าน datasheet<br><b>การประเมิน:</b> แบบฝึกหัดและรายงานผลการทดลอง (20%) · สอบกลางภาค บทที่ 1–6 (30%)</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="book">
+<section class="sec"><h2 id="s3-1"><span class="no">3.1</span> อินเวอร์เตอร์ (Inverter)</h2>
+<p class="lead"><strong>อินเวอร์เตอร์</strong> หรือวงจร <span class="gate">NOT</span> (นิเสธ) เป็นวงจรที่กลับค่าจาก 0 ให้เป็น 1 หรือ 1 ให้เป็น 0 มีสัญลักษณ์ลอจิกมาตรฐานดังแสดงในรูปที่ 3.1 ส่วน (ก) แสดงสัญลักษณ์ที่เป็นรูปทรงเฉพาะ (<em>distinctive shape</em>) ของอินเวอร์เตอร์ ซึ่งสัญลักษณ์แบบนี้สามารถพบเห็นได้ทั่วไป ส่วน (ข) แสดงสัญลักษณ์แบบโครงร่างสี่เหลี่ยม (<em>rectangular outline</em>) ซึ่งจะพบในเอกสารตีพิมพ์ทางอุตสาหกรรมเป็นส่วนใหญ่ สัญลักษณ์ลอจิกเหล่านี้ถูกกำหนดไว้ในมาตรฐาน <span class="term">ANSI/IEEE 91-1984</span></p>
+<figure class="parts"><div class="pgrid" style="grid-template-columns:246px 246px;column-gap:38px"><img alt="รูปที่ 3.1 สัญลักษณ์มาตรฐาน ANSI/IEEE 91-1984 ของอินเวอร์เตอร์" loading="lazy" src="img/fig3-1a.png" style="width:152px"/><img alt="รูปที่ 3.1 สัญลักษณ์มาตรฐาน ANSI/IEEE 91-1984 ของอินเวอร์เตอร์" loading="lazy" src="img/fig3-1b.png" style="width:164px"/><div class="subcap">(ก) สัญลักษณ์รูปทรงเฉพาะที่มี negation indicator</div><div class="subcap">(ข) สัญลักษณ์โครงร่างสี่เหลี่ยมที่มี polarity indicator</div></div><figcaption><span class="cap-no">รูปที่ 3.1</span> สัญลักษณ์มาตรฐาน ANSI/IEEE 91-1984 ของอินเวอร์เตอร์</figcaption></figure>
+<h3 id="s3-1-1"><span class="no">3.1.1</span> Negation Indicator และ Polarity Indicator</h3>
+<p><strong>negation indicator</strong> ก็คือฟองน้ำหรือ <em>bubble</em> (◦) เมื่อปรากฏอยู่ที่ด้านใดด้านหนึ่ง คืออินพุตหรือเอาต์พุตของตัวกระทำการลอจิก จะเป็นตัวบ่งถึงการแปลงเป็นค่าตรงข้าม (<em>inversion</em> หรือ <em>complementation</em>) ดังรูปที่ 3.1 (ก) ซึ่งเป็น negation indicator ของอินเวอร์เตอร์ เพื่อให้เข้าใจตรงกัน โดยทั่วไปอินพุตจะอยู่ทางด้านซ้ายมือ ส่วนเอาต์พุตจะอยู่ด้านขวามือ เมื่อฟองน้ำปรากฏอยู่ที่อินพุต จะหมายความว่าค่า 0 เป็นค่าที่ <em>active</em> หรือ <em>asserted</em> สถานะของอินพุต และอินพุตในลักษณะนี้จะเรียกกันว่า <strong>active-LOW input</strong> แต่ถ้าปรากฏอยู่ด้านเอาต์พุต ฟองน้ำจะหมายความว่าค่า 0 เป็นค่าที่ active หรือ asserted สถานะของเอาต์พุต เราเรียกเอาต์พุตลักษณะนี้ว่า <strong>active-LOW output</strong> ส่วนอินพุตหรือเอาต์พุตที่ไม่มีฟองน้ำปรากฏอยู่ จะหมายถึงว่า 1 เป็นค่าที่ active หรือ asserted สถานะของอินพุตหรือเอาต์พุตนั้น ๆ และเราจะเรียกอินพุตหรือเอาต์พุตที่ปราศจากฟองน้ำนั้นว่า <strong>active-HIGH</strong></p>
+<p>สำหรับ <strong>polarity indicator</strong> นั้นจะใช้เครื่องหมายสามเหลี่ยม (<svg aria-label="สามเหลี่ยม" class="pol" viewbox="0 0 14 10"><path d="M1 9 H13 L1 1.5 Z" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.3"></path></svg>) กำกับการทำ inversion ซึ่งมีความหมายเหมือนกับฟองน้ำที่เป็น negation indicator นั่นเอง</p>
+<p>ในที่นี้เราจะใช้สัญลักษณ์แบบ <em>distinctive symbol</em> ในภาพประกอบเป็นหลัก และขอให้ทราบว่าสัญลักษณ์ที่แตกต่างกันในการวางตำแหน่งของ negation indicator และ polarity indicator ในรูปที่ 3.1 นั้น ไม่ได้ทำให้การปฏิบัติการของอินเวอร์เตอร์เปลี่ยนไปเลย</p>
+<h3 id="s3-1-2"><span class="no">3.1.2</span> ตารางค่าความจริงของอินเวอร์เตอร์ (Inverter Truth Table)</h3>
+<p>เมื่อระดับสัญญาณด้านอินพุตของอินเวอร์เตอร์เป็น HIGH ทางด้านเอาต์พุตจะได้ผลลัพธ์เป็นระดับสัญญาณ LOW และในทางกลับกัน เมื่อระดับสัญญาณด้านอินพุตของอินเวอร์เตอร์เป็น LOW ทางด้านเอาต์พุตจะได้ผลลัพธ์เป็นระดับสัญญาณ HIGH ซึ่งเราสามารถเขียนแสดงเป็น <strong>ตารางค่าความจริง</strong> (<em>truth table</em>) ได้ดังตารางที่ 3.1</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 3.1</span> ตารางค่าความจริงของอินเวอร์เตอร์</div>
+<div class="tbl-scroll"><table class="tt">
+<thead><tr><th>อินพุต</th><th class="out">เอาต์พุต</th></tr></thead>
+<tbody>
+<tr><td>LOW (0)</td><td class="out">HIGH (1)</td></tr>
+<tr><td>HIGH (1)</td><td class="out">LOW (0)</td></tr>
+</tbody>
+</table></div>
+</div>
+<h3 id="s3-1-3"><span class="no">3.1.3</span> การปฏิบัติการของอินเวอร์เตอร์</h3>
+<figure><img alt="รูปที่ 3.2 การปฏิบัติการของอินเวอร์เตอร์ที่เกิดขึ้นกับสัญญาณ pulse ทางด้านอินพุต" loading="lazy" src="img/fig3-2.png" style="width:479px"/><figcaption><span class="cap-no">รูปที่ 3.2</span> การปฏิบัติการของอินเวอร์เตอร์ที่เกิดขึ้นกับสัญญาณ pulse ทางด้านอินพุต</figcaption></figure>
+<p>รูปที่ 3.2 แสดงเอาต์พุตของอินเวอร์เตอร์สำหรับสัญญาณ pulse ด้านอินพุต โดยจุดเวลา t<sub>1</sub> และ t<sub>2</sub> ของรูปคลื่น pulse ทั้งอินพุตและเอาต์พุตแสดงจุดเวลาที่สอดคล้องกัน เพื่อบอกว่าเมื่อระดับสัญญาณก่อนหน้าเวลา t<sub>1</sub> ทางด้านอินพุตมีค่าเป็น LOW ในช่วงเวลาเดียวกันทางด้านเอาต์พุตจะมีระดับสัญญาณเป็น HIGH แต่เมื่อผ่านจุด t<sub>1</sub> ซึ่งเป็นจุดเวลาที่ pulse ยกตัวขึ้นทำให้ระดับสัญญาณทางด้านอินพุตเป็น HIGH อินเวอร์เตอร์ก็จะทำการ inversion ให้ระดับสัญญาณทางด้านเอาต์พุตเป็น LOW ตามหน้าที่ของมัน และเมื่อถึงจุดเวลา t<sub>2</sub> pulse ทางอินพุตจะลดระดับสัญญาณลงเป็น LOW ซึ่งทำให้เกิดรูป pulse กลับทางที่ด้านเอาต์พุตดังแสดงในรูป</p>
+<h3 id="s3-1-4"><span class="no">3.1.4</span> ผังเวลา (Timing Diagrams)</h3>
+<p><strong>ผังเวลา</strong> เป็นกราฟที่แสดงความสัมพันธ์ระหว่างรูปคลื่นตั้งแต่ 2 รูปคลื่นขึ้นไปที่เกี่ยวข้องซึ่งกันและกัน โดยมีฐานของเวลาเป็นจุดอ้างอิง ยกตัวอย่างสัญญาณ pulse ด้านอินพุตและเอาต์พุตในรูปที่ 3.2 เมื่อนำมาวางบนแกนเวลาเดียวกัน ก็จะทำให้เราเห็นความสัมพันธ์ระหว่างอินพุตและเอาต์พุตที่ได้จากการปฏิบัติการลอจิก ซึ่งในรูปที่ 3.2 คือการทำงานของอินเวอร์เตอร์ ดังจะเห็นได้จากรูปที่ 3.3</p>
+<figure><img alt="รูปที่ 3.3 ผังเวลาของการปฏิบัติการของอินเวอร์เตอร์จากรูปที่ 3.2" loading="lazy" src="img/fig3-3.png" style="width:186px"/><figcaption><span class="cap-no">รูปที่ 3.3</span> ผังเวลาของการปฏิบัติการของอินเวอร์เตอร์จากรูปที่ 3.2</figcaption></figure>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.1</span></div>
+<p>รูปที่ 3.4 เป็นรูปคลื่นสัญญาณที่จะนำเข้าทางอินพุตของอินเวอร์เตอร์ จงวาดรูปคลื่นสัญญาณทางด้านเอาต์พุตที่ได้จากการปฏิบัติการของอินเวอร์เตอร์ในแบบของผังเวลาให้ถูกต้อง และจากรูปของอินเวอร์เตอร์ที่กำหนดไว้ จงบอกว่าสถานะของเอาต์พุตจะ active ที่ค่า 0 หรือ 1</p>
+<figure><img alt="รูปที่ 3.4 รูปคลื่นอินพุตของอินเวอร์เตอร์ (ตัวอย่างที่ 3.1)" loading="lazy" src="img/fig3-4.png" style="width:366px"/><figcaption><span class="cap-no">รูปที่ 3.4</span> รูปคลื่นอินพุตของอินเวอร์เตอร์ (ตัวอย่างที่ 3.1)</figcaption></figure>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>จากโจทย์และสัญญาณที่เข้าทางอินพุตของอินเวอร์เตอร์ เราจะได้รูปคลื่นทางด้านเอาต์พุตเป็นรูปคลื่นที่มีระดับสัญญาณตรงกันข้ามกับอินพุตทุกประการ โดยวาดผังเวลาได้ดังรูปข้างล่างนี้ สำหรับ <strong>สถานะของเอาต์พุตจะเป็น active ที่ค่า 0</strong></p>
+<figure><img alt="" loading="lazy" src="img/fig3-ex1a.png" style="width:211px"/></figure>
+</details>
+</div>
+<div data-widget="gatewave" data-gate="NOT"></div><h3 id="s3-1-5"><span class="no">3.1.5</span> การแสดงสมการลอจิกของอินเวอร์เตอร์ (Logic Expression for an Inverter)</h3>
+<p>สมการลอจิกของอินเวอร์เตอร์สามารถแสดงได้เป็น</p>
+<div class="expr">X = <span class="ov">A</span></div>
+<p>ตัวแปรอินพุตคือ A และตัวแปรเอาต์พุตคือ X การเขียนสมการลักษณะนี้เป็นการบ่งว่าเอาต์พุตเป็นค่าตรงกันข้ามกับอินพุต (<em>complement</em>) ดังนั้น เมื่อ A = 0 จะได้ X = 1 และถ้า A = 1 จะได้ X = 0 สำหรับตัวแปรที่เป็น complement <span class="ov">A</span> นั้น เราอ่านว่า “เอบาร์” (<em>A bar</em>) หรือ “น็อตเอ” (<em>not A</em>) ก็ได้ รูปที่ 3.5 แสดงการกลับค่าของอินเวอร์เตอร์พร้อมการเขียนสมการลอจิกของมัน</p>
+<figure><img alt="รูปที่ 3.5 อินเวอร์เตอร์และสมการลอจิกของเอาต์พุต" loading="lazy" src="img/fig3-5.png" style="width:199px"/><figcaption><span class="cap-no">รูปที่ 3.5</span> อินเวอร์เตอร์และสมการลอจิกของเอาต์พุต</figcaption></figure>
+<h3 id="s3-1-6"><span class="no">3.1.6</span> การประยุกต์ใช้อินเวอร์เตอร์</h3>
+<p>รูปที่ 3.6 แสดงวงจรที่ใช้สำหรับหา <strong>1’s complement</strong> ของเลขไบนารีขนาด 8 บิต โดยตัวเลขดังกล่าวจะป้อนเข้าทางด้านอินพุตของวงจร แล้วเราจะได้ 1’s complement ของเลขนั้นทางเอาต์พุต</p>
+<figure><img alt="รูปที่ 3.6 ตัวอย่างการใช้อินเวอร์เตอร์เพื่อสร้างวงจรหา 1’s complement ของเลขไบนารีขนาด 8 บิต" loading="lazy" src="img/fig3-6.png" style="width:414px"/><figcaption><span class="cap-no">รูปที่ 3.6</span> ตัวอย่างการใช้อินเวอร์เตอร์เพื่อสร้างวงจรหา 1’s complement ของเลขไบนารีขนาด 8 บิต</figcaption></figure>
+</section><section class="sec"><h2 id="s3-2"><span class="no">3.2</span> AND gate</h2>
+<p>คำว่า <em>gate</em> ในต่อไปนี้จะหมายถึงวงจรที่ใช้ในการปฏิบัติการทางลอจิกพื้นฐาน สำหรับ <span class="gate">AND</span> gate จะมีสัญลักษณ์มาตรฐานที่ใช้กันดังที่เห็นในรูปที่ 3.7</p>
+<figure class="parts"><div class="pgrid" style="grid-template-columns:227px 227px;column-gap:38px"><img alt="รูปที่ 3.7 สัญลักษณ์มาตรฐานของ AND gate ในที่นี้เป็นแบบที่มี 2 อินพุต" loading="lazy" src="img/fig3-7a.png" style="width:167px"/><img alt="รูปที่ 3.7 สัญลักษณ์มาตรฐานของ AND gate ในที่นี้เป็นแบบที่มี 2 อินพุต" loading="lazy" src="img/fig3-7b.png" style="width:164px"/><div class="subcap">(ก) สัญลักษณ์รูปทรงเฉพาะ</div><div class="subcap">(ข) สัญลักษณ์โครงร่างสี่เหลี่ยม ซึ่งจะมีเครื่องหมาย &amp; ระบุไว้</div></div><figcaption><span class="cap-no">รูปที่ 3.7</span> สัญลักษณ์มาตรฐานของ AND gate ในที่นี้เป็นแบบที่มี 2 อินพุต</figcaption></figure>
+<p>AND gate สามารถมีจำนวนอินพุตได้ตั้งแต่ 2 อินพุตขึ้นไป</p>
+<h3 id="s3-2-1"><span class="no">3.2.1</span> การปฏิบัติการของ AND gate</h3>
+<p>เอาต์พุตที่ได้จาก AND gate จะเป็น HIGH (1) ได้กรณีเดียว คือเมื่อสัญญาณอินพุตทุกสัญญาณเป็น HIGH เหมือนกันหมดเท่านั้น ดังนั้นเมื่อสัญญาณอินพุตตัวใดตัวหนึ่งหรือทุกตัวมีค่าเป็น LOW จะทำให้เอาต์พุตเป็น LOW ทั้งสิ้น ดังจะเห็นได้จากรูปที่ 3.8 ซึ่งแสดง AND gate ขนาด 2 อินพุต โดยแต่ละอินพุตมีตัวอักษรแสดงตัวแปรอินพุตเป็น A และ B ซึ่งมีกรณีที่เป็นไปได้อยู่ 4 กรณี และตัวแปรเอาต์พุต X จะมีค่าเป็น HIGH (หรือ <em>true</em>) เพียงกรณีเดียวเท่านั้น คือเมื่อ A และ B เป็น HIGH ทั้งคู่</p>
+<figure><img alt="รูปที่ 3.8 ค่าลอจิกที่เป็นไปได้จากการปฏิบัติการของ AND gate ขนาด 2 อินพุต" loading="lazy" src="img/fig3-8.png" style="width:598px"/><figcaption><span class="cap-no">รูปที่ 3.8</span> ค่าลอจิกที่เป็นไปได้จากการปฏิบัติการของ AND gate ขนาด 2 อินพุต</figcaption></figure>
+<h3 id="s3-2-2"><span class="no">3.2.2</span> ตารางค่าความจริงของ AND gate</h3>
+<p>ตารางที่ 3.2 เป็นตารางค่าความจริงของ AND gate ขนาด 2 อินพุต โดยเราจะแทน HIGH ด้วย 1 และแทน LOW ด้วย 0</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 3.2</span> ตารางค่าความจริงของ AND gate ขนาด 2 อินพุต</div>
+<div class="tbl-scroll"><table class="tt">
+<thead><tr><th colspan="2">อินพุต</th><th class="out">เอาต์พุต</th></tr>
+<tr><th>A</th><th>B</th><th class="out">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>1</td><td class="out">0</td></tr>
+<tr><td>1</td><td>0</td><td class="out">0</td></tr>
+<tr><td>1</td><td>1</td><td class="out">1</td></tr>
+</tbody>
+</table></div>
+</div>
+<p>เราสามารถหาจำนวนกรณีที่เกิดขึ้นได้จากการ <em>combination</em> ของจำนวนอินพุตของ gate ใด ๆ ได้จากสูตรต่อไปนี้</p>
+<div class="expr">N = 2<sup>n</sup></div>
+<p>โดยที่ N คือจำนวนกรณีที่เกิดขึ้นได้จากการ combination กันของจำนวนอินพุต n ดังนั้นเราจะได้ว่า</p>
+<div class="expr-block">
+<div>สำหรับตัวแปรอินพุต 2 ตัว เราจะได้   N = 2<sup>2</sup> = 4 กรณี</div>
+<div>สำหรับตัวแปรอินพุต 3 ตัว เราจะได้   N = 2<sup>3</sup> = 8 กรณี</div>
+<div>สำหรับตัวแปรอินพุต 4 ตัว เราจะได้   N = 2<sup>4</sup> = 16 กรณี</div>
+</div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.2</span></div>
+<p>(I) จงสร้างตารางค่าความจริงของ AND gate ขนาด 3 อินพุต<br/>(II) จงหาจำนวนกรณีที่จะเกิดขึ้นได้ของ AND gate ขนาด 4 อินพุต</p>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p><b>(I)</b> ก่อนอื่นต้องหาว่า AND gate ขนาด 3 อินพุตจะมีกรณีของอินพุตที่ combination กันเป็นจำนวนเท่าใด จากสูตร N = 2<sup>n</sup> ซึ่ง n = 3 ดังนั้นกรณีที่เป็นไปได้จะเท่ากับ 2<sup>3</sup> ซึ่งมีค่าเท่ากับ 8 เราจึงต้องสร้างตารางค่าความจริงของ AND gate ขนาด 3 อินพุตที่ประกอบด้วยกรณีทางด้านอินพุตจำนวน 8 กรณี ได้ดังต่อไปนี้</p>
+<div class="tbl-scroll"><table class="tt">
+<thead><tr><th colspan="3">อินพุต</th><th class="out">เอาต์พุต</th></tr>
+<tr><th>A</th><th>B</th><th>C</th><th class="out">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>0</td><td>1</td><td class="out">0</td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td class="out">0</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td class="out">0</td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td class="out">0</td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td class="out">0</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td class="out">1</td></tr>
+</tbody>
+</table></div>
+<p><b>(II)</b> <span class="ans">N = 2<sup>4</sup> = 16</span> ดังนั้น AND gate ขนาด 4 อินพุตจะมีกรณีที่เป็นไปได้ของอินพุตที่ combination กัน 16 กรณี</p>
+</details>
+</div>
+<h3 id="s3-2-3"><span class="no">3.2.3</span> การปฏิบัติการของ AND gate กับอินพุตที่เป็นรูปคลื่น</h3>
+<p>ในการทำงานจริงของวงจร สัญญาณอินพุตมักไม่ได้หยุดนิ่งอยู่ที่ระดับสัญญาณใดระดับหนึ่ง แต่มักเป็นสัญญาณที่เปลี่ยนแปลงระหว่างระดับลอจิก HIGH กับ LOW ดังตัวอย่างต่อไปนี้ ซึ่งแสดงให้เห็นว่าเมื่อสัญญาณอินพุตมีการเปลี่ยนแปลงไปมาที่ขาสัญญาณอินพุต AND gate ก็จะตอบสนองต่อสัญญาณอินพุตนั้น ๆ ตามหน้าที่ของมัน โดยระดับสัญญาณเอาต์พุตจะเปลี่ยนแปลงไปตามหลักทางลอจิกที่ได้กล่าวไปแล้วข้างต้น</p>
+<figure><img alt="รูปที่ 3.9 ตัวอย่างการทำงานของ AND gate แสดงความสัมพันธ์ของรูปคลื่นของอินพุตและเอาต์พุต" loading="lazy" src="img/fig3-9.png" style="width:437px"/><figcaption><span class="cap-no">รูปที่ 3.9</span> ตัวอย่างการทำงานของ AND gate แสดงความสัมพันธ์ของรูปคลื่นของอินพุตและเอาต์พุต</figcaption></figure>
+<p>จากรูปจะเห็นว่าสัญญาณอินพุต A และ B มีการเปลี่ยนแปลงตามช่วงเวลาต่าง ๆ ซึ่งแต่ละการเปลี่ยนแปลงจะส่งผลต่อเอาต์พุต โดยเอาต์พุตจะเป็น HIGH (1) เฉพาะกรณีที่ทั้ง A และ B มีค่าสัญญาณเป็น HIGH เท่านั้น ซึ่งได้แก่ช่วงเวลา t<sub>1</sub> และ t<sub>3</sub> นอกนั้นจะได้ผลลัพธ์ X เป็น LOW (0) ทั้งสิ้น และสิ่งที่เราเห็นเป็นการเปลี่ยนแปลงของรูปสัญญาณไปตามเวลานี้เรียกว่า <strong>ผังเวลา</strong> (<em>timing diagram</em>)</p>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.3</span></div>
+<p>ถ้าสัญญาณอินพุต A และ B มีรูปคลื่นดังรูปที่ 3.10 ถูกนำเข้าทางอินพุตของ AND gate ขนาด 2 อินพุต จะทำให้เกิดรูปสัญญาณแบบใดทางด้านเอาต์พุต</p>
+<figure><img alt="รูปที่ 3.10 รูปคลื่นอินพุต A, B และเอาต์พุต X ของ AND gate ขนาด 2 อินพุต (ตัวอย่างที่ 3.3)" loading="lazy" src="img/fig3-10.png" style="width:485px"/><figcaption><span class="cap-no">รูปที่ 3.10</span> รูปคลื่นอินพุต A, B และเอาต์พุต X ของ AND gate ขนาด 2 อินพุต (ตัวอย่างที่ 3.3)</figcaption></figure>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>เนื่องจากเป็น AND gate สัญญาณทางด้านเอาต์พุต X จะเป็น HIGH (1) เฉพาะกรณีที่สัญญาณอินพุต A และ B เป็น HIGH เท่านั้น ซึ่งมีอยู่เพียง 4 ช่วงเวลาเท่านั้น ดังรูปคลื่น X ในรูปที่ 3.10</p>
+</details>
+</div>
+<p>โปรดจำไว้ว่า เมื่อเราวิเคราะห์หาผลการปฏิบัติการของ AND gate ในรูปแบบของรูปคลื่น จะต้องพิจารณาทุก ๆ กรณี ในทุก ๆ การเปลี่ยนแปลง และในทุก ๆ ช่วงเวลาอย่างถี่ถ้วน ดังที่เราจะเห็นในตัวอย่างที่ 3.4 และ 3.5</p>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.4</span></div>
+<p>สำหรับรูปคลื่น A และ B ที่ป้อนเข้าทางอินพุตดังที่เห็นในรูปที่ 3.11 เราจะได้รูปคลื่นเอาต์พุตที่ตอบสนองต่อการเปลี่ยนแปลงของอินพุตดังกล่าวอย่างไร</p>
+<figure><img alt="รูปที่ 3.11 รูปคลื่นอินพุต A, B และเอาต์พุต X ของ AND gate ขนาด 2 อินพุต (ตัวอย่างที่ 3.4)" loading="lazy" src="img/fig3-11.png" style="width:537px"/><figcaption><span class="cap-no">รูปที่ 3.11</span> รูปคลื่นอินพุต A, B และเอาต์พุต X ของ AND gate ขนาด 2 อินพุต (ตัวอย่างที่ 3.4)</figcaption></figure>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>รูปสัญญาณเอาต์พุตจะมีระดับ HIGH ก็ต่อเมื่อสัญญาณอินพุตที่เข้ามาจาก A และ B เป็น HIGH พร้อมกันเท่านั้น (ได้ 3 ช่วงเวลา ดังรูปคลื่น X ในรูปที่ 3.11) สำหรับช่วงเวลาอื่น ๆ เอาต์พุตจะเป็น LOW ทั้งสิ้น</p>
+</details>
+</div>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.5</span></div>
+<p>สำหรับ AND gate ขนาด 3 อินพุต จงหาว่ารูปสัญญาณเอาต์พุตจะเป็นอย่างไร เมื่อรูปสัญญาณอินพุตเป็นดังที่เห็นในรูปที่ 3.12</p>
+<figure><img alt="รูปที่ 3.12 รูปคลื่นอินพุต A, B, C และเอาต์พุต X ของ AND gate ขนาด 3 อินพุต (ตัวอย่างที่ 3.5)" loading="lazy" src="img/fig3-12.png" style="width:415px"/><figcaption><span class="cap-no">รูปที่ 3.12</span> รูปคลื่นอินพุต A, B, C และเอาต์พุต X ของ AND gate ขนาด 3 อินพุต (ตัวอย่างที่ 3.5)</figcaption></figure>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>รูปสัญญาณเอาต์พุตจะมีระดับ HIGH ก็ต่อเมื่อสัญญาณอินพุตที่เข้ามาจาก A, B และ C เป็น HIGH พร้อมกันเท่านั้น (ได้ 2 ช่วงเวลา ดังรูปคลื่น X ในรูปที่ 3.12) สำหรับช่วงเวลาอื่น ๆ เอาต์พุตจะเป็น LOW ทั้งสิ้น</p>
+</details>
+</div>
+<div data-widget="gatewave" data-gate="AND"></div><h3 id="s3-2-4"><span class="no">3.2.4</span> การแสดงสมการลอจิกของ AND gate</h3>
+<p>สำหรับการแสดงสมการลอจิกของ AND gate แบบ 2 ตัวแปร เราจะใช้เครื่องหมาย <em>dot</em> คั่นระหว่าง 2 ตัวแปรนั้น เช่น A · B หรือเพื่อความสะดวกอาจเขียนตัวแปรทั้งสองติดกันโดยไม่ต้องมี dot คั่นกลางก็ได้ เช่น AB</p>
+<p><strong>การคูณแบบบูลีน</strong> (<em>Boolean Multiplication</em>) ใช้กฎเกณฑ์การคูณเลขไบนารีดังที่เคยกล่าวไปแล้ว ซึ่งจะได้ผลลัพธ์ดังต่อไปนี้</p>
+<div class="expr-block">
+<div>0 · 0 = 0</div>
+<div>0 · 1 = 0</div>
+<div>1 · 0 = 0</div>
+<div>1 · 1 = 1</div>
+</div>
+<p><strong>ดังนั้นการคูณแบบบูลีนจะได้ผลลัพธ์แบบเดียวกับฟังก์ชันของ AND นั่นเอง</strong></p>
+<p>ปฏิบัติการของ AND gate ขนาด 2 ตัวแปร ที่มี A และ B เป็นอินพุต และมีตัวแปร X เป็นเอาต์พุต สามารถเขียนสมการลอจิกได้ดังต่อไปนี้</p>
+<div class="expr">X = A · B</div>
+<p>หรือเขียนให้ง่าย ๆ ก็คือ</p>
+<div class="expr">X = AB</div>
+<p>รูปที่ 3.13 (ก) แสดงสัญลักษณ์ทางลอจิกของ AND gate ที่มีตัวแปรอินพุต 2 ตัว และมีตัวแปรเอาต์พุตดังที่แสดงในรูป</p>
+<figure class="parts"><div class="pgrid" style="grid-template-columns:179px 182px 200px;column-gap:41px"><img alt="รูปที่ 3.13 สมการบูลีนของ AND gate ที่มีขนาด 2, 3 และ 4 อินพุตตามลำดับ" loading="lazy" src="img/fig3-13a.png" style="width:179px"/><img alt="รูปที่ 3.13 สมการบูลีนของ AND gate ที่มีขนาด 2, 3 และ 4 อินพุตตามลำดับ" loading="lazy" src="img/fig3-13b.png" style="width:182px"/><img alt="รูปที่ 3.13 สมการบูลีนของ AND gate ที่มีขนาด 2, 3 และ 4 อินพุตตามลำดับ" loading="lazy" src="img/fig3-13c.png" style="width:200px"/><div class="subcap">(ก)</div><div class="subcap">(ข)</div><div class="subcap">(ค)</div></div><figcaption><span class="cap-no">รูปที่ 3.13</span> สมการบูลีนของ AND gate ที่มีขนาด 2, 3 และ 4 อินพุตตามลำดับ</figcaption></figure>
+<p>จะเห็นว่า AND gate สามารถมีอินพุตมากกว่า 2 อินพุต ดังนั้นเราควรอภิปรายกรณีที่จำนวนอินพุตมีมากกว่า 2 อินพุต เพื่อพิจารณาปฏิบัติการของ AND gate จากพื้นฐานที่ได้เรียนมาข้างต้น</p>
+<h3 id="s3-2-5"><span class="no">3.2.5</span> การประยุกต์ใช้ AND gate</h3>
+<p>เราสามารถนำ AND gate มาประยุกต์ใช้งานได้หลากหลาย ตัวอย่างหนึ่งที่เข้าใจได้ง่ายได้แก่ <strong>ระบบเตือนการคาดเข็มขัดนิรภัยในรถยนต์</strong> ดังที่เห็นในรูปที่ 3.14 ถ้าเราเคยขับขี่รถยนต์ที่มีเข็มขัดนิรภัย เราจะพบว่าถ้าผู้ขับขี่สตาร์ทเครื่องโดยไม่คาดเข็มขัดนิรภัย จะมีเสียงดังเพื่อเตือนให้ผู้ขับขี่คาดเข็มขัด มิฉะนั้นเสียงก็จะดังไม่หยุดและน่ารำคาญ จนผู้ขับขี่ต้องยอมคาดเข็มขัดนิรภัยเพื่อความปลอดภัย</p>
+<figure><img alt="รูปที่ 3.14 วงจรเตือนการคาดเข็มขัดนิรภัยในรถยนต์ด้วยการใช้ AND gate" loading="lazy" src="img/fig3-14.png" style="width:570px"/><figcaption><span class="cap-no">รูปที่ 3.14</span> วงจรเตือนการคาดเข็มขัดนิรภัยในรถยนต์ด้วยการใช้ AND gate</figcaption></figure>
+<p>จากรูปจะเห็นว่าวงจรกำเนิดเสียงต่ออยู่กับเอาต์พุตของ AND gate ขนาด 3 อินพุตที่มีตัวแปร A, B และ C ถ้าต้องการให้เกิดเสียงดัง ทางด้านเอาต์พุตจะต้องป้อนระดับสัญญาณลอจิกที่เป็น HIGH และเสียงจะดับลงก็ต่อเมื่อสัญญาณเอาต์พุตของ AND gate เป็น LOW</p>
+<p>สำหรับด้านอินพุต <strong>A</strong> จะเป็นจุดต่อกับสวิตช์กุญแจปิด/เปิดเครื่องยนต์ ในกรณีที่ไม่ได้หมุนกุญแจเพื่อให้เครื่องยนต์ทำงาน ขาสัญญาณนี้จะให้ระดับสัญญาณ LOW ซึ่งจะไม่สามารถทำให้วงจรกำเนิดเสียงทำงานได้ ไม่ว่าอีกสองอินพุตจะอยู่ในสถานะใดก็ตาม แต่เมื่อใดที่มีการบิดกุญแจเพื่อสตาร์ทเครื่องยนต์ สัญญาณอินพุตนี้จะมีระดับเป็น HIGH ซึ่งจะถูกป้อนเข้าไปเป็นอินพุตหนึ่งของ AND gate ทั้งนี้วงจรกำเนิดเสียงเตือนจะทำงานหรือไม่ ขึ้นอยู่กับเงื่อนไขของอีกสองอินพุตคือ B และ C ซึ่งจะกล่าวถึงต่อไป</p>
+<p>อินพุต <strong>B</strong> จะต่อกับช่องเสียบเข็มขัดนิรภัย ถ้าไม่มีการเสียบเข็มขัดอยู่ ที่จุด B นี้จะมีสัญญาณลอจิกเป็น HIGH แต่ถ้ามีการเสียบอยู่ก็จะให้สัญญาณลอจิกเป็น LOW จึงชัดเจนว่าไม่ว่า A หรือ C จะมีระดับสัญญาณใดก็ตาม ถ้ามีการเสียบเข็มขัดนิรภัยลงในช่องเสียบแล้ว จะไม่มีเสียงเตือนหลุดรอดมาอย่างแน่นอน</p>
+<p>สำหรับอินพุต <strong>C</strong> จะเป็นวงจรจับเวลา (<em>timer</em>) ที่จะเริ่มนับเวลาทุกครั้งที่มีการบิดกุญแจสตาร์ทรถ เมื่อเริ่มนับ วงจร timer ที่จุดอินพุต C นี้จะสร้างสัญญาณ HIGH ป้อนเข้าไปยัง AND gate เป็นเวลา 30 วินาที (ดังที่ระบุในรูปที่ 3.14 ว่า Ignition on = HIGH for 30 s) เมื่อครบ 30 วินาทีแล้วจึงกลับเป็น LOW</p>
+<p>จากลักษณะของระบบนี้ สัญญาณเสียงเตือนการคาดเข็มขัดจะเกิดขึ้นในกรณีที่มีการสตาร์ทเครื่อง (A = HIGH) ภายในเวลา 30 วินาที (C = HIGH) และเข็มขัดนิรภัยไม่ได้ถูกเสียบอยู่กับช่องเสียบ (B = HIGH) เท่านั้น</p>
+</section><section class="sec"><h2 id="s3-3"><span class="no">3.3</span> OR gate</h2>
+<p>สัญลักษณ์มาตรฐานของ <span class="gate">OR</span> gate ขนาด 2 อินพุตสามารถเขียนได้ดังรูปที่ 3.15</p>
+<figure class="parts"><div class="pgrid" style="grid-template-columns:246px 246px;column-gap:38px"><img alt="รูปที่ 3.15 สัญลักษณ์มาตรฐานของ OR gate แบบที่มี 2 อินพุต" loading="lazy" src="img/fig3-15a.png" style="width:165px"/><img alt="รูปที่ 3.15 สัญลักษณ์มาตรฐานของ OR gate แบบที่มี 2 อินพุต" loading="lazy" src="img/fig3-15b.png" style="width:163px"/><div class="subcap">(ก) สัญลักษณ์รูปทรงเฉพาะ</div><div class="subcap">(ข) สัญลักษณ์โครงร่างสี่เหลี่ยม ซึ่งจะมีเครื่องหมาย ≥1 ระบุไว้</div></div><figcaption><span class="cap-no">รูปที่ 3.15</span> สัญลักษณ์มาตรฐานของ OR gate แบบที่มี 2 อินพุต</figcaption></figure>
+<h3 id="s3-3-1"><span class="no">3.3.1</span> การปฏิบัติการของ OR gate</h3>
+<p>เอาต์พุตที่ได้จาก OR gate จะเป็น HIGH (1) ในเกือบทุกกรณีของอินพุต ยกเว้นกรณีเดียวเท่านั้น คือกรณีที่อินพุตมีระดับสัญญาณลอจิกเป็น LOW (0) ทั้งหมด รูปที่ 3.16 แสดง OR gate ขนาด 2 อินพุต โดยแต่ละอินพุตมีตัวอักษรแสดงตัวแปรอินพุตเป็น A และ B ซึ่งมีกรณีที่เป็นไปได้อยู่ 4 กรณี และตัวแปรเอาต์พุต X จะมีค่าเป็น LOW (หรือ <em>false</em>) เพียงกรณีเดียวเท่านั้น คือเมื่อ A และ B เป็น LOW ทั้งคู่</p>
+<figure><img alt="รูปที่ 3.16 ค่าลอจิกที่เป็นไปได้จากการปฏิบัติการของ OR gate ขนาด 2 อินพุต" loading="lazy" src="img/fig3-16.png" style="width:599px"/><figcaption><span class="cap-no">รูปที่ 3.16</span> ค่าลอจิกที่เป็นไปได้จากการปฏิบัติการของ OR gate ขนาด 2 อินพุต</figcaption></figure>
+<h3 id="s3-3-2"><span class="no">3.3.2</span> ตารางค่าความจริงของ OR gate</h3>
+<p>ตารางที่ 3.3 เป็นตารางค่าความจริงของ OR gate ขนาด 2 อินพุต โดยเราจะแทน HIGH ด้วย 1 และแทน LOW ด้วย 0</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 3.3</span> ตารางค่าความจริงของ OR gate ขนาด 2 อินพุต</div>
+<div class="tbl-scroll"><table class="tt">
+<thead><tr><th colspan="2">อินพุต</th><th class="out">เอาต์พุต</th></tr>
+<tr><th>A</th><th>B</th><th class="out">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>1</td><td class="out">1</td></tr>
+<tr><td>1</td><td>0</td><td class="out">1</td></tr>
+<tr><td>1</td><td>1</td><td class="out">1</td></tr>
+</tbody>
+</table></div>
+</div>
+<h3 id="s3-3-3"><span class="no">3.3.3</span> การปฏิบัติการของ OR gate กับอินพุตที่เป็นรูปคลื่น</h3>
+<p>พิจารณารูปที่ 3.17 ซึ่งแสดงผังเวลาการทำงานของ OR gate ที่ตอบสนองต่อรูปคลื่นสัญญาณที่เข้ามาทางอินพุต A และ B จะเห็นว่าเฉพาะช่วงเวลาก่อน t<sub>1</sub> ช่วงเวลา t<sub>3</sub> และหลังจากช่วงเวลา t<sub>4</sub> เท่านั้นที่สัญญาณลอจิกที่เอาต์พุตเป็น LOW (0) เนื่องจากสัญญาณจาก A และ B เป็น LOW (0) ทั้งคู่</p>
+<figure><img alt="รูปที่ 3.17 ตัวอย่างการทำงานของ OR gate แสดงความสัมพันธ์ของรูปคลื่นของอินพุตและเอาต์พุต" loading="lazy" src="img/fig3-17.png" style="width:422px"/><figcaption><span class="cap-no">รูปที่ 3.17</span> ตัวอย่างการทำงานของ OR gate แสดงความสัมพันธ์ของรูปคลื่นของอินพุตและเอาต์พุต</figcaption></figure>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.6</span></div>
+<p>จากรูปที่ 3.18 เมื่อมีอินพุตที่มีรูปคลื่นสัญญาณดังกล่าว จงหารูปคลื่นสัญญาณเอาต์พุต</p>
+<figure><img alt="รูปที่ 3.18 รูปคลื่นอินพุต A, B และเอาต์พุต X ของ OR gate ขนาด 2 อินพุต (ตัวอย่างที่ 3.6)" loading="lazy" src="img/fig3-18.png" style="width:441px"/><figcaption><span class="cap-no">รูปที่ 3.18</span> รูปคลื่นอินพุต A, B และเอาต์พุต X ของ OR gate ขนาด 2 อินพุต (ตัวอย่างที่ 3.6)</figcaption></figure>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>ผลลัพธ์ของสัญญาณเอาต์พุต X จะมีค่าเท่ากับ HIGH เมื่ออินพุต A กับ B ตัวใดตัวหนึ่งหรือทั้งสองตัวมีค่าเป็น HIGH ดังรูปคลื่น X ในผังเวลาของรูปที่ 3.18 ในรูปนี้จะเห็นว่า A กับ B ไม่เคยเป็น HIGH พร้อมกันเลย แต่ก็ยังสามารถทำให้เอาต์พุตเป็น HIGH ได้</p>
+</details>
+</div>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.7</span></div>
+<p>จากรูปที่ 3.19 เมื่อมีอินพุตที่มีรูปคลื่นสัญญาณดังกล่าว จงหารูปคลื่นสัญญาณเอาต์พุตที่ตอบสนองต่อการทำงานของ OR gate ให้ถูกต้อง</p>
+<figure><img alt="รูปที่ 3.19 รูปคลื่นอินพุต A, B และเอาต์พุต X ของ OR gate ขนาด 2 อินพุต (ตัวอย่างที่ 3.7)" loading="lazy" src="img/fig3-19.png" style="width:502px"/><figcaption><span class="cap-no">รูปที่ 3.19</span> รูปคลื่นอินพุต A, B และเอาต์พุต X ของ OR gate ขนาด 2 อินพุต (ตัวอย่างที่ 3.7)</figcaption></figure>
+<details class="solution"><summary>แสดงเฉลย</summary><p>รูปคลื่นเอาต์พุต X แสดงอยู่ในแถวล่างสุดของรูปที่ 3.19</p></details>
+</div>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.8</span></div>
+<p>จากรูปที่ 3.20 เป็นรูปคลื่นสัญญาณขนาด 3 ตัวแปรที่ป้อนเข้ามายัง OR gate จงสร้างรูปสัญญาณเอาต์พุตให้ถูกต้อง</p>
+<figure><img alt="รูปที่ 3.20 รูปคลื่นอินพุต A, B, C และเอาต์พุต X ของ OR gate ขนาด 3 อินพุต (ตัวอย่างที่ 3.8)" loading="lazy" src="img/fig3-20.png" style="width:430px"/><figcaption><span class="cap-no">รูปที่ 3.20</span> รูปคลื่นอินพุต A, B, C และเอาต์พุต X ของ OR gate ขนาด 3 อินพุต (ตัวอย่างที่ 3.8)</figcaption></figure>
+<details class="solution"><summary>แสดงเฉลย</summary><p>รูปคลื่นเอาต์พุต X แสดงอยู่ในแถวล่างสุดของรูปที่ 3.20</p></details>
+</div>
+<div data-widget="gatewave" data-gate="OR"></div><h3 id="s3-3-4"><span class="no">3.3.4</span> การแสดงสมการลอจิกของ OR gate</h3>
+<p>ฟังก์ชันลอจิกของ OR ที่มีสองตัวแปรสามารถเขียนในรูปสมการทางคณิตศาสตร์ด้วยการใช้เครื่องหมาย + ระหว่างตัวแปรทั้งสองได้ เช่น A + B</p>
+<p><strong>การบวกแบบบูลีน</strong> มีหลักเกณฑ์พื้นฐานดังต่อไปนี้</p>
+<div class="expr-block">
+<div>0 + 0 = 0</div>
+<div>0 + 1 = 1</div>
+<div>1 + 0 = 1</div>
+<div>1 + 1 = 1</div>
+</div>
+<p><strong>ซึ่งจะเห็นได้ว่าการบวกแบบบูลีนเหมือนกับฟังก์ชัน OR</strong> โดยการบวกแบบบูลีนแตกต่างจากการบวกเลขไบนารีตรงการบวก 1 สองตัวเข้าด้วยกัน คือในการบวกแบบบูลีนจะไม่มีตัวทด</p>
+<p>ปฏิบัติการของ OR gate ขนาด 2 อินพุต: เมื่อให้ตัวแปรอินพุตหนึ่งคือ A และอีกตัวแปรอินพุตหนึ่งคือ B และกำหนดให้ X เป็นตัวแปรเอาต์พุต เราสามารถเขียนเป็นสมการบูลีนได้ว่า</p>
+<div class="expr">X = A + B</div>
+<p>รูปที่ 3.21 (ก) แสดงสัญลักษณ์ OR gate ที่มีตัวแปรอินพุต 2 ตัวและตัวแปรเอาต์พุตที่กำกับชื่อไว้</p>
+<figure class="parts"><div class="pgrid" style="grid-template-columns:167px 183px 213px;column-gap:40px"><img alt="รูปที่ 3.21 สมการบูลีนของ OR gate ที่มีขนาด 2, 3 และ 4 อินพุตตามลำดับ" loading="lazy" src="img/fig3-21a.png" style="width:167px"/><img alt="รูปที่ 3.21 สมการบูลีนของ OR gate ที่มีขนาด 2, 3 และ 4 อินพุตตามลำดับ" loading="lazy" src="img/fig3-21b.png" style="width:183px"/><img alt="รูปที่ 3.21 สมการบูลีนของ OR gate ที่มีขนาด 2, 3 และ 4 อินพุตตามลำดับ" loading="lazy" src="img/fig3-21c.png" style="width:213px"/><div class="subcap">(ก)</div><div class="subcap">(ข)</div><div class="subcap">(ค)</div></div><figcaption><span class="cap-no">รูปที่ 3.21</span> สมการบูลีนของ OR gate ที่มีขนาด 2, 3 และ 4 อินพุตตามลำดับ</figcaption></figure>
+<p>เช่นเดียวกับ AND gate ที่สามารถมีอินพุตได้มากกว่า 2 อินพุต OR gate ที่มี 3 ตัวแปรอินพุตสามารถเขียนสมการบูลีนได้เป็น X = A + B + C และถ้ามี 4 ตัวแปร สมการบูลีนก็เขียนได้เป็น X = A + B + C + D ดังที่เห็นในรูปที่ 3.21 (ข) และ (ค) ตามลำดับ</p>
+<h3 id="s3-3-5"><span class="no">3.3.5</span> การประยุกต์ใช้ OR gate</h3>
+<p>เราสามารถประยุกต์ใช้ OR gate สำหรับ <strong>ระบบตรวจจับและเตือนภัยกรณีมีการบุกรุกประตู/หน้าต่างที่บ้าน</strong> ดังแสดงในรูปที่ 3.22 ซึ่งสมมติสถานการณ์ว่ามีห้องหนึ่งในบ้านที่มี 1 ประตูกับ 2 หน้าต่าง ติดเซนเซอร์สวิตช์แม่เหล็กไว้กับทุก ๆ บานประตูและหน้าต่าง โดยเซนเซอร์จะส่งระดับสัญญาณลอจิกเป็น HIGH (1) เมื่อบานประตู/หน้าต่างนั้น ๆ ถูกเปิดออก แต่จะเป็นสัญญาณ LOW (0) เมื่อบานนั้น ๆ ปิดอยู่ ดังนั้นเมื่อระบบรักษาความปลอดภัยนี้ถูกสั่งให้ทำงาน การเปิดประตู/หน้าต่างบานใดบานหนึ่งที่เชื่อมโยงกับระบบจะทำให้เกิดสัญญาณลอจิก HIGH ที่เอาต์พุตของ OR gate ซึ่งจะป้อนสัญญาณไปสั่งให้วงจรกำเนิดเสียงแจ้งเตือนดังขึ้นทันที และจะเงียบลงเมื่อทุกบานปิดอยู่เท่านั้น</p>
+<figure><img alt="รูปที่ 3.22 ระบบตรวจจับและเตือนภัยการบุกรุกอย่างง่ายด้วยการใช้ OR gate" loading="lazy" src="img/fig3-22.png" style="width:394px"/><figcaption><span class="cap-no">รูปที่ 3.22</span> ระบบตรวจจับและเตือนภัยการบุกรุกอย่างง่ายด้วยการใช้ OR gate</figcaption></figure>
+</section><section class="sec"><h2 id="s3-4"><span class="no">3.4</span> NAND gate</h2>
+<p><span class="gate">NAND</span> gate เป็นวงจรเกทที่ผนวกฟังก์ชันของ AND และ NOT เข้าด้วยกัน ผลลัพธ์ของมันก็คือ complement ของ AND นั่นเอง สัญลักษณ์ลอจิกมาตรฐานสำหรับ NAND gate ขนาด 2 อินพุตและวงจรเทียบเท่าของมัน (AND กับ NOT เชื่อมต่อกัน) แสดงในรูปที่ 3.23</p>
+<figure class="parts"><div class="pgrid" style="grid-template-columns:432px 157px;column-gap:41px"><img alt="รูปที่ 3.23 สัญลักษณ์มาตรฐานของ NAND gate" loading="lazy" src="img/fig3-23a.png" style="width:432px"/><img alt="รูปที่ 3.23 สัญลักษณ์มาตรฐานของ NAND gate" loading="lazy" src="img/fig3-23b.png" style="width:157px"/><div class="subcap">(ก) สัญลักษณ์รูปทรงเฉพาะของ NAND และวงจร NOT/AND ที่เทียบเท่ากับการทำงานของ NAND</div><div class="subcap">(ข) สัญลักษณ์โครงร่างสี่เหลี่ยมของ NAND</div></div><figcaption><span class="cap-no">รูปที่ 3.23</span> สัญลักษณ์มาตรฐานของ NAND gate</figcaption></figure>
+<h3 id="s3-4-1"><span class="no">3.4.1</span> การปฏิบัติการของ NAND gate</h3>
+<p>NAND gate จะให้ <strong>เอาต์พุตเป็น LOW (0)</strong> กรณีเดียว คือเมื่อ <strong>ทุกอินพุตเป็น HIGH (1)</strong> แต่เมื่ออินพุตขาใดขาหนึ่งหรือทั้งสองขาเป็น LOW เอาต์พุตที่ได้จะเป็น HIGH สำหรับ NAND ขนาด 2 อินพุตจะมีกรณีที่เกิดขึ้น 4 กรณีดังที่เห็นในรูปที่ 3.24 ซึ่งมีอินพุต A และ B และมีเอาต์พุตเป็น X ซึ่งเขียนเป็นตารางค่าความจริงได้ดังตารางที่ 3.4</p>
+<figure><img alt="รูปที่ 3.24 ค่าลอจิกที่เป็นไปได้จากการปฏิบัติการของ NAND gate ขนาด 2 อินพุต" loading="lazy" src="img/fig3-24.png" style="width:597px"/><figcaption><span class="cap-no">รูปที่ 3.24</span> ค่าลอจิกที่เป็นไปได้จากการปฏิบัติการของ NAND gate ขนาด 2 อินพุต</figcaption></figure>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 3.4</span> ตารางค่าความจริงของ NAND gate ขนาด 2 อินพุต</div>
+<div class="tbl-scroll"><table class="tt">
+<thead><tr><th colspan="2">อินพุต</th><th class="out">เอาต์พุต</th></tr>
+<tr><th>A</th><th>B</th><th class="out">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="out">1</td></tr>
+<tr><td>0</td><td>1</td><td class="out">1</td></tr>
+<tr><td>1</td><td>0</td><td class="out">1</td></tr>
+<tr><td>1</td><td>1</td><td class="out">0</td></tr>
+</tbody>
+</table></div>
+</div>
+<h3 id="s3-4-2"><span class="no">3.4.2</span> การปฏิบัติการของ NAND gate กับอินพุตที่เป็นรูปคลื่น</h3>
+<p>ให้พิจารณาตัวอย่างของสัญญาณ pulse ที่เกิดขึ้นจาก NAND gate เพื่อทำความเข้าใจการปฏิบัติการของมัน ซึ่งจากตารางค่าความจริงที่ได้กล่าวไป จุดสำคัญก็คือสัญญาณเอาต์พุตจะเป็น LOW ในกรณีเดียว คือเมื่ออินพุตทุกขาเป็น HIGH</p>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.9</span></div>
+<p>ถ้าคลื่นสัญญาณ A และ B เป็นดังที่แสดงในรูปที่ 3.25 จงหารูปคลื่นสัญญาณเอาต์พุตของ NAND gate</p>
+<figure><img alt="รูปที่ 3.25 รูปคลื่นอินพุต A, B และเอาต์พุต X ของ NAND gate ขนาด 2 อินพุต (ตัวอย่างที่ 3.9)" loading="lazy" src="img/fig3-25.png" style="width:434px"/><figcaption><span class="cap-no">รูปที่ 3.25</span> รูปคลื่นอินพุต A, B และเอาต์พุต X ของ NAND gate ขนาด 2 อินพุต (ตัวอย่างที่ 3.9)</figcaption></figure>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>จากตารางค่าความจริง เอาต์พุตของ NAND gate จะเป็น LOW ในกรณีเดียวคือเมื่อ A และ B เป็น HIGH ทั้งคู่ และจะเป็น HIGH เมื่อ A หรือ B ตัวใดตัวหนึ่งเป็น LOW จะได้ผลลัพธ์แสดงเป็นผังเวลาดังรูปคลื่น X ในรูปที่ 3.25 <u>จากตรงนี้ขอให้อภิปรายเพื่อทำความเข้าใจกับคำว่า <strong>active-LOW</strong></u></p>
+</details>
+</div>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.10</span></div>
+<p>กรณีที่เป็น NAND ขนาด 3 อินพุต และมีรูปคลื่นสัญญาณอินพุตเป็นดังรูปที่ 3.26 จงหารูปคลื่นสัญญาณด้านเอาต์พุตที่ถูกต้อง</p>
+<figure><img alt="รูปที่ 3.26 รูปคลื่นอินพุต A, B, C และเอาต์พุต X ของ NAND gate ขนาด 3 อินพุต (ตัวอย่างที่ 3.10)" loading="lazy" src="img/fig3-26.png" style="width:393px"/><figcaption><span class="cap-no">รูปที่ 3.26</span> รูปคลื่นอินพุต A, B, C และเอาต์พุต X ของ NAND gate ขนาด 3 อินพุต (ตัวอย่างที่ 3.10)</figcaption></figure>
+<details class="solution"><summary>แสดงเฉลย</summary><p>รูปคลื่นเอาต์พุต X แสดงอยู่ในแถวล่างสุดของรูปที่ 3.26</p></details>
+</div>
+<div data-widget="gatewave" data-gate="NAND"></div><h3 id="s3-4-3"><span class="no">3.4.3</span> Negative-OR วงจรที่เทียบเท่ากับ NAND gate</h3>
+<p>รูปที่ 3.27 แสดงการเทียบเท่ากันระหว่างวงจรที่เป็น <strong>Negative-OR</strong> กับ NAND gate</p>
+<figure><img alt="รูปที่ 3.27 สัญลักษณ์มาตรฐานของ NAND gate และ Negative-OR" loading="lazy" src="img/fig3-27.png" style="width:344px"/><figcaption><span class="cap-no">รูปที่ 3.27</span> สัญลักษณ์มาตรฐานของ NAND gate และ Negative-OR</figcaption></figure>
+<p>จากรูปจะเห็นว่าวงจร Negative-OR ก็คือ OR gate ที่มีอินพุตแบบ active-LOW เนื่องจากมีฟองน้ำกำกับอยู่ ดังนั้นถ้าขาอินพุตเป็น A และ B ก่อนที่สัญญาณจะถูกป้อนเข้าไปทำงานที่ OR gate จะต้องถูก complement จาก A และ B ก่อน เมื่อเขียนเปรียบเทียบตารางค่าความจริงระหว่าง NAND gate กับวงจร Negative-OR จะได้ดังต่อไปนี้</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 3.5</span> ตารางค่าความจริงของ NAND gate และ Negative-OR ขนาด 2 อินพุต</div>
+<div class="tt-row">
+<table class="tt">
+<thead><tr><th colspan="3">NAND gate</th></tr>
+<tr><th colspan="2">อินพุต</th><th class="out">เอาต์พุต</th></tr>
+<tr><th>A</th><th>B</th><th class="out">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="out">1</td></tr>
+<tr><td>0</td><td>1</td><td class="out">1</td></tr>
+<tr><td>1</td><td>0</td><td class="out">1</td></tr>
+<tr><td>1</td><td>1</td><td class="out">0</td></tr>
+</tbody>
+</table>
+<table class="tt">
+<thead><tr><th colspan="5">Negative-OR</th></tr>
+<tr><th colspan="4">อินพุต</th><th class="out">เอาต์พุต</th></tr>
+<tr><th>A</th><th>B</th><th><span class="ov">A</span></th><th><span class="ov">B</span></th><th class="out">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>1</td><td>1</td><td class="out">1</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td>0</td><td class="out">1</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>1</td><td class="out">1</td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td>0</td><td class="out">0</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>จะเห็นว่าผลลัพธ์ที่ได้เทียบเท่ากันทุกประการ ดังนั้นเราจึงสามารถสรุปได้ว่าวงจร Negative-OR ทำงานเทียบเท่ากับ NAND gate</p>
+<h3 id="s3-4-4"><span class="no">3.4.4</span> การแสดงสมการลอจิกของ NAND gate</h3>
+<p>สมการบูลีนของ NAND gate ขนาด 2 อินพุตสามารถเขียนได้เป็น</p>
+<div class="expr">X = <span class="ov">AB</span></div>
+</section><section class="sec"><h2 id="s3-5"><span class="no">3.5</span> NOR gate</h2>
+<p><span class="gate">NOR</span> gate ขนาด 2 อินพุตมีสัญลักษณ์มาตรฐานดังที่เห็นในรูปที่ 3.28</p>
+<figure class="parts"><div class="pgrid" style="grid-template-columns:434px 160px;column-gap:49px"><img alt="รูปที่ 3.28 สัญลักษณ์มาตรฐานของ NOR gate" loading="lazy" src="img/fig3-28a.png" style="width:434px"/><img alt="รูปที่ 3.28 สัญลักษณ์มาตรฐานของ NOR gate" loading="lazy" src="img/fig3-28b.png" style="width:160px"/><div class="subcap">(ก) สัญลักษณ์รูปทรงเฉพาะของ NOR และวงจร NOT/OR ที่เทียบเท่ากับการทำงานของ NOR</div><div class="subcap">(ข) สัญลักษณ์โครงร่างสี่เหลี่ยมของ NOR</div></div><figcaption><span class="cap-no">รูปที่ 3.28</span> สัญลักษณ์มาตรฐานของ NOR gate</figcaption></figure>
+<h3 id="s3-5-1"><span class="no">3.5.1</span> การปฏิบัติการของ NOR gate</h3>
+<p>NOR gate จะให้ <strong>เอาต์พุตเป็น LOW (0)</strong> เมื่ออินพุตขาใดขาหนึ่งเป็น HIGH (1) และจะมีกรณีเดียวเท่านั้นที่ได้เอาต์พุตเป็น HIGH คือเมื่อทุกขาอินพุตเป็น LOW รูปที่ 3.29 แสดงปฏิบัติการของ NOR gate ขนาด 2 อินพุต A กับ B และมีเอาต์พุตเป็น X สำหรับตารางค่าความจริงแสดงไว้ในตารางที่ 3.6</p>
+<figure><img alt="รูปที่ 3.29 ปฏิบัติการของ NOR gate ขนาด 2 อินพุต" loading="lazy" src="img/fig3-29.png" style="width:598px"/><figcaption><span class="cap-no">รูปที่ 3.29</span> ปฏิบัติการของ NOR gate ขนาด 2 อินพุต</figcaption></figure>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 3.6</span> ตารางค่าความจริงของ NOR gate ขนาด 2 อินพุต</div>
+<div class="tbl-scroll"><table class="tt">
+<thead><tr><th colspan="2">อินพุต</th><th class="out">เอาต์พุต</th></tr>
+<tr><th>A</th><th>B</th><th class="out">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="out">1</td></tr>
+<tr><td>0</td><td>1</td><td class="out">0</td></tr>
+<tr><td>1</td><td>0</td><td class="out">0</td></tr>
+<tr><td>1</td><td>1</td><td class="out">0</td></tr>
+</tbody>
+</table></div>
+</div>
+<h3 id="s3-5-2"><span class="no">3.5.2</span> การปฏิบัติการของ NOR gate กับอินพุตที่เป็นรูปคลื่น</h3>
+<p>ให้พิจารณาตัวอย่างของสัญญาณ pulse ที่เกิดขึ้นจาก NOR gate เพื่อทำความเข้าใจการปฏิบัติการของ NOR gate โดยใช้ตารางค่าความจริงเป็นหลักในการพิจารณา</p>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.11</span></div>
+<p>ถ้ารูปคลื่น A และ B ที่เป็นอินพุตของ NOR gate เป็นดังรูปที่ 3.30 จงหารูปคลื่นเอาต์พุตที่ถูกต้อง</p>
+<figure><img alt="รูปที่ 3.30 รูปคลื่นอินพุต A, B และเอาต์พุต X ของ NOR gate ขนาด 2 อินพุต (ตัวอย่างที่ 3.11)" loading="lazy" src="img/fig3-30.png" style="width:378px"/><figcaption><span class="cap-no">รูปที่ 3.30</span> รูปคลื่นอินพุต A, B และเอาต์พุต X ของ NOR gate ขนาด 2 อินพุต (ตัวอย่างที่ 3.11)</figcaption></figure>
+<details class="solution"><summary>แสดงเฉลย</summary><p>รูปคลื่นเอาต์พุต X แสดงอยู่ในแถวล่างสุดของรูปที่ 3.30</p></details>
+</div>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.12</span></div>
+<p>รูปที่ 3.31 แสดงรูปคลื่นสัญญาณที่ป้อนเข้าไปยัง NOR gate ขนาด 3 อินพุต จงเขียนผังเวลาที่ถูกต้องของสัญญาณเอาต์พุต</p>
+<figure><img alt="รูปที่ 3.31 รูปคลื่นอินพุต A, B, C และเอาต์พุต X ของ NOR gate ขนาด 3 อินพุต (ตัวอย่างที่ 3.12)" loading="lazy" src="img/fig3-31.png" style="width:396px"/><figcaption><span class="cap-no">รูปที่ 3.31</span> รูปคลื่นอินพุต A, B, C และเอาต์พุต X ของ NOR gate ขนาด 3 อินพุต (ตัวอย่างที่ 3.12)</figcaption></figure>
+<details class="solution"><summary>แสดงเฉลย</summary><p>รูปคลื่นเอาต์พุต X แสดงอยู่ในแถวล่างสุดของรูปที่ 3.31</p></details>
+</div>
+<div data-widget="gatewave" data-gate="NOR"></div><h3 id="s3-5-3"><span class="no">3.5.3</span> Negative-AND วงจรที่เทียบเท่ากับ NOR gate</h3>
+<p>รูปที่ 3.32 แสดงการเทียบเท่ากันระหว่างวงจรที่เป็น <strong>Negative-AND</strong> กับ NOR gate</p>
+<figure><img alt="รูปที่ 3.32 สัญลักษณ์มาตรฐานของ NOR gate และ Negative-AND" loading="lazy" src="img/fig3-32.png" style="width:340px"/><figcaption><span class="cap-no">รูปที่ 3.32</span> สัญลักษณ์มาตรฐานของ NOR gate และ Negative-AND</figcaption></figure>
+<p>จากรูปจะเห็นว่าวงจร Negative-AND ก็คือ AND gate ที่มีอินพุตแบบ active-LOW เนื่องจากมีฟองน้ำกำกับอยู่ ดังนั้นถ้าขาอินพุตเป็น A และ B ก่อนที่สัญญาณจะถูกป้อนเข้าไปทำงานที่ AND gate จะต้องถูก complement จาก A และ B ก่อน เมื่อเขียนเปรียบเทียบตารางค่าความจริงระหว่าง NOR gate กับวงจร Negative-AND จะได้ดังต่อไปนี้</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 3.7</span> ตารางค่าความจริงของ NOR gate และ Negative-AND ขนาด 2 อินพุต</div>
+<div class="tt-row">
+<table class="tt">
+<thead><tr><th colspan="3">NOR gate</th></tr>
+<tr><th colspan="2">อินพุต</th><th class="out">เอาต์พุต</th></tr>
+<tr><th>A</th><th>B</th><th class="out">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="out">1</td></tr>
+<tr><td>0</td><td>1</td><td class="out">0</td></tr>
+<tr><td>1</td><td>0</td><td class="out">0</td></tr>
+<tr><td>1</td><td>1</td><td class="out">0</td></tr>
+</tbody>
+</table>
+<table class="tt">
+<thead><tr><th colspan="5">Negative-AND</th></tr>
+<tr><th colspan="4">อินพุต</th><th class="out">เอาต์พุต</th></tr>
+<tr><th>A</th><th>B</th><th><span class="ov">A</span></th><th><span class="ov">B</span></th><th class="out">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>1</td><td>1</td><td class="out">1</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td>0</td><td class="out">0</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>1</td><td class="out">0</td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td>0</td><td class="out">0</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>จะเห็นว่าผลลัพธ์ที่ได้เทียบเท่ากันทุกประการ ดังนั้นเราจึงสามารถสรุปได้ว่าวงจร Negative-AND ทำงานเทียบเท่ากับ NOR gate</p>
+<div data-widget="equiv"></div><h3 id="s3-5-4"><span class="no">3.5.4</span> การแสดงสมการลอจิกของ NOR gate</h3>
+<p>สมการบูลีนของ NOR gate ขนาด 2 อินพุตสามารถเขียนได้เป็น</p>
+<div class="expr">X = <span class="ov">A + B</span></div>
+</section><section class="sec"><h2 id="s3-6"><span class="no">3.6</span> XOR (Exclusive-OR) และ XNOR (Exclusive-NOR)</h2>
+<p>เกททั้งสองชนิดนี้เกิดจากการรวมตัวของเกทอื่น ๆ หลายตัว ทั้งสองเป็นเกทที่มีความสำคัญในการนำไปประยุกต์ใช้กับงานต่าง ๆ เป็นจำนวนมาก และมีสัญลักษณ์ประจำตัวของมันเอง รวมถึงมีสิ่งที่น่าเรียนรู้ ซึ่งจะกล่าวไว้ในหัวข้อย่อยต่อไป</p>
+<h3 id="s3-6-1"><span class="no">3.6.1</span> XOR gate</h3>
+<p>สัญลักษณ์มาตรฐานสำหรับ <span class="gate">XOR</span> gate แสดงดังในรูปที่ 3.33 ทั้งนี้ <strong>XOR จะเป็นเกทที่มีขนาด 2 อินพุตเท่านั้น</strong></p>
+<figure class="parts"><div class="pgrid" style="grid-template-columns:227px 227px;column-gap:38px"><img alt="รูปที่ 3.33 สัญลักษณ์มาตรฐานของ XOR gate" loading="lazy" src="img/fig3-33a.png" style="width:190px"/><img alt="รูปที่ 3.33 สัญลักษณ์มาตรฐานของ XOR gate" loading="lazy" src="img/fig3-33b.png" style="width:190px"/><div class="subcap">(ก) สัญลักษณ์รูปทรงเฉพาะของ XOR</div><div class="subcap">(ข) สัญลักษณ์โครงร่างสี่เหลี่ยมของ XOR</div></div><figcaption><span class="cap-no">รูปที่ 3.33</span> สัญลักษณ์มาตรฐานของ XOR gate</figcaption></figure>
+<p><strong>เอาต์พุตของ XOR gate จะเป็น HIGH (1) ในกรณีที่สัญญาณอินพุตทั้งสองเป็นสัญญาณลอจิกที่ตรงกันข้าม</strong> รูปที่ 3.34 แสดงกรณีที่เป็นไปได้ 4 กรณีในการปฏิบัติการของ XOR ซึ่งสรุปได้ดังตารางค่าความจริงในตารางที่ 3.8</p>
+<figure><img alt="รูปที่ 3.34 ปฏิบัติการของ XOR gate" loading="lazy" src="img/fig3-34.png" style="width:601px"/><figcaption><span class="cap-no">รูปที่ 3.34</span> ปฏิบัติการของ XOR gate</figcaption></figure>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 3.8</span> ตารางค่าความจริงของ XOR gate</div>
+<div class="tbl-scroll"><table class="tt">
+<thead><tr><th colspan="2">อินพุต</th><th class="out">เอาต์พุต</th></tr>
+<tr><th>A</th><th>B</th><th class="out">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>1</td><td class="out">1</td></tr>
+<tr><td>1</td><td>0</td><td class="out">1</td></tr>
+<tr><td>1</td><td>1</td><td class="out">0</td></tr>
+</tbody>
+</table></div>
+</div>
+<h3 id="s3-6-2"><span class="no">3.6.2</span> XNOR gate</h3>
+<p>สัญลักษณ์มาตรฐานสำหรับ <span class="gate">XNOR</span> gate แสดงดังในรูปที่ 3.35 ทั้งนี้ <strong>XNOR จะเป็นเกทที่มีขนาด 2 อินพุตเท่านั้น</strong></p>
+<figure class="parts"><div class="pgrid" style="grid-template-columns:227px 227px;column-gap:38px"><img alt="รูปที่ 3.35 สัญลักษณ์มาตรฐานของ XNOR gate" loading="lazy" src="img/fig3-35a.png" style="width:190px"/><img alt="รูปที่ 3.35 สัญลักษณ์มาตรฐานของ XNOR gate" loading="lazy" src="img/fig3-35b.png" style="width:188px"/><div class="subcap">(ก) สัญลักษณ์รูปทรงเฉพาะของ XNOR</div><div class="subcap">(ข) สัญลักษณ์โครงร่างสี่เหลี่ยมของ XNOR</div></div><figcaption><span class="cap-no">รูปที่ 3.35</span> สัญลักษณ์มาตรฐานของ XNOR gate</figcaption></figure>
+<p><strong>เอาต์พุตของ XNOR gate จะเป็น HIGH (1) ในกรณีที่สัญญาณอินพุตทั้งสองเป็นสัญญาณลอจิกที่เหมือนกัน</strong> รูปที่ 3.36 แสดงกรณีที่เป็นไปได้ 4 กรณีในการปฏิบัติการของ XNOR ซึ่งสรุปได้ดังตารางค่าความจริงในตารางที่ 3.9</p>
+<figure><img alt="รูปที่ 3.36 ปฏิบัติการของ XNOR gate" loading="lazy" src="img/fig3-36.png" style="width:599px"/><figcaption><span class="cap-no">รูปที่ 3.36</span> ปฏิบัติการของ XNOR gate</figcaption></figure>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 3.9</span> ตารางค่าความจริงของ XNOR gate</div>
+<div class="tbl-scroll"><table class="tt">
+<thead><tr><th colspan="2">อินพุต</th><th class="out">เอาต์พุต</th></tr>
+<tr><th>A</th><th>B</th><th class="out">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="out">1</td></tr>
+<tr><td>0</td><td>1</td><td class="out">0</td></tr>
+<tr><td>1</td><td>0</td><td class="out">0</td></tr>
+<tr><td>1</td><td>1</td><td class="out">1</td></tr>
+</tbody>
+</table></div>
+</div>
+<div data-widget="gatelab"></div><h3 id="s3-6-3"><span class="no">3.6.3</span> การปฏิบัติการกับอินพุตที่เป็นรูปคลื่น</h3>
+<p>เช่นเดียวกับเกทอื่น ๆ ที่ได้กล่าวไปแล้วข้างต้น ในส่วนนี้เราจะมาดูปฏิบัติการของ XOR และ XNOR กับคลื่นสัญญาณอินพุตที่เกิดขึ้นในช่วงเวลาต่อเนื่องกัน เริ่มจาก XOR ในรูปที่ 3.37 จะเห็นว่าช่วงเวลา t<sub>2</sub> และ t<sub>4</sub> เป็นช่วงเวลาที่สัญญาณอินพุต A และ B มีระดับลอจิกตรงกันข้าม ซึ่งทำให้ระดับสัญญาณเอาต์พุต X เป็น HIGH (1) ตามที่ตารางค่าความจริงของ XOR ได้ระบุไว้</p>
+<figure><img alt="รูปที่ 3.37 ตัวอย่างผังเวลาการปฏิบัติการของ XOR gate ต่อรูปคลื่นสัญญาณอินพุต" loading="lazy" src="img/fig3-37.png" style="width:432px"/><figcaption><span class="cap-no">รูปที่ 3.37</span> ตัวอย่างผังเวลาการปฏิบัติการของ XOR gate ต่อรูปคลื่นสัญญาณอินพุต</figcaption></figure>
+<p>สำหรับรูปที่ 3.38 เป็นการเปรียบเทียบให้เห็นความแตกต่างของการปฏิบัติการระหว่าง XOR กับ XNOR ที่มีต่อรูปคลื่นสัญญาณอินพุตชุดเดียวกัน ซึ่งจะเห็นว่า XOR กับ XNOR ให้ผลลัพธ์ที่ตรงกันข้าม (เป็น complement ซึ่งกันและกัน) ซึ่งสัญลักษณ์มาตรฐานก็บ่งบอกไว้แล้วจากการที่มีฟองน้ำที่ปลายเอาต์พุตของ XNOR หมายความว่าเอาต์พุตของ XNOR เป็น complement ของ XOR นั่นเอง</p>
+<figure><img alt="รูปที่ 3.38 ผังเวลาเปรียบเทียบการปฏิบัติการของ XOR และ XNOR ต่อรูปคลื่นสัญญาณอินพุตชุดเดียวกัน" loading="lazy" src="img/fig3-38.png" style="width:508px"/><figcaption><span class="cap-no">รูปที่ 3.38</span> ผังเวลาเปรียบเทียบการปฏิบัติการของ XOR และ XNOR ต่อรูปคลื่นสัญญาณอินพุตชุดเดียวกัน</figcaption></figure>
+<div data-widget="gatewave" data-gate="XOR" data-compare="XNOR"></div><h3 id="s3-6-4"><span class="no">3.6.4</span> การประยุกต์ใช้งาน</h3>
+<p>XOR gate สามารถนำไปใช้สร้างวงจรบวกบิต A กับบิต B เข้าด้วยกัน (ผลบวกโดยไม่คิดตัวทด) ได้ ถ้าเราย้อนไปที่บทที่ 2 ในเรื่องกฎพื้นฐานของการบวกเลขไบนารี จะได้ว่า</p>
+<div class="expr-block">
+<div>0 + 0 = 0</div>
+<div>0 + 1 = 1</div>
+<div>1 + 0 = 1</div>
+<div>1 + 1 = (1)0</div>
+</div>
+<p>ถ้าเราพิจารณาเฉพาะผลบวก (<em>sum</em>) โดยไม่สนใจตัวทดที่เกิดขึ้นจากการบวก จะเห็นว่าเราสามารถใช้ XOR ทำเป็นวงจรหาผลบวกของบิต A กับบิต B ได้ ดังจะเห็นจากรูปที่ 3.39 ทั้งนี้วงจรบวกที่สมบูรณ์กว่านี้จะกล่าวถึงต่อไปในบทหลัง ณ ขณะนี้ขอให้เข้าใจการทำงานของ XOR ให้ขึ้นใจไว้ก่อน เพราะจะต้องนำไปใช้เมื่อถึงเรื่องวงจรบวก ซึ่งเป็นวงจรที่สำคัญมากสำหรับระบบดิจิทัลคอมพิวเตอร์</p>
+<figure><img alt="รูปที่ 3.39 การใช้ XOR gate สำหรับการบวกบิต 2 บิตเข้าด้วยกัน (ไม่คิดตัวทด)" loading="lazy" src="img/fig3-39.png" style="width:319px"/><figcaption><span class="cap-no">รูปที่ 3.39</span> การใช้ XOR gate สำหรับการบวกบิต 2 บิตเข้าด้วยกัน (ไม่คิดตัวทด)</figcaption></figure>
+<div data-widget="gateapps"></div></section><section class="sec"><h2 id="s3-7"><span class="no">3.7</span> ตระกูลวงจรรวมดิจิทัลและคุณลักษณะทางไฟฟ้า</h2>
+<p>หัวข้อที่ผ่านมาได้พิจารณาเกทในแง่ของลอจิกเพียงอย่างเดียว คือมองว่าอินพุตและเอาต์พุตมีค่าเป็น 0 หรือ 1 แต่เมื่อต้องสร้างวงจรจริง เกทเหล่านี้คือวงจรรวม (Integrated Circuit: IC) ที่ทำงานด้วยแรงดันและกระแสไฟฟ้า ผู้ออกแบบจึงต้องรู้ว่าแรงดันเท่าใดถือเป็น HIGH หรือ LOW เกทหนึ่งตัวขับอินพุตอื่นได้กี่ตัว สัญญาณผ่านเกทช้าเพียงใด และใช้กำลังไฟฟ้ามากน้อยเพียงใด ข้อมูลเหล่านี้เรียกว่าคุณลักษณะทางไฟฟ้า (electrical characteristics) ซึ่งระบุไว้ในเอกสารข้อมูล (datasheet) ของไอซีแต่ละเบอร์ หัวข้อนี้จะกล่าวถึงไอซีลอจิกตระกูลที่พบบ่อย คุณลักษณะสำคัญ และหลักการเลือกไอซีให้เหมาะกับระดับแรงดันไฟเลี้ยงและสภาวะแวดล้อมการทำงาน</p>
+<h3 id="s3-7-1"><span class="no">3.7.1</span> ไอซีลอจิกแบบฟังก์ชันคงที่และตัวถัง</h3>
+<p>ไอซีลอจิกแบบฟังก์ชันคงที่ (fixed-function logic IC) คือไอซีที่บรรจุเกทชนิดเดียวกันไว้หลายตัวในตัวถังเดียว เช่น NAND gate ขนาด 2 อินพุตจำนวน 4 ตัว ซึ่งเรียกว่า quad 2-input NAND โดยเกททุกตัวในตัวถังใช้ขาไฟเลี้ยง <i>V</i><sub>CC</sub> และขากราวด์ (GND) ร่วมกัน ไอซีกลุ่มนี้เหมาะสำหรับสร้างวงจรขนาดเล็ก ทดลองบนแผงต่อวงจร (breadboard) หรือใช้เป็นวงจรเชื่อมต่อ (glue logic) ระหว่างชิปขนาดใหญ่ ตัวถัง (package) ที่พบบ่อยมีดังนี้</p>
+<ul class="bul">
+<li><b>DIP</b> (Dual In-line Package) ขาเรียงสองแถว ระยะห่างระหว่างขา 2.54 มม. (0.1 นิ้ว) เสียบผ่านรูบนแผ่นวงจร (through-hole) จึงเหมาะกับการทดลองบนแผงต่อวงจร</li>
+<li><b>SOIC</b> (Small Outline IC) เป็นตัวถังแบบติดตั้งบนผิวหน้าแผ่นวงจร (surface mount) ระยะห่างระหว่างขา 1.27 มม. มีขนาดเล็กกว่า DIP มาก นิยมใช้ในผลิตภัณฑ์จริง</li>
+<li><b>TSSOP</b> และตัวถังขนาดเล็กอื่น ๆ มีระยะห่างระหว่างขาเพียง 0.65 มม. หรือน้อยกว่า ใช้ในอุปกรณ์ที่ต้องการประหยัดพื้นที่</li>
+</ul>
+<p>การนับขาของไอซีเริ่มจากขาที่ 1 ซึ่งอยู่ใกล้รอยบาก (notch) หรือจุดกลมบนตัวถัง แล้วนับทวนเข็มนาฬิกาเมื่อมองจากด้านบน รูปที่ 3.40 แสดงการจัดขาของไอซี 7400 แบบ DIP 14 ขา ซึ่งบรรจุ NAND gate 4 ตัว ขาที่ 14 คือ <i>V</i><sub>CC</sub> และขาที่ 7 คือ GND ชื่อขา 1A, 1B และ 1Y หมายถึงอินพุต A, B และเอาต์พุต Y ของเกทตัวที่ 1 ตามลำดับ</p>
+<figure class="c"><svg class="fig" style="width:120.0mm;height:64.29mm" viewbox="0 0 560 300" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah-c3f40" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"></path></marker></defs><rect fill="#f4f4f2" height="156" rx="4" stroke="#231f20" stroke-width="1.6" width="480" x="40" y="72"></rect><path d="M40,137.0 A13,13 0 0 1 40,163.0" fill="#fff" stroke="#231f20" stroke-width="1.4"></path><circle cx="88" cy="214" fill="#231f20" r="4"></circle><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="77" y="52"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="88.0" y="67.0">14</text><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="16" font-style="italic" text-anchor="middle" x="88.0" y="44.0">V<tspan dy="4.5" font-size="10.9" font-style="normal">CC</tspan></text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="141" y="52"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="152.0" y="67.0">13</text><text fill="#1e8fd6" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="152.0" y="44.0">4B</text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="205" y="52"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="216.0" y="67.0">12</text><text fill="#1e8fd6" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="216.0" y="44.0">4A</text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="269" y="52"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="280.0" y="67.0">11</text><text fill="#1a9a48" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="280.0" y="44.0">4Y</text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="333" y="52"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="344.0" y="67.0">10</text><text fill="#1e8fd6" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="344.0" y="44.0">3B</text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="397" y="52"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="408.0" y="67.0">9</text><text fill="#1e8fd6" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="408.0" y="44.0">3A</text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="461" y="52"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="472.0" y="67.0">8</text><text fill="#1a9a48" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="472.0" y="44.0">3Y</text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="77" y="228"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="88.0" y="243.0">1</text><text fill="#1e8fd6" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="88.0" y="268.0">1A</text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="141" y="228"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="152.0" y="243.0">2</text><text fill="#1e8fd6" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="152.0" y="268.0">1B</text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="205" y="228"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="216.0" y="243.0">3</text><text fill="#1a9a48" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="216.0" y="268.0">1Y</text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="269" y="228"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="280.0" y="243.0">4</text><text fill="#1e8fd6" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="280.0" y="268.0">2A</text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="333" y="228"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="344.0" y="243.0">5</text><text fill="#1e8fd6" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="344.0" y="268.0">2B</text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="397" y="228"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="408.0" y="243.0">6</text><text fill="#1a9a48" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="408.0" y="268.0">2Y</text><rect fill="#d9dbe0" height="20" stroke="#231f20" stroke-width="1.2" width="22" x="461" y="228"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="472.0" y="243.0">7</text><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="middle" x="472.0" y="268.0">GND</text><path d="M164,168.0 L178,168.0 A15.0,15.0 0 0 1 178,198.0 L164,198.0 Z" fill="#fbf3d5" stroke="#231f20" stroke-width="1.4"></path><circle cx="198.0" cy="183.0" fill="#fff" r="5" stroke="#231f20" stroke-width="1.3"></circle><polyline fill="none" points="88.0,228.0 88.0,174.0 164.0,174.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><polyline fill="none" points="152.0,228.0 152.0,192.0 164.0,192.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><polyline fill="none" points="203.0,183.0 216.0,183.0 216.0,228.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><path d="M356,168.0 L370,168.0 A15.0,15.0 0 0 1 370,198.0 L356,198.0 Z" fill="#fbf3d5" stroke="#231f20" stroke-width="1.4"></path><circle cx="390.0" cy="183.0" fill="#fff" r="5" stroke="#231f20" stroke-width="1.3"></circle><polyline fill="none" points="280.0,228.0 280.0,174.0 356.0,174.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><polyline fill="none" points="344.0,228.0 344.0,192.0 356.0,192.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><polyline fill="none" points="395.0,183.0 408.0,183.0 408.0,228.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><path d="M228,102.0 L242,102.0 A15.0,15.0 0 0 1 242,132.0 L228,132.0 Z" fill="#fbf3d5" stroke="#231f20" stroke-width="1.4"></path><circle cx="262.0" cy="117.0" fill="#fff" r="5" stroke="#231f20" stroke-width="1.3"></circle><polyline fill="none" points="216.0,72.0 216.0,108.0 228.0,108.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><polyline fill="none" points="152.0,72.0 152.0,126.0 228.0,126.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><polyline fill="none" points="267.0,117.0 280.0,117.0 280.0,72.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><path d="M420,102.0 L434,102.0 A15.0,15.0 0 0 1 434,132.0 L420,132.0 Z" fill="#fbf3d5" stroke="#231f20" stroke-width="1.4"></path><circle cx="454.0" cy="117.0" fill="#fff" r="5" stroke="#231f20" stroke-width="1.3"></circle><polyline fill="none" points="408.0,72.0 408.0,108.0 420.0,108.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><polyline fill="none" points="344.0,72.0 344.0,126.0 420.0,126.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><polyline fill="none" points="459.0,117.0 472.0,117.0 472.0,72.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><line stroke="#231f20" stroke-width="1.4" x1="88.0" x2="88.0" y1="72.0" y2="86.0"></line><line stroke="#231f20" stroke-width="1.4" x1="472.0" x2="472.0" y1="228.0" y2="214.0"></line><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="middle" x="280.0" y="155.0">7400 : Quad 2-input NAND</text></svg><figcaption><span class="cap-no">รูปที่ 3.40</span> การจัดขาของไอซี 7400 (quad 2-input NAND) ตัวถัง DIP 14 ขา มองจากด้านบน</figcaption></figure>
+<p>ไอซีในอนุกรม 74 ส่วนใหญ่ใช้ตัวเลขฟังก์ชันเดียวกันไม่ว่าจะเป็นตระกูลใด เช่น 74LS00, 74HC00 และ 74LVC00 ล้วนเป็น quad 2-input NAND เหมือนกัน (แต่การจัดขาของบางเบอร์อาจต่างกันเล็กน้อยระหว่างตระกูล ควรตรวจสอบกับ datasheet ทุกครั้ง) ตารางที่ 3.10 แสดงเบอร์ของเกทพื้นฐานที่ได้ศึกษาในบทนี้</p>
+<div class="tblock t37"><div class="tcap solo"><span class="cap-no">ตารางที่ 3.10</span> ตัวเลขฟังก์ชันของไอซีเกทพื้นฐานในอนุกรม 74</div>
+<div class="tbl-scroll"><table class="ic fn">
+<thead><tr><th>ตัวเลขฟังก์ชัน</th><th>ฟังก์ชัน</th><th>ตัวเลขฟังก์ชัน</th><th>ฟังก์ชัน</th></tr></thead>
+<tbody>
+<tr><td class="k">00</td><td class="l">NAND 2 อินพุต × 4 (quad)</td><td class="k">14</td><td class="l">อินเวอร์เตอร์แบบ Schmitt trigger × 6</td></tr>
+<tr><td class="k">02</td><td class="l">NOR 2 อินพุต × 4</td><td class="k">20</td><td class="l">NAND 4 อินพุต × 2 (dual)</td></tr>
+<tr><td class="k">04</td><td class="l">อินเวอร์เตอร์ × 6 (hex)</td><td class="k">27</td><td class="l">NOR 3 อินพุต × 3</td></tr>
+<tr><td class="k">08</td><td class="l">AND 2 อินพุต × 4</td><td class="k">32</td><td class="l">OR 2 อินพุต × 4</td></tr>
+<tr><td class="k">10</td><td class="l">NAND 3 อินพุต × 3 (triple)</td><td class="k">86</td><td class="l">XOR 2 อินพุต × 4</td></tr>
+</tbody></table></div></div>
+<div data-widget="pinout"></div><h3 id="s3-7-2"><span class="no">3.7.2</span> การอ่านรหัสไอซีอนุกรม 74</h3>
+<p>รหัสของไอซีอนุกรม 74 ประกอบด้วยหลายส่วน แต่ละส่วนบอกข้อมูลที่จำเป็นต่อการเลือกใช้ ตารางที่ 3.11 แยกส่วนประกอบของรหัส SN74LVC00AD เป็นตัวอย่าง ทั้งนี้อักษรนำหน้าและอักษรท้ายรหัสแตกต่างกันไปตามผู้ผลิต แต่ส่วนกลางคือ “74” + ตระกูล + ตัวเลขฟังก์ชัน เป็นรูปแบบที่ใช้ร่วมกันทั่วไป</p>
+<div class="tblock t37"><div class="tcap solo"><span class="cap-no">ตารางที่ 3.11</span> ส่วนประกอบของรหัสไอซี SN74LVC00AD</div>
+<div class="tbl-scroll"><table class="ic dec">
+<thead><tr><th>ส่วนของรหัส</th><th>ตัวอย่าง</th><th>ความหมาย</th></tr></thead>
+<tbody>
+<tr><td>อักษรนำหน้า (prefix)</td><td class="k">SN</td><td class="l">รหัสผู้ผลิต (SN = Texas Instruments; ผู้ผลิตอื่นอาจใช้ MC, DM, CD หรือไม่มีอักษรนำหน้า)</td></tr>
+<tr><td>อนุกรม</td><td class="k">74</td><td class="l">เกรดใช้งานทั่วไป/อุตสาหกรรม (อนุกรม 54 คือเกรดทหาร ใช้งานได้ช่วง −55 ถึง 125 °C)</td></tr>
+<tr><td>ตระกูล (family)</td><td class="k">LVC</td><td class="l">เทคโนโลยีของวงจรภายใน ซึ่งกำหนดแรงดันไฟเลี้ยง ระดับลอจิก ความเร็ว และกำลังไฟฟ้า</td></tr>
+<tr><td>ฟังก์ชัน</td><td class="k">00</td><td class="l">quad 2-input NAND (ตารางที่ 3.10)</td></tr>
+<tr><td>รุ่นปรับปรุง</td><td class="k">A</td><td class="l">รุ่นที่ปรับปรุงคุณลักษณะจากรุ่นเดิม (ถ้ามี)</td></tr>
+<tr><td>ตัวถัง (suffix)</td><td class="k">D</td><td class="l">ตัวถัง SOIC (สำหรับ TI: N = DIP, D = SOIC, PW = TSSOP)</td></tr>
+</tbody></table></div></div>
+<p>ตระกูลที่พบบ่อยในการเรียนและงานออกแบบปัจจุบันได้แก่ <b>74LS</b> (Low-power Schottky TTL) ซึ่งเป็นตระกูล TTL ที่ใช้กันแพร่หลายในห้องปฏิบัติการ <b>74HC</b> (High-speed CMOS) <b>74HCT</b> (High-speed CMOS ที่มีอินพุตเข้ากันได้กับ TTL) และ <b>74LVC</b> (Low-Voltage CMOS) สำหรับระบบ 3.3 V หรือต่ำกว่า นอกจากนี้ยังมีตระกูลอื่น เช่น 74AC, 74AHC, 74ALVC และ 74AUP ซึ่งมีจุดเด่นด้านความเร็วหรือการประหยัดพลังงานแตกต่างกันไป</p>
+<div data-widget="partdecoder"></div><h3 id="s3-7-3"><span class="no">3.7.3</span> TTL และ CMOS: แรงดันไฟเลี้ยงและระดับลอจิก</h3>
+<p>ไอซีลอจิกแบ่งตามเทคโนโลยีการสร้างได้เป็นสองกลุ่มใหญ่ คือ <b>TTL</b> (Transistor-Transistor Logic) ซึ่งสร้างจากทรานซิสเตอร์ชนิดไบโพลาร์ และ <b>CMOS</b> (Complementary Metal-Oxide-Semiconductor) ซึ่งสร้างจากมอสเฟตชนิด n และ p ทำงานคู่กัน ความแตกต่างที่สำคัญต่อผู้ใช้มีดังนี้</p>
+<ul class="bul">
+<li><b>แรงดันไฟเลี้ยง</b> TTL ต้องใช้ไฟเลี้ยง 5 V ±5% (4.75–5.25 V) เท่านั้น ขณะที่ CMOS ใช้ได้ในช่วงกว้างกว่า เช่น 74HC ใช้ได้ 2–6 V, 74HCT ใช้ 4.5–5.5 V และ 74LVC ใช้ได้ 1.65–3.6 V</li>
+<li><b>กระแสอินพุต</b> อินพุตของ TTL ต้องการกระแสค่อนข้างมาก (โดยเฉพาะเมื่ออินพุตเป็น LOW ซึ่งกระแสไหลออกจากอินพุต) ส่วนอินพุตของ CMOS เป็นขาเกตของมอสเฟต จึงมีกระแสรั่วเพียงระดับไมโครแอมแปร์</li>
+<li><b>กำลังไฟฟ้า</b> TTL กินไฟคงที่แม้ไม่มีการเปลี่ยนสถานะ ส่วน CMOS แทบไม่กินไฟขณะอยู่นิ่ง (static) และกินไฟส่วนใหญ่ขณะเปลี่ยนสถานะ (dynamic) เท่านั้น</li>
+</ul>
+<p>ระดับแรงดันที่เกทยอมรับว่าเป็น HIGH หรือ LOW กำหนดด้วยค่าพารามิเตอร์ 4 ค่าดังนี้</p>
+<ul class="bul">
+<li><span class="nw"><i>V</i><sub>IH(min)</sub></span> แรงดันอินพุตต่ำสุดที่เกทรับประกันว่ายอมรับเป็น HIGH</li>
+<li><span class="nw"><i>V</i><sub>IL(max)</sub></span> แรงดันอินพุตสูงสุดที่เกทรับประกันว่ายอมรับเป็น LOW (แรงดันระหว่าง <span class="nw"><i>V</i><sub>IL(max)</sub></span> กับ <span class="nw"><i>V</i><sub>IH(min)</sub></span> เป็นช่วงไม่กำหนด ซึ่งเกทอาจตีความเป็นค่าใดก็ได้)</li>
+<li><span class="nw"><i>V</i><sub>OH(min)</sub></span> แรงดันเอาต์พุตต่ำสุดที่เกทรับประกันว่าจะให้ออกมาเมื่อเอาต์พุตเป็น HIGH</li>
+<li><span class="nw"><i>V</i><sub>OL(max)</sub></span> แรงดันเอาต์พุตสูงสุดที่เกทรับประกันว่าจะให้ออกมาเมื่อเอาต์พุตเป็น LOW</li>
+</ul>
+<p>ตารางที่ 3.12 แสดงค่าตัวแทน (representative values) ของพารามิเตอร์เหล่านี้สำหรับ 4 ตระกูล โดยคัดจากค่าที่พบทั่วไปใน datasheet ของผู้ผลิต ค่าจริงขึ้นอยู่กับผู้ผลิต อุณหภูมิ แรงดันไฟเลี้ยง และกระแสโหลดที่เอาต์พุตต้องจ่าย ในการออกแบบจริงจึงต้องใช้ค่าจาก datasheet ของเบอร์ที่ใช้เสมอ</p>
+<div class="tblock t37"><div class="tcap solo"><span class="cap-no">ตารางที่ 3.12</span> ระดับแรงดันลอจิกตัวแทน (หน่วย V) และ noise margin ของไอซี 4 ตระกูล</div>
+<div class="tbl-scroll"><table class="ic lv"><thead><tr><th>ตระกูล</th><th><i>V</i><sub>CC</sub></th><th><i>V</i><sub>IH(min)</sub></th><th><i>V</i><sub>IL(max)</sub></th><th><i>V</i><sub>OH(min)</sub></th><th><i>V</i><sub>OL(max)</sub></th><th class="nm">NM<sub>H</sub></th><th class="nm">NM<sub>L</sub></th></tr></thead><tbody><tr><td class="k">74LS</td><td>5 V</td><td>2.0</td><td>0.8</td><td>2.7</td><td>0.5</td><td class="nm">0.7</td><td class="nm">0.3</td></tr><tr><td class="k">74HC</td><td>5 V</td><td>3.5</td><td>1.5</td><td>4.4</td><td>0.33</td><td class="nm">0.9</td><td class="nm">1.17</td></tr><tr><td class="k">74HCT</td><td>5 V</td><td>2.0</td><td>0.8</td><td>4.4</td><td>0.33</td><td class="nm">2.4</td><td class="nm">0.47</td></tr><tr><td class="k">74LVC</td><td>3.3 V</td><td>2.0</td><td>0.8</td><td>2.4</td><td>0.4</td><td class="nm">0.4</td><td class="nm">0.4</td></tr><tr class="foot"><td colspan="8">ค่า <i>V</i><sub>OH</sub>/<i>V</i><sub>OL</sub> ที่กระแสโหลด: 74LS −0.4/8 mA · 74HC, 74HCT ±4 mA · 74LVC ±12 mA · NM ของแต่ละตระกูลคิดเมื่อขับตระกูลเดียวกัน</td></tr></tbody></table></div></div>
+<p>รูปที่ 3.41 นำค่าในตารางที่ 3.12 มาเขียนเป็นแผนภาพเพื่อเปรียบเทียบ แท่ง O แสดงช่วงแรงดันที่เอาต์พุตรับประกัน และแท่ง I แสดงช่วงแรงดันที่อินพุตยอมรับ จะเห็นว่า 74HCT มีระดับอินพุตเหมือน 74LS ทุกประการ (2.0 V และ 0.8 V) แต่มีเอาต์พุตแบบ CMOS ที่ขึ้นไปใกล้ <i>V</i><sub>CC</sub> ส่วน 74HC มีระดับอินพุตเป็นสัดส่วนกับไฟเลี้ยง (ประมาณ 0.7<i>V</i><sub>CC</sub> และ 0.3<i>V</i><sub>CC</sub>) สำหรับ 74LVC แม้ใช้ไฟเลี้ยงเพียง 3.3 V แต่อินพุตทนแรงดันได้ถึง 5.5 V (5 V-tolerant input)</p>
+<figure class="c"><svg class="fig" style="width:132.0mm;height:71.82mm" viewbox="0 0 680 370" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah-c3f42" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"></path></marker></defs><line marker-end="url(#ah-c3f42)" stroke="#231f20" stroke-width="1.2" x1="50.0" x2="50.0" y1="300.0" y2="10.0"></line><line stroke="#231f20" stroke-width="1.2" x1="45.0" x2="50.0" y1="300.0" y2="300.0"></line><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="end" x="41.0" y="305.0">0</text><line stroke="#e3e5ea" stroke-width="0.8" x1="50.0" x2="670.0" y1="300.0" y2="300.0"></line><line stroke="#231f20" stroke-width="1.2" x1="45.0" x2="50.0" y1="248.0" y2="248.0"></line><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="end" x="41.0" y="253.0">1</text><line stroke="#e3e5ea" stroke-width="0.8" x1="50.0" x2="670.0" y1="248.0" y2="248.0"></line><line stroke="#231f20" stroke-width="1.2" x1="45.0" x2="50.0" y1="196.0" y2="196.0"></line><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="end" x="41.0" y="201.0">2</text><line stroke="#e3e5ea" stroke-width="0.8" x1="50.0" x2="670.0" y1="196.0" y2="196.0"></line><line stroke="#231f20" stroke-width="1.2" x1="45.0" x2="50.0" y1="144.0" y2="144.0"></line><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="end" x="41.0" y="149.0">3</text><line stroke="#e3e5ea" stroke-width="0.8" x1="50.0" x2="670.0" y1="144.0" y2="144.0"></line><line stroke="#231f20" stroke-width="1.2" x1="45.0" x2="50.0" y1="92.0" y2="92.0"></line><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="end" x="41.0" y="97.0">4</text><line stroke="#e3e5ea" stroke-width="0.8" x1="50.0" x2="670.0" y1="92.0" y2="92.0"></line><line stroke="#231f20" stroke-width="1.2" x1="45.0" x2="50.0" y1="40.0" y2="40.0"></line><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="end" x="41.0" y="45.0">5</text><line stroke="#e3e5ea" stroke-width="0.8" x1="50.0" x2="670.0" y1="40.0" y2="40.0"></line><text fill="#231f20" font-family="'Times New Roman', Times, serif" font-size="17" font-weight="normal" text-anchor="end" x="41.0" y="16.0">V</text><rect fill="#cfe5f6" height="119.6" stroke="#231f20" stroke-width="1" width="32" x="110" y="40.0"></rect><rect fill="#fff" height="114.4" stroke="#231f20" stroke-width="1" width="32" x="110" y="159.6"></rect><rect fill="#fbf3d5" height="26.0" stroke="#231f20" stroke-width="1" width="32" x="110" y="274.0"></rect><rect fill="#cfe5f6" height="156.0" stroke="#231f20" stroke-width="1" width="32" x="152" y="40.0"></rect><rect fill="#c9cdd4" height="62.4" stroke="#231f20" stroke-width="1" width="32" x="152" y="196.0"></rect><rect fill="#fbf3d5" height="41.6" stroke="#231f20" stroke-width="1" width="32" x="152" y="258.4"></rect><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="end" x="107.0" y="164.6">2.7</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="end" x="107.0" y="279.0">0.5</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="start" x="187.0" y="201.0">2.0</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="start" x="187.0" y="263.4">0.8</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="middle" x="126.0" y="318.0">O</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="middle" x="168.0" y="318.0">I</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="18" font-weight="bold" text-anchor="middle" x="147.0" y="342.0">74LS</text><text fill="#231f20" font-family="'Times New Roman', Times, serif" font-size="16" text-anchor="middle" x="147.0" y="364.0"><tspan font-style="italic">V</tspan><tspan dy="4.5" font-size="10.9">CC</tspan><tspan dy="-4.5"> = 5 V</tspan></text><rect fill="#cfe5f6" height="31.2" stroke="#231f20" stroke-width="1" width="32" x="260" y="40.0"></rect><rect fill="#fff" height="211.6" stroke="#231f20" stroke-width="1" width="32" x="260" y="71.2"></rect><rect fill="#fbf3d5" height="17.2" stroke="#231f20" stroke-width="1" width="32" x="260" y="282.8"></rect><rect fill="#cfe5f6" height="78.0" stroke="#231f20" stroke-width="1" width="32" x="302" y="40.0"></rect><rect fill="#c9cdd4" height="104.0" stroke="#231f20" stroke-width="1" width="32" x="302" y="118.0"></rect><rect fill="#fbf3d5" height="78.0" stroke="#231f20" stroke-width="1" width="32" x="302" y="222.0"></rect><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="end" x="257.0" y="76.2">4.4</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="end" x="257.0" y="287.8">0.33</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="start" x="337.0" y="123.0">3.5</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="start" x="337.0" y="227.0">1.5</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="middle" x="276.0" y="318.0">O</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="middle" x="318.0" y="318.0">I</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="18" font-weight="bold" text-anchor="middle" x="297.0" y="342.0">74HC</text><text fill="#231f20" font-family="'Times New Roman', Times, serif" font-size="16" text-anchor="middle" x="297.0" y="364.0"><tspan font-style="italic">V</tspan><tspan dy="4.5" font-size="10.9">CC</tspan><tspan dy="-4.5"> = 5 V</tspan></text><rect fill="#cfe5f6" height="31.2" stroke="#231f20" stroke-width="1" width="32" x="410" y="40.0"></rect><rect fill="#fff" height="211.6" stroke="#231f20" stroke-width="1" width="32" x="410" y="71.2"></rect><rect fill="#fbf3d5" height="17.2" stroke="#231f20" stroke-width="1" width="32" x="410" y="282.8"></rect><rect fill="#cfe5f6" height="156.0" stroke="#231f20" stroke-width="1" width="32" x="452" y="40.0"></rect><rect fill="#c9cdd4" height="62.4" stroke="#231f20" stroke-width="1" width="32" x="452" y="196.0"></rect><rect fill="#fbf3d5" height="41.6" stroke="#231f20" stroke-width="1" width="32" x="452" y="258.4"></rect><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="end" x="407.0" y="76.2">4.4</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="end" x="407.0" y="287.8">0.33</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="start" x="487.0" y="201.0">2.0</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="start" x="487.0" y="263.4">0.8</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="middle" x="426.0" y="318.0">O</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="middle" x="468.0" y="318.0">I</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="18" font-weight="bold" text-anchor="middle" x="447.0" y="342.0">74HCT</text><text fill="#231f20" font-family="'Times New Roman', Times, serif" font-size="16" text-anchor="middle" x="447.0" y="364.0"><tspan font-style="italic">V</tspan><tspan dy="4.5" font-size="10.9">CC</tspan><tspan dy="-4.5"> = 5 V</tspan></text><rect fill="#cfe5f6" height="46.8" stroke="#231f20" stroke-width="1" width="32" x="560" y="128.4"></rect><rect fill="#fff" height="104.0" stroke="#231f20" stroke-width="1" width="32" x="560" y="175.2"></rect><rect fill="#fbf3d5" height="20.8" stroke="#231f20" stroke-width="1" width="32" x="560" y="279.2"></rect><rect fill="#cfe5f6" height="67.6" stroke="#231f20" stroke-width="1" width="32" x="602" y="128.4"></rect><rect fill="#c9cdd4" height="62.4" stroke="#231f20" stroke-width="1" width="32" x="602" y="196.0"></rect><rect fill="#fbf3d5" height="41.6" stroke="#231f20" stroke-width="1" width="32" x="602" y="258.4"></rect><rect fill="#cfe5f6" fill-opacity="0.45" height="88.4" stroke="#231f20" stroke-dasharray="4 3" stroke-width="1" width="32" x="602" y="40.0"></rect><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="17.9" font-weight="normal" text-anchor="start" x="639.0" y="82.4">ทน 5 V</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="end" x="557.0" y="180.2">2.4</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="end" x="557.0" y="284.2">0.4</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="start" x="637.0" y="201.0">2.0</text><text fill="#d6127a" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="start" x="637.0" y="263.4">0.8</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="middle" x="576.0" y="318.0">O</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="14" font-weight="normal" text-anchor="middle" x="618.0" y="318.0">I</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="18" font-weight="bold" text-anchor="middle" x="597.0" y="342.0">74LVC</text><text fill="#231f20" font-family="'Times New Roman', Times, serif" font-size="16" text-anchor="middle" x="597.0" y="364.0"><tspan font-style="italic">V</tspan><tspan dy="4.5" font-size="10.9">CC</tspan><tspan dy="-4.5"> = 3.3 V</tspan></text></svg><figcaption><span class="cap-no">รูปที่ 3.41</span> เปรียบเทียบช่วงแรงดันเอาต์พุต (O) และอินพุต (I) ของไอซี 4 ตระกูล (HIGH: แท่งบน, ไม่กำหนด: แถบกลางสีเทา, LOW: แท่งล่าง)</figcaption></figure>
+<h3 id="s3-7-4"><span class="no">3.7.4</span> ขอบเขตของสัญญาณรบกวน (Noise Margin)</h3>
+<p>เมื่อเอาต์พุตของเกทหนึ่ง (เกทขับ: driver) ต่อเข้ากับอินพุตของอีกเกทหนึ่ง (เกทรับ: receiver) สัญญาณบนสายอาจถูกสัญญาณรบกวน (noise) เพิ่มหรือลดแรงดันไป ขอบเขตของสัญญาณรบกวน (noise margin) คือขนาดของแรงดันรบกวนสูงสุดที่ยอมให้เกิดได้โดยที่เกทรับยังอ่านค่าลอจิกถูกต้อง หาได้จาก</p>
+<div class="expr-block c">
+<div><span class="nw">NM<sub>H</sub></span> = <span class="nw"><i>V</i><sub>OH(min)</sub></span> − <span class="nw"><i>V</i><sub>IH(min)</sub></span></div>
+<div><span class="nw">NM<sub>L</sub></span> = <span class="nw"><i>V</i><sub>IL(max)</sub></span> − <span class="nw"><i>V</i><sub>OL(max)</sub></span></div>
+</div>
+<p>โดย <span class="nw">NM<sub>H</sub></span> คือ noise margin ขณะสัญญาณเป็น HIGH (สัญญาณรบกวนที่ดึงแรงดันลง) และ <span class="nw">NM<sub>L</sub></span> คือ noise margin ขณะสัญญาณเป็น LOW (สัญญาณรบกวนที่ดันแรงดันขึ้น) ดังแสดงในรูปที่ 3.42 ค่าทั้งสองต้องเป็นบวก ถ้าค่าใดเป็นลบแสดงว่าเกททั้งสองต่อกันโดยตรงไม่ได้ เพราะแม้ไม่มีสัญญาณรบกวนเลย เกทรับก็อาจอ่านค่าผิด โดยทั่วไปค่าที่ใช้บอกความทนทานต่อสัญญาณรบกวนของวงจรคือค่าที่น้อยกว่าระหว่าง <span class="nw">NM<sub>H</sub></span> กับ <span class="nw">NM<sub>L</sub></span></p>
+<figure class="c"><svg class="fig" style="width:118.0mm;height:68.22mm" viewbox="0 0 640 370" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah-c3f41" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"></path></marker></defs><rect fill="#cfe5f6" height="128.8" stroke="#231f20" stroke-width="1.2" width="84" x="166" y="50.0"></rect><rect fill="#fff" height="123.2" stroke="#231f20" stroke-width="1.2" width="84" x="166" y="178.8"></rect><rect fill="#fbf3d5" height="28.0" stroke="#231f20" stroke-width="1.2" width="84" x="166" y="302.0"></rect><rect fill="#cfe5f6" height="168.0" stroke="#231f20" stroke-width="1.2" width="70" x="400" y="50.0"></rect><rect fill="#c9cdd4" height="67.2" stroke="#231f20" stroke-width="1.2" width="70" x="400" y="218.0"></rect><rect fill="#fbf3d5" height="44.8" stroke="#231f20" stroke-width="1.2" width="70" x="400" y="285.2"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="middle" x="208.0" y="120.4">HIGH</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="middle" x="435.0" y="140.0">HIGH</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="17.9" font-weight="normal" text-anchor="middle" x="208.0" y="247.4">ไม่รับประกัน</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="17.9" font-weight="normal" text-anchor="middle" x="435.0" y="258.6">ไม่กำหนด</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="13" font-weight="normal" text-anchor="middle" x="208.0" y="321.0">LOW</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="middle" x="435.0" y="313.6">LOW</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="19.5" font-weight="bold" text-anchor="middle" x="208.0" y="24.0">เอาต์พุตของเกทขับ</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="19.5" font-weight="bold" text-anchor="middle" x="435.0" y="24.0">อินพุตของเกทรับ</text><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="18" text-anchor="end" x="158.0" y="184.8"><tspan font-style="italic">V</tspan><tspan dy="5.0" font-size="12.2">OH(min)</tspan><tspan dy="-5.0"> = 2.7 V</tspan></text><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="18" text-anchor="end" x="158.0" y="308.0"><tspan font-style="italic">V</tspan><tspan dy="5.0" font-size="12.2">OL(max)</tspan><tspan dy="-5.0"> = 0.5 V</tspan></text><text fill="#231f20" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="end" x="158.0" y="56.0">5 V</text><text fill="#231f20" font-family="'Times New Roman', Times, serif" font-size="16" font-weight="normal" text-anchor="end" x="158.0" y="336.0">0 V</text><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="18" text-anchor="start" x="478.0" y="224.0"><tspan font-style="italic">V</tspan><tspan dy="5.0" font-size="12.2">IH(min)</tspan><tspan dy="-5.0"> = 2.0 V</tspan></text><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="18" text-anchor="start" x="478.0" y="291.2"><tspan font-style="italic">V</tspan><tspan dy="5.0" font-size="12.2">IL(max)</tspan><tspan dy="-5.0"> = 0.8 V</tspan></text><line stroke="#9aa0aa" stroke-dasharray="4 3" stroke-width="1" x1="250.0" x2="400.0" y1="178.8" y2="178.8"></line><line stroke="#9aa0aa" stroke-dasharray="4 3" stroke-width="1" x1="250.0" x2="400.0" y1="302.0" y2="302.0"></line><line stroke="#9aa0aa" stroke-dasharray="4 3" stroke-width="1" x1="250.0" x2="400.0" y1="218.0" y2="218.0"></line><line stroke="#9aa0aa" stroke-dasharray="4 3" stroke-width="1" x1="250.0" x2="400.0" y1="285.2" y2="285.2"></line><line marker-end="url(#ah-c3f41)" stroke="#d6127a" stroke-width="1.6" x1="272.0" x2="272.0" y1="217.0" y2="182.8"></line><line marker-end="url(#ah-c3f41)" stroke="#d6127a" stroke-width="1.6" x1="272.0" x2="272.0" y1="179.8" y2="214.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="17" text-anchor="start" x="280.0" y="204.4"><tspan>NM</tspan><tspan dy="4.8" font-size="11.6">H</tspan><tspan dy="-4.8"> = 0.7 V</tspan></text><line marker-end="url(#ah-c3f41)" stroke="#d6127a" stroke-width="1.6" x1="272.0" x2="272.0" y1="301.0" y2="289.2"></line><line marker-end="url(#ah-c3f41)" stroke="#d6127a" stroke-width="1.6" x1="272.0" x2="272.0" y1="286.2" y2="298.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="17" text-anchor="start" x="280.0" y="324.0"><tspan>NM</tspan><tspan dy="4.8" font-size="11.6">L</tspan><tspan dy="-4.8"> = 0.3 V</tspan></text><line stroke="#231f20" stroke-width="1" x1="162.0" x2="474.0" y1="330.0" y2="330.0"></line></svg><figcaption><span class="cap-no">รูปที่ 3.42</span> ระดับแรงดันเอาต์พุตของเกทขับ อินพุตของเกทรับ และ noise margin (ใช้ค่าของ 74LS ขับ 74LS)</figcaption></figure>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.13</span></div>
+<p>จากค่าในตารางที่ 3.12 จงหา <span class="nw">NM<sub>H</sub></span> และ <span class="nw">NM<sub>L</sub></span> ของ (I) 74LS ขับ 74LS และ (II) 74HC ขับ 74HC ที่ <i>V</i><sub>CC</sub> = 5 V แล้วพิจารณาว่าถ้าสายสัญญาณที่เป็น LOW ถูกสัญญาณรบกวนดันแรงดันขึ้น 0.5 V วงจรใดยังทำงานถูกต้อง</p>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p><b>(I) 74LS:</b> <span class="nw">NM<sub>H</sub></span> = 2.7 − 2.0 = <b>0.7 V</b> และ <span class="nw">NM<sub>L</sub></span> = 0.8 − 0.5 = <b>0.3 V</b></p>
+<p><b>(II) 74HC:</b> <span class="nw">NM<sub>H</sub></span> = 4.4 − 3.5 = <b>0.9 V</b> และ <span class="nw">NM<sub>L</sub></span> = 1.5 − 0.33 = <b>1.17 V</b></p>
+<p>สัญญาณรบกวน 0.5 V ขณะสายเป็น LOW ต้องเทียบกับ <span class="nw">NM<sub>L</sub></span> สำหรับ 74LS แรงดันอินพุตอาจสูงถึง 0.5 + 0.5 = 1.0 V ซึ่งเกิน <span class="nw"><i>V</i><sub>IL(max)</sub></span> = 0.8 V (เพราะ 0.5 V &gt; <span class="nw">NM<sub>L</sub></span> = 0.3 V) จึง<b>อาจอ่านค่าผิด</b> ส่วน 74HC แรงดันอินพุตสูงสุดเป็น 0.33 + 0.5 = 0.83 V ซึ่งยังต่ำกว่า <span class="nw"><i>V</i><sub>IL(max)</sub></span> = 1.5 V (เพราะ 0.5 V &lt; <span class="nw">NM<sub>L</sub></span> = 1.17 V) จึง<b>ยังทำงานถูกต้อง</b> สรุปได้ว่าที่ไฟเลี้ยง 5 V ตระกูล 74HC ทนสัญญาณรบกวนได้ดีกว่า 74LS</p>
+</details>
+</div>
+<div data-widget="noisemargin"></div><h3 id="s3-7-5"><span class="no">3.7.5</span> ความสามารถในการขับโหลด (Fan-out)</h3>
+<p>เอาต์พุตของเกทจ่ายกระแสได้จำกัด เมื่อต่ออินพุตของเกทอื่นเข้าไปหลายตัว กระแสรวมที่อินพุตเหล่านั้นต้องการจะต้องไม่เกินพิกัดของเอาต์พุต มิฉะนั้นแรงดันเอาต์พุตจะเลื่อนออกนอกช่วงที่รับประกัน (<span class="nw"><i>V</i><sub>OH</sub></span> ลดลง หรือ <span class="nw"><i>V</i><sub>OL</sub></span> สูงขึ้น) จำนวนอินพุตสูงสุดที่เอาต์พุตหนึ่งขับได้เรียกว่า <b>fan-out</b> ซึ่งต้องคำนวณทั้งสถานะ LOW และ HIGH แล้วเลือกค่าที่น้อยกว่า</p>
+<div class="expr-block c">
+<div>fan-out<sub>L</sub> = <span class="nw"><i>I</i><sub>OL(max)</sub></span> / <span class="nw"><i>I</i><sub>IL(max)</sub></span>    fan-out<sub>H</sub> = <span class="nw"><i>I</i><sub>OH(max)</sub></span> / <span class="nw"><i>I</i><sub>IH(max)</sub></span></div>
+<div>fan-out = min(fan-out<sub>L</sub>, fan-out<sub>H</sub>)  (ปัดเศษลงเป็นจำนวนเต็ม)</div>
+</div>
+<p>สำหรับ CMOS กระแสอินพุตมีค่าเพียงประมาณ 1 µA ทำให้ fan-out ที่คำนวณจากกระแสตรงมีค่าหลายพัน แต่ในทางปฏิบัติอินพุตของ CMOS แต่ละตัวมีความจุประมาณ 3–10 pF ยิ่งต่อมากความจุรวมยิ่งสูง ขอบสัญญาณจะช้าลงและ propagation delay เพิ่มขึ้น fan-out ของ CMOS จึงถูกจำกัดด้วยความเร็วที่ต้องการมากกว่ากระแส</p>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.14</span></div>
+<p>ไอซี 74LS00 มี <span class="nw"><i>I</i><sub>OL(max)</sub></span> = 8 mA, <span class="nw"><i>I</i><sub>OH(max)</sub></span> = 0.4 mA, <span class="nw"><i>I</i><sub>IL(max)</sub></span> = 0.4 mA และ <span class="nw"><i>I</i><sub>IH(max)</sub></span> = 20 µA ส่วน 74HC00 ที่ 5 V จ่ายกระแสเอาต์พุตได้ ±4 mA จงหา (I) fan-out ของ 74LS ขับ 74LS และ (II) fan-out ของ 74HC ขับ 74LS</p>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p><b>(I)</b> fan-out<sub>L</sub> = 8 mA / 0.4 mA = 20 และ fan-out<sub>H</sub> = 0.4 mA / 0.02 mA = 20 ดังนั้น fan-out = <b>20</b> หมายความว่าเอาต์พุตของ 74LS ขับอินพุต 74LS ได้ไม่เกิน 20 อินพุต</p>
+<p><b>(II)</b> fan-out<sub>L</sub> = 4 mA / 0.4 mA = 10 และ fan-out<sub>H</sub> = 4 mA / 0.02 mA = 200 ดังนั้น fan-out = min(10, 200) = <b>10</b> ซึ่งถูกจำกัดด้วยสถานะ LOW เพราะอินพุตของ TTL ต้องการกระแสมากเมื่อเป็น LOW นอกจากนี้ต้องตรวจระดับแรงดันด้วย: <span class="nw">NM<sub>H</sub></span> = 4.4 − 2.0 = 2.4 V และ <span class="nw">NM<sub>L</sub></span> = 0.8 − 0.33 = 0.47 V ซึ่งเป็นบวกทั้งคู่ จึงต่อกันได้</p>
+</details>
+</div>
+<div data-widget="fanout"></div><h3 id="s3-7-6"><span class="no">3.7.6</span> Propagation Delay และกำลังไฟฟ้า</h3>
+<p>เมื่ออินพุตเปลี่ยนค่า เอาต์พุตของเกทไม่ได้เปลี่ยนทันที แต่จะหน่วงไปช่วงเวลาหนึ่งเรียกว่า <b>propagation delay</b> ซึ่งวัดระหว่างจุด 50% ของขอบสัญญาณอินพุตกับจุด 50% ของขอบสัญญาณเอาต์พุต แยกเป็น 2 ค่าดังรูปที่ 3.43</p>
+<ul class="bul">
+<li><span class="nw"><i>t</i><sub>PHL</sub></span> เวลาหน่วงเมื่อเอาต์พุตเปลี่ยนจาก HIGH ไป LOW</li>
+<li><span class="nw"><i>t</i><sub>PLH</sub></span> เวลาหน่วงเมื่อเอาต์พุตเปลี่ยนจาก LOW ไป HIGH</li>
+</ul>
+<figure class="c"><svg class="fig" style="width:118.0mm;height:51.13mm" viewbox="0 0 600 260" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah-c3f43" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"></path></marker></defs><polyline fill="none" points="150.0,90.0 190.0,90.0 210.0,40.0 390.0,40.0 410.0,90.0 550.0,90.0" stroke="#1e8fd6" stroke-linejoin="round" stroke-width="2.4"></polyline><polyline fill="none" points="150.0,150.0 246.0,150.0 266.0,200.0 434.0,200.0 454.0,150.0 550.0,150.0" stroke="#1a9a48" stroke-linejoin="round" stroke-width="2.4"></polyline><line stroke="#9aa0aa" stroke-dasharray="4 3" stroke-width="1" x1="200.0" x2="200.0" y1="26.0" y2="222.0"></line><line stroke="#9aa0aa" stroke-dasharray="4 3" stroke-width="1" x1="400.0" x2="400.0" y1="26.0" y2="222.0"></line><line stroke="#9aa0aa" stroke-dasharray="4 3" stroke-width="1" x1="256.0" x2="256.0" y1="26.0" y2="222.0"></line><line stroke="#9aa0aa" stroke-dasharray="4 3" stroke-width="1" x1="444.0" x2="444.0" y1="26.0" y2="222.0"></line><line stroke="#9aa0aa" stroke-dasharray="2 3" stroke-width="0.8" x1="150.0" x2="550.0" y1="65.0" y2="65.0"></line><line stroke="#9aa0aa" stroke-dasharray="2 3" stroke-width="0.8" x1="150.0" x2="550.0" y1="175.0" y2="175.0"></line><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="start" x="556.0" y="70.0">50%</text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="start" x="556.0" y="180.0">50%</text><line marker-end="url(#ah-c3f43)" stroke="#d6127a" stroke-width="1.6" x1="201.0" x2="255.0" y1="222.0" y2="222.0"></line><line marker-end="url(#ah-c3f43)" stroke="#d6127a" stroke-width="1.6" x1="255.0" x2="201.0" y1="222.0" y2="222.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="21" text-anchor="middle" x="228.0" y="248.0"><tspan font-style="italic">t</tspan><tspan dy="5.9" font-size="14.3">PHL</tspan></text><line marker-end="url(#ah-c3f43)" stroke="#d6127a" stroke-width="1.6" x1="401.0" x2="443.0" y1="222.0" y2="222.0"></line><line marker-end="url(#ah-c3f43)" stroke="#d6127a" stroke-width="1.6" x1="443.0" x2="401.0" y1="222.0" y2="222.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="21" text-anchor="middle" x="422.0" y="248.0"><tspan font-style="italic">t</tspan><tspan dy="5.9" font-size="14.3">PLH</tspan></text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="17.9" font-weight="normal" text-anchor="end" x="140.0" y="72.0">อินพุต</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="17.9" font-weight="normal" text-anchor="end" x="140.0" y="182.0">เอาต์พุต</text><path d="M34,213 L60,226 L34,239 Z" fill="#fbf3d5" stroke="#231f20" stroke-width="1.4"></path><circle cx="65.0" cy="226.0" fill="#fff" r="5" stroke="#231f20" stroke-width="1.3"></circle><line stroke="#1e8fd6" stroke-width="1.4" x1="14.0" x2="34.0" y1="226.0" y2="226.0"></line><line stroke="#1a9a48" stroke-width="1.4" x1="70.0" x2="86.0" y1="226.0" y2="226.0"></line></svg><figcaption><span class="cap-no">รูปที่ 3.43</span> การวัด propagation delay t<sub>PHL</sub> และ t<sub>PLH</sub> ของอินเวอร์เตอร์ที่จุด 50% ของขอบสัญญาณ</figcaption></figure>
+<p>ค่าเฉลี่ย <span class="nw"><i>t</i><sub>p</sub></span> = (<span class="nw"><i>t</i><sub>PLH</sub></span> + <span class="nw"><i>t</i><sub>PHL</sub></span>) / 2 ใช้บอกความเร็วของตระกูล เช่น 74LS00 มี <span class="nw"><i>t</i><sub>PLH</sub></span> ≈ 9 ns และ <span class="nw"><i>t</i><sub>PHL</sub></span> ≈ 10 ns (ค่าทั่วไป) จึงได้ <span class="nw"><i>t</i><sub>p</sub></span> ≈ 9.5 ns เมื่อสัญญาณผ่านเกทหลายชั้นต่ออนุกรมกัน เวลาหน่วงจะสะสมเพิ่มขึ้น ซึ่งเป็นตัวจำกัดความถี่สูงสุดที่วงจรทำงานได้</p>
+<p>ด้านกำลังไฟฟ้า ตระกูล TTL กินกระแสจากแหล่งจ่ายเกือบคงที่ เช่น 74LS00 ทั้งตัวกินกระแสเฉลี่ยประมาณ 1.6 mA ที่ 5 V คิดเป็น 5 V × 1.6 mA = 8 mW หรือประมาณ 2 mW ต่อเกท ส่วน CMOS กินไฟขณะอยู่นิ่งน้อยมาก (ระดับไมโครวัตต์) แต่ทุกครั้งที่เอาต์พุตเปลี่ยนสถานะต้องประจุและคายประจุความจุภายในและความจุของโหลด กำลังไฟฟ้าแบบพลวัตจึงประมาณได้จาก</p>
+<div class="expr-block c"><div><span class="nw"><i>P</i><sub>D</sub></span> = (<span class="nw"><i>C</i><sub>PD</sub></span> + <span class="nw"><i>C</i><sub>L</sub></span>) <span class="nw"><i>V</i><sub>CC</sub></span><sup>2</sup> <i>f</i></div></div>
+<p>โดย <span class="nw"><i>C</i><sub>PD</sub></span> คือความจุภายในที่ระบุใน datasheet (power dissipation capacitance), <span class="nw"><i>C</i><sub>L</sub></span> คือความจุของโหลด และ <i>f</i> คือความถี่ของการเปลี่ยนสถานะ เช่น เกท 74HC ที่ <span class="nw"><i>C</i><sub>PD</sub></span> ≈ 20 pF ทำงานที่ 5 V และ 1 MHz (ไม่คิดโหลด) จะกินกำลัง 20 pF × (5 V)<sup>2</sup> × 1 MHz = 0.5 mW สมการนี้แสดงว่ากำลังไฟฟ้าแปรตาม <span class="nw"><i>V</i><sub>CC</sub></span><sup>2</sup> ถ้าลดไฟเลี้ยงจาก 5 V เป็น 3.3 V กำลังจะเหลือ (3.3/5)<sup>2</sup> = 0.4356 เท่า หรือลดลงประมาณ 56% นี่คือเหตุผลหนึ่งที่ระบบสมัยใหม่และอุปกรณ์ที่ใช้แบตเตอรี่นิยมใช้ไฟเลี้ยงต่ำ</p>
+<p>เนื่องจากโดยทั่วไปวงจรที่เร็วกว่ามักกินไฟมากกว่า จึงใช้ผลคูณความเร็วกับกำลัง (speed-power product) = <span class="nw"><i>t</i><sub>p</sub></span> × <span class="nw"><i>P</i><sub>D</sub></span> ในหน่วยพิโคจูล (pJ) เป็นตัวชี้วัดคุณภาพรวมของตระกูล ยิ่งค่าน้อยยิ่งดี เช่น 74LS: 9.5 ns × 2 mW = 19 pJ และ 74HC ที่ 1 MHz: 9 ns × 0.5 mW = 4.5 pJ ตารางที่ 3.13 สรุปคุณลักษณะสำคัญของทั้ง 4 ตระกูล</p>
+<div class="tblock t37"><div class="tcap solo"><span class="cap-no">ตารางที่ 3.13</span> เปรียบเทียบคุณลักษณะตัวแทนของไอซีเกทแต่ละตระกูล (ต่อเกท)</div>
+<div class="tbl-scroll"><table class="ic cmp">
+<thead><tr><th>คุณลักษณะ</th><th>74LS</th><th>74HC</th><th>74HCT</th><th>74LVC</th></tr></thead>
+<tbody>
+<tr><td class="l">เทคโนโลยี</td><td>TTL</td><td>CMOS</td><td>CMOS</td><td>CMOS</td></tr>
+<tr><td class="l">ช่วงไฟเลี้ยง <i>V</i><sub>CC</sub></td><td>4.75–5.25 V</td><td>2–6 V</td><td>4.5–5.5 V</td><td>1.65–3.6 V</td></tr>
+<tr><td class="l">ระดับอินพุต</td><td>TTL</td><td>≈ 0.7/0.3 <i>V</i><sub>CC</sub></td><td>TTL</td><td>2.0/0.8 V</td></tr>
+<tr><td class="l">กระแสเอาต์พุต <i>I</i><sub>OH</sub> / <i>I</i><sub>OL</sub></td><td>−0.4 / 8 mA</td><td>±4 mA</td><td>±4 mA</td><td>±24 mA</td></tr>
+<tr><td class="l">กระแสอินพุต <i>I</i><sub>IH</sub> / <i>I</i><sub>IL</sub></td><td>20 µA / −0.4 mA</td><td>±1 µA</td><td>±1 µA</td><td>±5 µA</td></tr>
+<tr><td class="l">t<sub>p</sub> (ค่าทั่วไป)</td><td>≈ 9.5 ns</td><td>≈ 9 ns</td><td>≈ 10 ns</td><td>≈ 3 ns</td></tr>
+<tr><td class="l">กำลังไฟฟ้า</td><td>≈ 2 mW<br/>(คงที่)</td><td>≈ 0.5 mW<br/>(ที่ 1 MHz)</td><td>≈ 0.5 mW<br/>(ที่ 1 MHz)</td><td>ต่ำ (แปรตาม<br/><i>V</i><sub>CC</sub><sup>2</sup><i>f</i>)</td></tr>
+<tr><td class="l">อินพุตทน 5 V</td><td>—</td><td>ไม่ได้</td><td>—</td><td>ได้ (ถึง 5.5 V)</td></tr>
+</tbody></table></div></div>
+<div data-widget="propdelay"></div><h3 id="s3-7-7"><span class="no">3.7.7</span> การเชื่อมต่อระหว่างลอจิก 3.3 V และ 5 V</h3>
+<p>ระบบดิจิทัลปัจจุบันมักมีอุปกรณ์หลายระดับแรงดันอยู่ร่วมกัน เช่น ไมโครคอนโทรลเลอร์ 3.3 V ต้องส่งสัญญาณให้วงจร 5 V หรือรับสัญญาณจากโมดูล 5 V การต่อตรงโดยไม่ตรวจระดับแรงดันอาจทำให้วงจรอ่านค่าผิดหรือเสียหายได้ ให้พิจารณาแยกเป็นสองทิศทาง</p>
+<p class="sub4"><span class="n">ก.</span>ทิศทาง 3.3 V → 5 V</p>
+<p>เอาต์พุตของ 74LVC ที่ไฟเลี้ยง 3.3 V มี <span class="nw"><i>V</i><sub>OH(min)</sub></span> = 2.4 V ถ้าต่อเข้า 74HC ที่ไฟเลี้ยง 5 V ซึ่งมี <span class="nw"><i>V</i><sub>IH(min)</sub></span> = 3.5 V จะได้ <span class="nw">NM<sub>H</sub></span> = 2.4 − 3.5 = −1.1 V ซึ่งเป็นลบ และแม้เอาต์พุตจะขึ้นได้เต็มที่ถึง 3.3 V ก็ยังต่ำกว่า 3.5 V อยู่ 0.2 V แปลว่า 74HC <b>ไม่รับประกัน</b>ว่าจะอ่านสัญญาณนี้เป็น HIGH วิธีแก้ที่ง่ายที่สุดคือรับสัญญาณด้วยไอซีตระกูล <b>74HCT</b> ที่ไฟเลี้ยง 5 V ซึ่งมี <span class="nw"><i>V</i><sub>IH(min)</sub></span> = 2.0 V ได้ <span class="nw">NM<sub>H</sub></span> = 2.4 − 2.0 = 0.4 V และ <span class="nw">NM<sub>L</sub></span> = 0.8 − 0.4 = 0.4 V ซึ่งเป็นบวกทั้งคู่ 74HCT จึงทำหน้าที่เป็นตัวแปลงระดับแรงดัน (level translator) ดังรูปที่ 3.44 (ก) เหตุผลเดียวกันนี้ทำให้เอาต์พุตของ 74LS (<span class="nw"><i>V</i><sub>OH(min)</sub></span> = 2.7 V) ต่อเข้า 74HC ที่ 5 V โดยตรงไม่ได้ (<span class="nw">NM<sub>H</sub></span> = 2.7 − 3.5 = −0.8 V) แต่ต่อเข้า 74HCT ได้</p>
+<p class="sub4"><span class="n">ข.</span>ทิศทาง 5 V → 3.3 V</p>
+<p>ปัญหาในทิศทางนี้ไม่ใช่ระดับลอจิก แต่เป็นแรงดันเกินพิกัด อินพุตของ CMOS ทั่วไป (เช่น 74HC ที่ไฟเลี้ยง 3.3 V) มีไดโอดป้องกันต่ออยู่กับ <i>V</i><sub>CC</sub> ถ้าป้อนแรงดัน 5 V เข้าไป กระแสจะไหลผ่านไดโอดนี้เข้าสู่ไฟเลี้ยง 3.3 V ซึ่งอาจทำให้ไอซีเสียหาย วิธีแก้คือใช้ไอซีที่มีอินพุตทน 5 V (5 V-tolerant input) เช่น <b>74LVC</b> ที่ไฟเลี้ยง 3.3 V ดังรูปที่ 3.44 (ข) ซึ่งได้ <span class="nw">NM<sub>H</sub></span> = 4.4 − 2.0 = 2.4 V และ <span class="nw">NM<sub>L</sub></span> = 0.8 − 0.33 = 0.47 V สำหรับงานที่ซับซ้อนกว่า เช่น บัสสองทิศทาง ควรใช้ไอซีแปลงระดับแรงดันโดยเฉพาะที่มีไฟเลี้ยงสองชุด (dual-supply level translator) เช่น 74LVC1T45</p>
+<figure class="c"><svg class="fig" style="width:136.0mm;height:58.56mm" viewbox="0 0 720 310" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah-c3f44" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"></path></marker></defs><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="17.2" font-weight="normal" text-anchor="start" x="4.0" y="85.0">(ก)</text><rect fill="#cfe5f6" height="70" rx="5" stroke="#5b93c2" stroke-width="1.3" width="190" x="40" y="43.0"></rect><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="17.9" font-weight="bold" text-anchor="middle" x="135.0" y="74.0">ระบบ 3.3 V</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="14.8" font-weight="normal" text-anchor="middle" x="135.0" y="98.0">74LVC / ไมโครคอนโทรลเลอร์</text><path d="M380,58 L418,78 L380,98 Z" fill="#fbf3d5" stroke="#231f20" stroke-width="1.4"></path><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="16" font-weight="bold" text-anchor="middle" x="399.0" y="50.0">74HCT</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="15.6" font-weight="normal" text-anchor="middle" x="399.0" y="122.0">ไฟเลี้ยง 5 V</text><line stroke="#1e8fd6" stroke-width="1.6" x1="230.0" x2="380.0" y1="78.0" y2="78.0"></line><rect fill="#fbf3d5" height="70" rx="5" stroke="#5b93c2" stroke-width="1.3" width="190" x="520" y="43.0"></rect><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="17.9" font-weight="bold" text-anchor="middle" x="615.0" y="74.0">ลอจิก 5 V</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="14.8" font-weight="normal" text-anchor="middle" x="615.0" y="98.0">74HC / 74LS</text><line stroke="#1a9a48" stroke-width="1.6" x1="418.0" x2="520.0" y1="78.0" y2="78.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="17" text-anchor="middle" x="305.0" y="48.0"><tspan font-style="italic">V</tspan><tspan dy="4.8" font-size="11.6">OH</tspan><tspan dy="-4.8"> ≥ 2.4 V</tspan></text><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="17" text-anchor="middle" x="305.0" y="69.0"><tspan font-style="italic">V</tspan><tspan dy="4.8" font-size="11.6">IH(min)</tspan><tspan dy="-4.8"> = 2.0 V</tspan></text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="17.2" font-weight="normal" text-anchor="start" x="4.0" y="235.0">(ข)</text><rect fill="#fbf3d5" height="70" rx="5" stroke="#5b93c2" stroke-width="1.3" width="190" x="40" y="193.0"></rect><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="17.9" font-weight="bold" text-anchor="middle" x="135.0" y="224.0">ลอจิก 5 V</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="14.8" font-weight="normal" text-anchor="middle" x="135.0" y="248.0">74HC / 74HCT</text><path d="M380,208 L418,228 L380,248 Z" fill="#fbf3d5" stroke="#231f20" stroke-width="1.4"></path><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="16" font-weight="bold" text-anchor="middle" x="399.0" y="200.0">74LVC</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="15.6" font-weight="normal" text-anchor="middle" x="399.0" y="272.0">ไฟเลี้ยง 3.3 V · อินพุตทน 5 V</text><line stroke="#1e8fd6" stroke-width="1.6" x1="230.0" x2="380.0" y1="228.0" y2="228.0"></line><rect fill="#cfe5f6" height="70" rx="5" stroke="#5b93c2" stroke-width="1.3" width="190" x="520" y="193.0"></rect><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="17.9" font-weight="bold" text-anchor="middle" x="615.0" y="224.0">ระบบ 3.3 V</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="14.8" font-weight="normal" text-anchor="middle" x="615.0" y="248.0">ไอซี/MCU 3.3 V</text><line stroke="#1a9a48" stroke-width="1.6" x1="418.0" x2="520.0" y1="228.0" y2="228.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="17" text-anchor="middle" x="305.0" y="198.0"><tspan font-style="italic">V</tspan><tspan dy="4.8" font-size="11.6">OH</tspan><tspan dy="-4.8"> ≥ 4.4 V</tspan></text><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="17" text-anchor="middle" x="305.0" y="219.0"><tspan font-style="italic">V</tspan><tspan dy="4.8" font-size="11.6">IH(min)</tspan><tspan dy="-4.8"> = 2.0 V</tspan></text><line stroke="#9aa0aa" stroke-dasharray="4 3" stroke-width="0.8" x1="10.0" x2="710.0" y1="153.0" y2="153.0"></line></svg><figcaption><span class="cap-no">รูปที่ 3.44</span> การเชื่อมต่อลอจิกต่างระดับแรงดัน (ก) 3.3 V → 5 V ผ่าน 74HCT (ข) 5 V → 3.3 V ผ่าน 74LVC ที่มีอินพุตทน 5 V</figcaption></figure>
+<h3 id="s3-7-8"><span class="no">3.7.8</span> อินพุตที่ไม่ใช้งานและตัวเก็บประจุดีคัปปลิง</h3>
+<p>อินพุตที่ไม่ได้ใช้งานต้อง<b>ไม่ปล่อยลอย</b> (floating) โดยเฉพาะ CMOS เพราะอินพุตมีอิมพีแดนซ์สูงมาก แรงดันจะลอยไปอยู่ในช่วงไม่กำหนดได้ง่าย ทำให้เอาต์พุตแกว่ง ทรานซิสเตอร์ทั้งสองชุดนำกระแสพร้อมกันจนกินไฟมากผิดปกติ หรือเกิดความเสียหายจากไฟฟ้าสถิต ส่วนอินพุต TTL ที่ปล่อยลอยมักทำตัวเหมือน HIGH แต่ไวต่อสัญญาณรบกวนมาก จึงไม่ควรปล่อยลอยเช่นกัน หลักการต่ออินพุตที่ไม่ใช้ (รูปที่ 3.45) มีดังนี้</p>
+<ul class="bul">
+<li>AND และ NAND: ต่ออินพุตที่ไม่ใช้ขึ้น <i>V</i><sub>CC</sub> (สำหรับ TTL นิยมต่อผ่านตัวต้านทานประมาณ 1 กิโลโอห์ม) เพื่อให้เป็น 1 ซึ่งไม่เปลี่ยนผลของ AND</li>
+<li>OR และ NOR: ต่ออินพุตที่ไม่ใช้ลงกราวด์ เพื่อให้เป็น 0 ซึ่งไม่เปลี่ยนผลของ OR</li>
+<li>ต่อร่วมกับอินพุตที่ใช้งาน (เพราะ A · A = A และ A + A = A) แต่จะเพิ่มโหลดให้กับเกทที่ขับสัญญาณนั้น</li>
+<li>เกทที่ไม่ได้ใช้ทั้งตัวในตัวถัง (เช่น ใช้ 3 จาก 4 ตัว) ให้ต่ออินพุตของเกทนั้นลงกราวด์หรือขึ้น <i>V</i><sub>CC</sub> และปล่อยเอาต์พุตไว้ไม่ต้องต่อ</li>
+</ul>
+<p>นอกจากนี้ ทุกครั้งที่เอาต์พุตเปลี่ยนสถานะ ไอซีจะดึงกระแสจากแหล่งจ่ายเป็นพัลส์สั้น ๆ ทำให้แรงดันไฟเลี้ยงกระเพื่อมและรบกวนไอซีตัวอื่น จึงต้องต่อ<b>ตัวเก็บประจุดีคัปปลิง</b> (decoupling capacitor) ชนิดเซรามิกขนาดประมาณ 0.1 µF คร่อมระหว่างขา <i>V</i><sub>CC</sub> กับ GND ของไอซีทุกตัว โดยวางให้ใกล้ขาไอซีมากที่สุด และมีตัวเก็บประจุขนาดใหญ่ (เช่น 10 µF) อีกหนึ่งตัวที่จุดจ่ายไฟของแผ่นวงจร</p>
+<figure class="c"><svg class="fig" style="width:140.0mm;height:48.46mm" viewbox="0 0 780 270" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah-c3f45" markerheight="6" markerwidth="6" orient="auto-start-reverse" refx="9" refy="5" viewbox="0 0 10 10"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"></path></marker></defs><path d="M80,128.0 L94,128.0 A22.0,22.0 0 0 1 94,172.0 L80,172.0 Z" fill="#fbf3d5" stroke="#231f20" stroke-width="1.4"></path><circle cx="121.0" cy="150.0" fill="#fff" r="5" stroke="#231f20" stroke-width="1.3"></circle><line stroke="#1e8fd6" stroke-width="1.4" x1="34.0" x2="80.0" y1="150.0" y2="150.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="18" font-style="italic" text-anchor="end" x="28.0" y="156.0">A</text><line stroke="#1e8fd6" stroke-width="1.4" x1="34.0" x2="80.0" y1="166.0" y2="166.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="18" font-style="italic" text-anchor="end" x="28.0" y="172.0">B</text><polyline fill="none" points="80.0,134.0 58.0,134.0 58.0,126.0 64.0,122.0 52.0,116.0 64.0,110.0 52.0,104.0 64.0,98.0 52.0,92.0 58.0,88.0 58.0,76.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.3"></polyline><line stroke="#231f20" stroke-width="1.6" x1="48.0" x2="68.0" y1="76.0" y2="76.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="16" text-anchor="middle" x="58.0" y="69.0"><tspan font-style="italic">V</tspan><tspan dy="4.5" font-size="10.9">CC</tspan></text><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="start" x="70.0" y="110.0">1 kΩ</text><line stroke="#1a9a48" stroke-width="1.4" x1="126.0" x2="148.0" y1="150.0" y2="150.0"></line><text fill="#1a9a48" font-family="'Times New Roman', Times, serif" font-size="18" font-style="italic" text-anchor="start" x="152.0" y="156.0">X</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="16.4" font-weight="normal" text-anchor="middle" x="85.0" y="252.0">(ก) ต่อขึ้นไฟเลี้ยง</text><path d="M285,128.0 Q312.83,128.0 335.6,150 Q312.83,172.0 285,172.0 Q297.65,150 285,128.0 Z" fill="#fbf3d5" stroke="#231f20" stroke-width="1.4"></path><circle cx="340.6" cy="150.0" fill="#fff" r="5" stroke="#231f20" stroke-width="1.3"></circle><line stroke="#1e8fd6" stroke-width="1.4" x1="235.0" x2="288.0" y1="134.0" y2="134.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="18" font-style="italic" text-anchor="end" x="229.0" y="140.0">A</text><line stroke="#1e8fd6" stroke-width="1.4" x1="235.0" x2="291.3" y1="150.0" y2="150.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="18" font-style="italic" text-anchor="end" x="229.0" y="156.0">B</text><polyline fill="none" points="288.0,166.0 263.0,166.0 263.0,206.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><line stroke="#231f20" stroke-width="1.6" x1="252.0" x2="274.0" y1="206.0" y2="206.0"></line><line stroke="#231f20" stroke-width="1.4" x1="256.0" x2="270.0" y1="210.0" y2="210.0"></line><line stroke="#231f20" stroke-width="1.2" x1="260.0" x2="266.0" y1="214.0" y2="214.0"></line><line stroke="#1a9a48" stroke-width="1.4" x1="345.6" x2="367.6" y1="150.0" y2="150.0"></line><text fill="#1a9a48" font-family="'Times New Roman', Times, serif" font-size="18" font-style="italic" text-anchor="start" x="371.6" y="156.0">X</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="16.4" font-weight="normal" text-anchor="middle" x="300.0" y="252.0">(ข) ต่อลงกราวด์</text><path d="M480,128.0 L494,128.0 A22.0,22.0 0 0 1 494,172.0 L480,172.0 Z" fill="#fbf3d5" stroke="#231f20" stroke-width="1.4"></path><line stroke="#1e8fd6" stroke-width="1.4" x1="430.0" x2="480.0" y1="134.0" y2="134.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="18" font-style="italic" text-anchor="end" x="424.0" y="140.0">A</text><line stroke="#1e8fd6" stroke-width="1.4" x1="430.0" x2="480.0" y1="150.0" y2="150.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="18" font-style="italic" text-anchor="end" x="424.0" y="156.0">B</text><polyline fill="none" points="480.0,166.0 458.0,166.0 458.0,150.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><circle cx="458.0" cy="150.0" fill="#231f20" r="3.2"></circle><line stroke="#1a9a48" stroke-width="1.4" x1="516.0" x2="538.0" y1="150.0" y2="150.0"></line><text fill="#1a9a48" font-family="'Times New Roman', Times, serif" font-size="18" font-style="italic" text-anchor="start" x="542.0" y="156.0">X</text><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="16.4" font-weight="normal" text-anchor="middle" x="490.0" y="252.0">(ค) ต่อร่วมกับอินพุตที่ใช้</text><rect fill="#f4f4f2" height="110" rx="3" stroke="#231f20" stroke-width="1.4" width="56" x="680" y="80"></rect><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="16" font-weight="normal" text-anchor="middle" x="708.0" y="141.0">IC</text><polyline fill="none" points="708.0,80.0 708.0,58.0 658.0,58.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><circle cx="658.0" cy="58.0" fill="#231f20" r="3.2"></circle><polyline fill="none" points="708.0,190.0 708.0,212.0 658.0,212.0" stroke="#231f20" stroke-linejoin="round" stroke-width="1.4"></polyline><circle cx="658.0" cy="212.0" fill="#231f20" r="3.2"></circle><line stroke="#231f20" stroke-width="1.4" x1="658.0" x2="658.0" y1="58.0" y2="130.0"></line><line stroke="#231f20" stroke-width="2.2" x1="646.0" x2="670.0" y1="130.0" y2="130.0"></line><line stroke="#231f20" stroke-width="2.2" x1="646.0" x2="670.0" y1="138.0" y2="138.0"></line><line stroke="#231f20" stroke-width="1.4" x1="658.0" x2="658.0" y1="138.0" y2="212.0"></line><text fill="#231f20" font-family='"Prompt", "IBM Plex Sans Thai", sans-serif' font-size="15" font-weight="normal" text-anchor="end" x="640.0" y="140.0">0.1 µF</text><line stroke="#231f20" stroke-width="1.4" x1="708.0" x2="730.0" y1="58.0" y2="58.0"></line><text fill="#d6127a" font-family="'Times New Roman', Times, serif" font-size="16" text-anchor="start" x="732.0" y="64.0"><tspan font-style="italic">V</tspan><tspan dy="4.5" font-size="10.9">CC</tspan></text><line stroke="#231f20" stroke-width="1.4" x1="708.0" x2="726.0" y1="212.0" y2="212.0"></line><line stroke="#231f20" stroke-width="1.6" x1="715.0" x2="737.0" y1="212.0" y2="212.0"></line><line stroke="#231f20" stroke-width="1.4" x1="719.0" x2="733.0" y1="216.0" y2="216.0"></line><line stroke="#231f20" stroke-width="1.2" x1="723.0" x2="729.0" y1="220.0" y2="220.0"></line><text fill="#231f20" font-family='"Sarabun", "IBM Plex Sans Thai", sans-serif' font-size="16.4" font-weight="normal" text-anchor="middle" x="685.0" y="252.0">(ง) ดีคัปปลิง</text></svg><figcaption><span class="cap-no">รูปที่ 3.45</span> การจัดการอินพุตที่ไม่ใช้งาน (ก)–(ค) และการต่อตัวเก็บประจุดีคัปปลิงที่ขาไฟเลี้ยงของไอซี (ง)</figcaption></figure>
+<h3 id="s3-7-9"><span class="no">3.7.9</span> หลักการเลือกไอซีให้เหมาะกับแรงดันและสภาวะแวดล้อม</h3>
+<p>จากคุณลักษณะทั้งหมดที่กล่าวมา การเลือกไอซีลอจิกสำหรับวงจรขนาดเล็กสามารถทำได้อย่างเป็นขั้นตอนดังนี้</p>
+<div class="callout k37 bk-callout">
+<div class="callout-head">ขั้นตอนการเลือกไอซีลอจิก</div>
+<ol>
+<li><b>ฟังก์ชันและจำนวนเกท</b> เขียนนิพจน์ของวงจร นับเกทแต่ละชนิด แล้วเลือกเบอร์ที่ใช้จำนวนตัวถังน้อยที่สุด (เช่น ใช้ NAND ล้วนจากไอซี 7400)</li>
+<li><b>แรงดันไฟเลี้ยงของระบบ</b> 5 V: 74HC, 74HCT หรือ 74LS · 3.3 V หรือต่ำกว่า: 74LVC (หรือ 74HC ที่ 3.3 V)</li>
+<li><b>ความเข้ากันได้ของระดับลอจิก</b> ทุกจุดที่ต่อกันต้องได้ NM<sub>H</sub> และ NM<sub>L</sub> เป็นบวก และแรงดันอินพุตต้องไม่เกินพิกัด ถ้าไม่ผ่านให้ใช้ 74HCT, 74LVC หรือไอซีแปลงระดับแรงดัน</li>
+<li><b>สภาวะแวดล้อม</b> ช่วงอุณหภูมิใช้งาน (เกรดพาณิชย์ อุตสาหกรรม ยานยนต์ หรือทหาร) และระดับสัญญาณรบกวน ถ้ารบกวนมากหรือสัญญาณเปลี่ยนช้าให้เลือกตระกูลที่มี noise margin สูงหรืออินพุตแบบ Schmitt trigger (เช่น 74HC14)</li>
+<li><b>ความเร็ว กำลังไฟฟ้า และการขับโหลด</b> ตรวจ t<sub>p</sub> สะสมเทียบกับความถี่ที่ต้องการ, ใช้ CMOS ไฟเลี้ยงต่ำสำหรับงานแบตเตอรี่, ตรวจ fan-out และกระแสที่ต้องจ่ายให้โหลด เช่น LED</li>
+<li><b>ตัวถัง</b> DIP สำหรับทดลองบนแผงต่อวงจร หรือ SOIC/TSSOP สำหรับแผ่นวงจรพิมพ์</li>
+</ol>
+</div>
+<div class="example long k37"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 3.15</span></div>
+<p>ระบบควบคุมพัดลมในตู้ควบคุมของโรงงานใช้ไฟเลี้ยง 3.3 V ติดตั้งในบริเวณที่อุณหภูมิอยู่ระหว่าง −20 ถึง 70 °C รับสัญญาณจากเซนเซอร์อุณหภูมิสองตัว A และ B ซึ่งเป็นโมดูล 5 V (เอาต์พุตเป็น 74HC ที่ไฟเลี้ยง 5 V) ต้องการให้พัดลมทำงาน (X = 1) เมื่อเซนเซอร์ตัวใดตัวหนึ่งตรวจพบความร้อน (X = A + B) และให้ไฟเตือนติด (Y = 1) เมื่อเซนเซอร์ทั้งสองตรวจพบพร้อมกัน (Y = AB) จงเลือกไอซีและตรวจสอบความเหมาะสม</p>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p><b>ฟังก์ชันและจำนวนเกท:</b> ต้องการ OR 2 อินพุต 1 ตัว และ AND 2 อินพุต 1 ตัว ถ้าใช้ NAND ล้วน จะต้องใช้ 3 ตัวสำหรับ OR (A + B = <span class="ov">A</span> NAND <span class="ov">B</span> โดยกลับค่า A และ B ด้วย NAND ที่ต่ออินพุตเข้าด้วยกัน) และ 2 ตัวสำหรับ AND รวม 5 ตัว ซึ่งเกิน 4 ตัวในไอซีหนึ่งตัวถัง ดังนั้นการใช้ไอซี OR หนึ่งตัวและ AND หนึ่งตัวก็ใช้ 2 ตัวถังเท่ากัน แต่ต่อวงจรง่ายกว่าและมีเวลาหน่วงน้อยกว่า</p>
+<p><b>ไฟเลี้ยงและตระกูล:</b> ระบบใช้ 3.3 V จึงเลือกตระกูล 74LVC ได้แก่ <b>74LVC32A</b> (quad 2-input OR) และ <b>74LVC08A</b> (quad 2-input AND)</p>
+<p><b>ระดับลอจิก:</b> อินพุตมาจาก 74HC ที่ 5 V ซึ่งมี <span class="nw"><i>V</i><sub>OH(min)</sub></span> = 4.4 V และ <span class="nw"><i>V</i><sub>OL(max)</sub></span> = 0.33 V เมื่อเข้า 74LVC (<span class="nw"><i>V</i><sub>IH(min)</sub></span> = 2.0 V, <span class="nw"><i>V</i><sub>IL(max)</sub></span> = 0.8 V) ได้ <span class="nw">NM<sub>H</sub></span> = 4.4 − 2.0 = 2.4 V และ <span class="nw">NM<sub>L</sub></span> = 0.8 − 0.33 = 0.47 V เป็นบวกทั้งคู่ และอินพุตของ 74LVC ทนแรงดันได้ถึง 5.5 V จึงรับสัญญาณ 5 V ได้โดยไม่เสียหาย ถ้าเลือก 74HC ที่ไฟเลี้ยง 3.3 V แทน จะรับแรงดัน 5 V ซึ่งเกิน <i>V</i><sub>CC</sub> ไม่ได้</p>
+<p><b>สภาวะแวดล้อมและการติดตั้ง:</b> เลือกเกรดอุตสาหกรรมที่ใช้งานได้ −40 ถึง 85 °C ซึ่งครอบคลุม −20 ถึง 70 °C, ใช้ตัวถัง SOIC บนแผ่นวงจรพิมพ์, ต่อตัวเก็บประจุ 0.1 µF ที่ขาไฟเลี้ยงของไอซีทั้งสองตัว และต่ออินพุตของเกทที่ไม่ใช้อีก 3 ตัวในแต่ละตัวถังลงกราวด์ เนื่องจากตู้ควบคุมในโรงงานมีสัญญาณรบกวนสูง และ NM<sub>L</sub> = 0.47 V ไม่มากนัก ควรเดินสายสัญญาณจากเซนเซอร์ให้สั้น หรือพิจารณาใช้บัฟเฟอร์แบบ Schmitt trigger (เช่น 74LVC14A) รับสัญญาณก่อน</p>
+</details>
+</div>
+<div class="exercise"><div class="ex-title">✍️ แบบฝึกหัด<br/>หัวข้อ 3.7</div><div class="ex-body">
+<ol class="num">
+<li>จงอธิบายความหมายของแต่ละส่วนในรหัสไอซี SN74HCT08N และบอกว่าไอซีนี้บรรจุเกทชนิดใด จำนวนกี่ตัว ใช้ตัวถังแบบใด และต้องใช้ไฟเลี้ยงเท่าใด</li>
+<li>ไอซี TTL อนุกรม 74 มาตรฐานมี <span class="nw"><i>V</i><sub>OH(min)</sub></span> = 2.4 V, <span class="nw"><i>V</i><sub>OL(max)</sub></span> = 0.4 V, <span class="nw"><i>V</i><sub>IH(min)</sub></span> = 2.0 V และ <span class="nw"><i>V</i><sub>IL(max)</sub></span> = 0.8 V จงหา <span class="nw">NM<sub>H</sub></span> และ <span class="nw">NM<sub>L</sub></span> แล้วเปรียบเทียบกับ 74LS ในตารางที่ 3.12</li>
+<li>ไอซี TTL อนุกรม 74 มาตรฐานมี <span class="nw"><i>I</i><sub>OL(max)</sub></span> = 16 mA, <span class="nw"><i>I</i><sub>OH(max)</sub></span> = 0.4 mA, <span class="nw"><i>I</i><sub>IL(max)</sub></span> = 1.6 mA และ <span class="nw"><i>I</i><sub>IH(max)</sub></span> = 40 µA จงหา (ก) fan-out เมื่อขับไอซีตระกูลเดียวกัน (ข) fan-out เมื่อใช้เอาต์พุตของ 74LS (<span class="nw"><i>I</i><sub>OL(max)</sub></span> = 8 mA, <span class="nw"><i>I</i><sub>OH(max)</sub></span> = 0.4 mA) ขับอินพุตของไอซีมาตรฐานนี้</li>
+<li>เอาต์พุตของ 74LS ต่อเข้ากับอินพุตของ 74HC ที่ไฟเลี้ยง 5 V โดยตรงได้หรือไม่ จงแสดงการคำนวณด้วยค่าในตารางที่ 3.12 และเสนอวิธีแก้ไข</li>
+<li>เกทตัวหนึ่งมี <span class="nw"><i>t</i><sub>PLH</sub></span> = 11 ns และ <span class="nw"><i>t</i><sub>PHL</sub></span> = 7 ns จงหา (ก) <span class="nw"><i>t</i><sub>p</sub></span> (ข) เวลาหน่วงโดยประมาณเมื่อสัญญาณผ่านเกทชนิดนี้ 5 ชั้น (ค) กำลังไฟฟ้าแบบพลวัตของเกท CMOS ที่มี <span class="nw"><i>C</i><sub>PD</sub></span> = 20 pF ขับโหลด <span class="nw"><i>C</i><sub>L</sub></span> = 30 pF ที่ไฟเลี้ยง 3.3 V และความถี่ 10 MHz</li>
+<li>ระบบที่ใช้แบตเตอรี่ไฟเลี้ยง 3.3 V ต้องการ NOR gate ขนาด 2 อินพุต 3 ตัว โดยอินพุตตัวหนึ่งมาจากโมดูลที่มีเอาต์พุต 5 V จงเลือกเบอร์ไอซีพร้อมเหตุผลตามขั้นตอนในหัวข้อ 3.7.9 และบอกวิธีจัดการเกทตัวที่ 4 ที่ไม่ได้ใช้</li>
+</ol>
+</div></div>
+
+</section></div>
+
+    <section class="sec" id="summary">
+      <h2>สรุปท้ายบท</h2>
+      <div class="summary"><ul><li>สัญลักษณ์ลอจิกตามมาตรฐาน ANSI/IEEE 91-1984 มีทั้งแบบรูปทรงเฉพาะ (distinctive shape) และแบบโครงร่างสี่เหลี่ยม (rectangular outline); ฟองน้ำ (negation indicator) หรือสามเหลี่ยม (polarity indicator) บ่งถึงการกลับค่าและสถานะ active-LOW</li><li>อินเวอร์เตอร์กลับค่าอินพุต: X = <span class="ov">A</span> · AND ให้ 1 เมื่อทุกอินพุตเป็น 1: X = AB · OR ให้ 0 เมื่อทุกอินพุตเป็น 0: X = A + B</li><li>NAND (X = <span class="ov">AB</span>) เป็น complement ของ AND และเทียบเท่าวงจร Negative-OR; NOR (X = <span class="ov">A + B</span>) เป็น complement ของ OR และเทียบเท่าวงจร Negative-AND</li><li>XOR ให้ 1 เมื่ออินพุตทั้งสองต่างกัน ส่วน XNOR ให้ 1 เมื่ออินพุตเหมือนกัน และเอาต์พุตของทั้งสองเป็น complement ซึ่งกันและกัน</li><li>เกทที่มี n อินพุตมีกรณีของอินพุตทั้งหมด N = 2<sup>n</sup> กรณี ซึ่งใช้กำหนดจำนวนแถวของตารางค่าความจริง</li><li>ผังเวลา (timing diagram) ใช้วิเคราะห์เอาต์พุตของเกทเมื่ออินพุตเปลี่ยนตามเวลา โดยต้องพิจารณาทุกช่วงเวลาที่มีการเปลี่ยนแปลงอย่างถี่ถ้วน</li><li>ตัวอย่างการประยุกต์: อินเวอร์เตอร์หา 1’s complement, AND ในระบบเตือนคาดเข็มขัดนิรภัย, OR ในระบบเตือนภัยการบุกรุก และ XOR ในการหาผลบวกของบิต 2 บิต (ไม่คิดตัวทด)</li><li>ไอซีลอจิกอนุกรม 74 มีรหัสบอกผู้ผลิต เกรด ตระกูล ฟังก์ชัน และตัวถัง; ตระกูล TTL (74LS) ใช้ไฟเลี้ยง 5 V ±5% ส่วน CMOS ใช้ได้กว้างกว่า (74HC 2–6 V, 74HCT 4.5–5.5 V, 74LVC 1.65–3.6 V) และกินไฟขณะอยู่นิ่งน้อยมาก</li><li>เกทสองตัวต่อกันได้เมื่อ NM<sub>H</sub> = <i>V</i><sub>OH(min)</sub> − <i>V</i><sub>IH(min)</sub> และ NM<sub>L</sub> = <i>V</i><sub>IL(max)</sub> − <i>V</i><sub>OL(max)</sub> เป็นบวก, fan-out = min(<i>I</i><sub>OL</sub>/<i>I</i><sub>IL</sub>, <i>I</i><sub>OH</sub>/<i>I</i><sub>IH</sub>); การเชื่อม 3.3 V → 5 V ใช้ 74HCT และ 5 V → 3.3 V ใช้ 74LVC ที่อินพุตทน 5 V; อินพุตที่ไม่ใช้ห้ามปล่อยลอย และต้องมีตัวเก็บประจุ 0.1 µF ที่ไอซีทุกตัว</li></ul></div>
+    </section>
+
+    <section class="sec" id="quiz">
+      <h2>แบบทดสอบท้ายบท</h2>
+      <p class="w-hint">เลือกคำตอบ ระบบจะเฉลยพร้อมคำอธิบายทันที (ไม่มีการบันทึกคะแนน ใช้สำหรับทบทวนด้วยตนเอง)</p>
+      <div class="quiz" id="quiz-box"></div>
+    </section>
+
+    <section class="sec" id="lab">
+  <h2>ปฏิบัติการสัปดาห์ที่ 4 · ทดสอบเกทพื้นฐานด้วยไอซีตระกูล 74 และอ่าน datasheet</h2>
+  <p>ตามแผนการสอนใน มคอ.3 (CLO8, CLO9) — ฝึกต่อวงจรจริงบนแผงทดลอง ยืนยันตารางค่าความจริงของเกทแต่ละชนิด และใช้ข้อมูลจาก datasheet ในการเลือกและต่อไอซีอย่างถูกต้อง</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3 style="font-size:18px;margin-top:0">🧰 อุปกรณ์</h3>
+      <ul style="margin:0;padding-left:1.2em">
+        <li>ไอซี 7400, 7402, 7404, 7408, 7432, 7486 (ตระกูล LS หรือ HC/HCT)</li>
+        <li>แผงทดลอง แหล่งจ่ายไฟ 5 V มัลติมิเตอร์ ลอจิกโพรบ</li>
+        <li>DIP switch หรือสายจัมเปอร์สำหรับป้อน 0/1</li>
+        <li>LED + ตัวต้านทาน 330 Ω–1 kΩ แสดงผลเอาต์พุต</li>
+        <li>ตัวเก็บประจุเซรามิก 0.1 µF (ไอซีละ 1 ตัว)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="font-size:18px;margin-top:0">⚠️ ก่อนจ่ายไฟทุกครั้ง</h3>
+      <ul style="margin:0;padding-left:1.2em">
+        <li>ตรวจเบอร์ไอซีและตำแหน่งรอยบาก (ขา 1)</li>
+        <li>ขา 14 → +5 V · ขา 7 → GND (ตรวจกับ datasheet)</li>
+        <li>ต่อ 0.1 µF คร่อม VCC–GND ใกล้ขาไอซี</li>
+        <li>อินพุตที่ไม่ใช้ห้ามปล่อยลอย (หัวข้อ 3.7.8)</li>
+        <li>ห้ามต่อเอาต์พุตสองตัวเข้าด้วยกัน</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3 style="font-size:19px;margin-top:0">📋 ใบงานปฏิบัติการที่ 2 (สัปดาห์ที่ 4)</h3>
+    <ol>
+      <li><b>อ่าน datasheet:</b> สำหรับไอซีที่ได้รับ บันทึกเบอร์เต็ม ถอดรหัสตามตารางที่ 3.11 (ใช้แบบจำลองถอดรหัสเบอร์ไอซีในหัวข้อ 3.7.2 ตรวจได้) และจดค่า V<sub>CC</sub>, V<sub>IH(min)</sub>, V<sub>IL(max)</sub>, V<sub>OH(min)</sub>, V<sub>OL(max)</sub>, t<sub>PLH</sub>, t<sub>PHL</sub></li>
+      <li><b>ตารางค่าความจริง:</b> ต่อเกทตัวที่ 1 ของไอซีแต่ละเบอร์ ป้อนอินพุตครบทุกกรณี (2ⁿ กรณี) บันทึกผลด้วย LED/ลอจิกโพรบ แล้วเทียบกับตารางที่ 3.1–3.9</li>
+      <li><b>วัดระดับแรงดัน:</b> วัดแรงดันเอาต์พุตขณะเป็น HIGH และ LOW ด้วยมัลติมิเตอร์ เทียบกับ V<sub>OH(min)</sub> และ V<sub>OL(max)</sub> ใน datasheet แล้วคำนวณ NM<sub>H</sub> และ NM<sub>L</sub> เมื่อขับไอซีตระกูลเดียวกัน</li>
+      <li><b>สร้างเกทจาก NAND:</b> ใช้ 7400 ตัวเดียวสร้าง NOT (ต่ออินพุตทั้งสองเข้าด้วยกัน), AND (NAND + NOT) และ OR (กลับค่าอินพุตแล้วเข้า NAND = Negative-OR) ยืนยันด้วยตารางค่าความจริง</li>
+      <li><b>ผังเวลา:</b> ป้อนสัญญาณนาฬิกา 1 kHz เข้าอินพุตหนึ่งของ AND/OR/XOR และสลับอีกอินพุตด้วยสวิตช์ สังเกตเอาต์พุตบนออสซิลโลสโคป วาดผังเวลา และอธิบายบทบาทของอินพุตที่เป็นสวิตช์ (enable / inhibit / inverter ที่ควบคุมได้)</li>
+      <li><b>(เสริม) วัด propagation delay:</b> ต่ออินเวอร์เตอร์ 7404 อนุกรม 6 ชั้น ป้อนพัลส์ที่อินพุต วัดเวลาหน่วงระหว่างจุด 50% ของอินพุตกับเอาต์พุต แล้วหาร 6 เพื่อประมาณ t<sub>p</sub> ต่อชั้น</li>
+    </ol>
+    <p class="w-hint" style="margin:0">ส่ง: ตารางบันทึกผลทุกข้อ + ผังเวลาจากข้อ 5 + สรุปเปรียบเทียบค่าที่วัดได้กับ datasheet (ประเมินในหมวดแบบฝึกหัดและรายงานผลการทดลอง 20%)</p>
+  </div>
+
+  <p class="w-hint">ใช้แบบจำลองการจัดขาไอซีใน <a href="#s3-7-1">หัวข้อ 3.7.1</a> วางแผนการต่อสายก่อนต่อวงจรจริง</p>
+</section>
+
+
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-top:48px;flex-wrap:wrap">
+      <a class="btn" href="../../index.html">← หน้ารายวิชา</a>
+      <a class="btn primary" href="slides.html">▶ ทบทวนด้วยสไลด์</a>
+    </div>
+  </main>
+</div>
+
+<footer class="footer">517 112 การออกแบบวงจรตรรกะเชิงเลข · ภาควิชาคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยศิลปากร · เนื้อหาจากเอกสารประกอบการสอน อ.อภิเษก หงษ์วิทยากร</footer>
+
+<script src="quiz.js"></script>
+<script>document.addEventListener("DOMContentLoaded", () => DLD.quiz(document.getElementById("quiz-box"), window.CH_QUIZ));</script>
+</body>
+</html>

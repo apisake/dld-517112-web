@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สไลด์ บทที่ 1 หลักการพื้นฐานระบบดิจิทัล · 517 112</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/slides.css">
+<script src="../../assets/js/site.js"></script>
+<script src="../../assets/js/logic.js"></script>
+<script src="../../assets/js/slides.js"></script>
+<script src="widgets.js"></script>
+</head>
+<body class="deck" data-footer="517 112 · บทที่ 1 หลักการพื้นฐานระบบดิจิทัล" data-lesson="index.html">
+<div class="stage"><div class="canvas">
+
+<!-- 1 ─ Title -->
+<section class="slide title">
+  <div class="kicker">517 112 DIGITAL LOGIC DESIGN · สัปดาห์ที่ 1</div>
+  <h1>บทที่ 1<br>หลักการพื้นฐานระบบดิจิทัล</h1>
+  <div class="en">Fundamentals of Digital Systems</div>
+  <div class="meta">อ.อภิเษก หงษ์วิทยากร<br>ภาควิชาคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยศิลปากร</div>
+  <aside class="notes">แนะนำตัว ชี้แจงว่าคาบแรกแบ่งเป็น (1) แนะนำรายวิชาตาม มคอ.3 ~20 นาที (2) บรรยายบทที่ 1 ~80 นาที (3) ปฏิบัติการแนะนำแผงทดลองและเครื่องมือวัด 2 ชม. · กด N เพื่อซ่อน/แสดงบันทึกนี้ กด ? ดูคีย์ลัด</aside>
+</section>
+
+<!-- 2 ─ Course intro -->
+<section class="slide">
+  <div class="kicker">แนะนำรายวิชา</div>
+  <h2>517 112 การออกแบบวงจรตรรกะเชิงเลข</h2>
+  <div class="cols wide-l">
+    <div>
+      <p class="small muted">ตรรกะเชิงเลขเบื้องต้น · วงจรดิจิทัลและการประยุกต์ · พีชคณิตแบบบูล · สมการเชิงตรรกะ · เทคนิคการลดรูปวงจรตรรกะ · การวิเคราะห์และออกแบบวงจรเชิงผสมและเชิงลำดับ · อุปกรณ์ตรรกะแบบโปรแกรมได้ · การสังเคราะห์วงจรรวมด้วยภาษาอธิบายฮาร์ดแวร์เบื้องต้น</p>
+    </div>
+    <div class="grid-2" style="gap:12px">
+      <div class="card"><div class="tiny muted">หน่วยกิต</div><div class="big mono">3(2-2-5)</div></div>
+      <div class="card"><div class="tiny muted">ประเภท</div><div style="font-size:21px;font-weight:600">วิชาเฉพาะด้าน (บังคับ)</div></div>
+      <div class="card"><div class="tiny muted">ต่อสัปดาห์</div><div style="font-size:21px">บรรยาย 2 ชม.<br>ปฏิบัติ 2 ชม.<br>ศึกษาเอง 5 ชม.</div></div>
+      <div class="card"><div class="tiny muted">ภาคการศึกษา</div><div style="font-size:21px">ภาค 2 ชั้นปีที่ 1<br>ไม่มีวิชาบังคับก่อน</div></div>
+    </div>
+  </div>
+  <aside class="notes">อ่านคำอธิบายรายวิชาจาก มคอ.3 หมวดที่ 3 · ย้ำว่าวิชานี้เป็นพื้นฐานของสถาปัตยกรรมคอมพิวเตอร์ และเป็นวิชาบังคับ</aside>
+</section>
+
+<!-- 3 ─ CLOs -->
+<section class="slide">
+  <div class="kicker">ผลลัพธ์การเรียนรู้ที่คาดหวังของรายวิชา (CLOs)</div>
+  <h2>เมื่อจบวิชานี้ นักศึกษาจะสามารถ…</h2>
+  <div class="cols" style="align-items:start;font-size:19px;line-height:1.5">
+    <ol style="margin:0">
+      <li>อธิบายหลักการเบื้องต้นของภาษาอธิบายฮาร์ดแวร์ (HDL)</li>
+      <li>อธิบายเทคนิคการลดรูปวงจรตรรกะ</li>
+      <li>อธิบายการวิเคราะห์และออกแบบวงจรพื้นฐานของระบบคอมพิวเตอร์</li>
+      <li style="background:var(--accent-soft);border-radius:8px;padding:2px 8px"><b>อธิบายหลักการตรรกะเชิงเลขเบื้องต้นในการสร้างวงจรดิจิทัล ← บทนี้</b></li>
+      <li>อธิบายการทำงานของวงจรผสมและวงจรเชิงลำดับ</li>
+      <li>อธิบายรูปแบบตัวแทนข้อมูลดิจิทัลด้วยเลขไบนารี</li>
+      <li>เขียนวิธีการแปลงชนิดของข้อมูลพื้นฐาน</li>
+    </ol>
+    <ol start="8" style="margin:0">
+      <li>เลือกเกทพื้นฐานที่เหมาะสมสำหรับวงจรขนาดเล็ก</li>
+      <li>เลือกไอซีที่เหมาะกับระดับแรงดันไฟฟ้า</li>
+      <li>แบ่งงานเป็นงานย่อยและมอบหมายในทีม</li>
+      <li>อธิบายเป้าหมายของงานกับผู้ร่วมทีมจนเข้าใจตรงกัน</li>
+      <li>รายงานความก้าวหน้าและนำเสนออย่างเหมาะสม</li>
+      <li>อ่านงานด้านเทคนิคใหม่ ๆ ในการออกแบบวงจรตรรกะ</li>
+    </ol>
+  </div>
+  <aside class="notes">CLO1–5 → PLO10, CLO6–7 → PLO11, CLO8–9 → PLO13, CLO10–11 → PLO15, CLO12 → PLO16, CLO13 → PLO17 · บทที่ 1 รับผิดชอบ CLO4</aside>
+</section>
+
+<!-- 4 ─ Plan -->
+<section class="slide">
+  <div class="kicker">แผนการสอน 16 สัปดาห์</div>
+  <h2>เส้นทางของเรา</h2>
+  <div class="cols" style="align-items:start;font-size:18px;line-height:1.45">
+    <table class="data">
+      <tbody>
+        <tr style="background:var(--accent-soft)"><td class="num"><b>1</b></td><td><b>แนะนำรายวิชา · บทที่ 1 หลักการพื้นฐานระบบดิจิทัล</b></td></tr>
+        <tr><td class="num">2–3</td><td>บทที่ 2 ระบบตัวเลข / รหัส</td></tr>
+        <tr><td class="num">4</td><td>บทที่ 3 ลอจิกเกท · TTL/CMOS</td></tr>
+        <tr><td class="num">5</td><td>บทที่ 4 พีชคณิตบูลีน</td></tr>
+        <tr><td class="num">6</td><td>บทที่ 5 การลดรูป · K-map</td></tr>
+        <tr><td class="num">7</td><td>บทที่ 6 วงจรคอมไบเนชัน · มอบหมายโครงงาน</td></tr>
+        <tr><td class="num">8</td><td><b>สอบกลางภาค</b> (บทที่ 1–6)</td></tr>
+      </tbody>
+    </table>
+    <table class="data">
+      <tbody>
+        <tr><td class="num">9–10</td><td>บทที่ 7 วงจรคอมไบเนชันของฟังก์ชันต่าง ๆ</td></tr>
+        <tr><td class="num">10–11</td><td>บทที่ 8 แลทช์และฟลิปฟลอป</td></tr>
+        <tr><td class="num">12</td><td>บทที่ 9 วงจรนับ · ชิฟต์รีจิสเตอร์</td></tr>
+        <tr><td class="num">13</td><td>บทที่ 10 เครื่องสถานะ Mealy/Moore</td></tr>
+        <tr><td class="num">14</td><td>บทที่ 11 PLD · CPLD · FPGA</td></tr>
+        <tr><td class="num">14–15</td><td>บทที่ 12 Verilog · นำเสนอโครงงาน</td></tr>
+        <tr><td class="num">16</td><td><b>สอบปลายภาค</b> (บทที่ 7–12)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <aside class="notes">ชี้ให้เห็นว่าครึ่งแรกเป็นวงจรคอมไบเนชัน ครึ่งหลังเป็นวงจรเชิงลำดับ จบด้วย PLD และ Verilog · ทุกสัปดาห์มีปฏิบัติการ 2 ชม.</aside>
+</section>
+
+<!-- 5 ─ Assessment -->
+<section class="slide">
+  <div class="kicker">การประเมินผล</div>
+  <h2>คะแนนมาจากไหน</h2>
+  <div class="bar" style="height:64px;font-size:22px;margin:10px 0 26px">
+    <div style="width:20%;background:#12b886">20%</div>
+    <div style="width:30%;background:#1f4fd6">30%</div>
+    <div style="width:20%;background:#e8590c">20%</div>
+    <div style="width:30%;background:#7c3aed">30%</div>
+  </div>
+  <div class="grid-2" style="font-size:21px;gap:16px">
+    <div class="card" style="border-left:6px solid #12b886"><b>แบบฝึกหัดท้ายบท + รายงานผลการทดลอง</b><br><span class="muted">สัปดาห์ 2–15 · ประเมินตามสภาพจริง</span></div>
+    <div class="card" style="border-left:6px solid #1f4fd6"><b>สอบกลางภาค</b> (ข้อเขียน)<br><span class="muted">สัปดาห์ 8 · บทที่ 1–6</span></div>
+    <div class="card" style="border-left:6px solid #e8590c"><b>โครงงานกลุ่ม + สรุปบทความเทคนิคใหม่</b><br><span class="muted">สัปดาห์ 7–15 · ทีม / ความก้าวหน้า / นำเสนอ</span></div>
+    <div class="card" style="border-left:6px solid #7c3aed"><b>สอบปลายภาค</b> (ข้อเขียน)<br><span class="muted">สัปดาห์ 16 · บทที่ 7–12</span></div>
+  </div>
+  <aside class="notes">จาก มคอ.3 หมวดที่ 5 ข้อ 2 · ชี้แจงช่องทางส่งงานและการติดต่อ (ชั่วโมงให้คำปรึกษา 2 ชม./สัปดาห์)</aside>
+</section>
+
+<!-- 6 ─ Objectives -->
+<section class="slide">
+  <div class="kicker">บทที่ 1</div>
+  <h2>จุดประสงค์ และเนื้อหาในบทนี้</h2>
+  <div class="cols wide-r" style="align-items:start">
+    <div class="card" style="font-size:22px">
+      <b>🎯 จุดประสงค์</b>
+      <ol style="margin-top:8px">
+        <li>เข้าใจพัฒนาการและความสำคัญของระบบดิจิทัลอิเล็กทรอนิกส์</li>
+        <li>อธิบายคุณสมบัติและความแตกต่างของปริมาณดิจิทัลและแอนะล็อก</li>
+        <li>เข้าใจปฏิบัติการตรรกะพื้นฐาน NOT, AND และ OR</li>
+      </ol>
+    </div>
+    <ol style="font-size:23px;list-style:none;padding:0">
+      <li><span class="mono hl">1.1</span> ความเป็นมาของอิเล็กทรอนิกส์</li>
+      <li><span class="mono hl">1.2</span> พัฒนาการของระบบดิจิทัลอิเล็กทรอนิกส์</li>
+      <li><span class="mono hl">1.3</span> ปริมาณทางดิจิทัลและแอนะล็อก</li>
+      <li><span class="mono hl">1.4</span> ข้อได้เปรียบของดิจิทัล</li>
+      <li><span class="mono hl">1.5</span> ลักษณะของสัญญาณดิจิทัล</li>
+      <li><span class="mono hl">1.6</span> สัญญาณนาฬิกาและพัลส์</li>
+      <li><span class="mono hl">1.7</span> พื้นฐานเรื่องตัวปฏิบัติการทางตรรกะ</li>
+    </ol>
+  </div>
+  <aside class="notes">ถามนำ: “ในชีวิตประจำวันมีอะไรบ้างที่เป็นดิจิทัล และอะไรที่ยังเป็นแอนะล็อก?” ให้ตอบ 2–3 คน</aside>
+</section>
+
+<!-- 7 ─ 1.1 -->
+<section class="slide">
+  <h2><span class="no">1.1</span>ความเป็นมาของอิเล็กทรอนิกส์</h2>
+  <div class="cols wide-l">
+    <div>
+      <p>อิเล็กทรอนิกส์เปลี่ยนอารยธรรมของโลก <span class="hl">ทั้งแง่บวก</span> (คอมพิวเตอร์ โทรคมนาคม เครื่องจักรอัตโนมัติ เครื่องใช้ในบ้าน) และ<span class="acc">แง่ลบ</span> (อาวุธสงครามยุคใหม่)</p>
+      <p class="frag">ใช้เวลาเพียง ~1 ศตวรรษ จากการค้นพบอิเล็กตรอน สู่การสร้าง<b>ปัญญาประดิษฐ์</b></p>
+    </div>
+    <div class="card frag" style="border-left:6px solid var(--accent)">
+      <div class="mono acc" style="font-size:40px">1883</div>
+      <b>โธมัส เอดิสัน</b> พบโดยบังเอิญว่าประจุไฟฟ้าไหลผ่าน<b>สุญญากาศ</b>ได้ — อิเล็กตรอนจากไส้หลอดที่ร้อนเดินทางไปยังขั้วไฟฟ้าอีกขั้ว
+      <p class="small muted" style="margin:8px 0 0">→ จุดเริ่มต้นยุค<b>หลอดสุญญากาศ</b> (ราว 1900–1950)</p>
+    </div>
+  </div>
+  <aside class="notes">เล่าเรื่องเอดิสัน (Edison effect) สั้น ๆ ว่าเป็นการค้นพบโดยบังเอิญ ระหว่างพยายามปรับปรุงหลอดไฟ</aside>
+</section>
+
+<!-- 8 ─ Timeline -->
+<section class="slide">
+  <h2 style="font-size:36px;margin-bottom:12px"><span class="no">1.1</span>ไทม์ไลน์การค้นพบที่สำคัญ (ตารางที่ 1.1)</h2>
+  <div class="body"><div data-widget="timeline"></div></div>
+  <aside class="notes">คลิกไล่ดูเหตุการณ์ เน้นจุดสีส้ม: 1937 Shannon (Switching Algebra → รากฐานของวิชานี้), 1946 ENIAC, 1947 ทรานซิสเตอร์, 1958 IC, 1963 MOS, 1969 ไมโครโพรเซสเซอร์ · กดปุ่ม “แสดงช่วงเวลากว่าจะแพร่หลาย” เพื่อโยงไปสไลด์ถัดไป</aside>
+</section>
+
+<!-- 9 ─ 3 observations -->
+<section class="slide">
+  <h2><span class="no">1.1</span>ข้อสังเกต 3 ประการจากไทม์ไลน์</h2>
+  <ol class="points" style="font-size:23px">
+    <li class="frag">ความสำเร็จมาจาก<b>การคิดค้นต่อเนื่อง</b> — ผลงานในอดีตปูทางให้ผลงานภายหลัง</li>
+    <li class="frag">จากวันประดิษฐ์ถึงวัน<b>แพร่หลาย</b>ใช้เวลาหลายปี: ทรานซิสเตอร์ 1947 → 1960s · ไอซี 1958 → 1970s · ไมโครโพรเซสเซอร์ 1969 → 1980s</li>
+    <li class="frag">เครื่องมือสมรรถนะสูง (คอมพิวเตอร์ ระบบนำวิถีจรวด) คือ<b>การผสมผสานสิ่งประดิษฐ์ในอดีต</b> — มรดกทางปัญญาที่ต้องสานต่อ</li>
+  </ol>
+  <aside class="notes">ชวนคิด: เทคโนโลยีอะไรในปัจจุบันที่ “ประดิษฐ์แล้วแต่ยังไม่แพร่หลาย”? (เช่น quantum computing, neuromorphic chips)</aside>
+</section>
+
+<!-- 10 ─ 1.2.1 eras -->
+<section class="slide">
+  <h2><span class="no">1.2.1</span>วิวัฒนาการของอุปกรณ์: 4 ยุค</h2>
+  <div class="eras" style="grid-template-columns:repeat(4,1fr);font-size:18px">
+    <div class="era" style="--c:#7c3aed"><div class="n">ยุคที่ 1</div><h4 style="font-size:24px">หลอดสุญญากาศ</h4><div class="yr">1920–1950</div><p style="font-size:17px">เริ่มที่วิทยุโทรคมนาคม ปลายยุคเริ่มใช้กับคอมพิวเตอร์</p></div>
+    <div class="era frag" style="--c:#0ea5e9"><div class="n">ยุคที่ 2</div><h4 style="font-size:24px">ทรานซิสเตอร์</h4><div class="yr">1950–1970</div><p style="font-size:17px">คอมพิวเตอร์และอุปกรณ์พกพาผลักดัน: คุณภาพดีขึ้น ขนาดเล็กลง</p></div>
+    <div class="era frag" style="--c:#12b886"><div class="n">ยุคที่ 3</div><h4 style="font-size:24px">ไอซี</h4><div class="yr">1970–1980</div><p style="font-size:17px">สารกึ่งตัวนำ (ซิลิคอน) → ราคาถูก คุณภาพสูง</p></div>
+    <div class="era frag" style="--c:#e8590c"><div class="n">ยุคที่ 4</div><h4 style="font-size:24px">VLSI</h4><div class="yr">1980–ปัจจุบัน</div><p style="font-size:17px">เพิ่มขีดความสามารถของอุปกรณ์</p></div>
+  </div>
+  <div class="callout note frag" style="font-size:20px"><b>VLSI</b> = Very Large Scale Integrated circuit — ไอซีที่มีทรานซิสเตอร์จำนวนมาก ๆ · แนวโน้ม: ใช้ VLSI มากขึ้น ใช้<b>ชิ้นส่วนเอกเทศ (discrete components)</b> น้อยลง</div>
+  <aside class="notes">ยกตัวอย่าง: CPU สมัยใหม่มีทรานซิสเตอร์หลายหมื่นล้านตัว เทียบกับ ENIAC ที่ใช้หลอดสุญญากาศราว 17,000 หลอด</aside>
+</section>
+
+<!-- 11 ─ 1.2.2 -->
+<section class="slide">
+  <h2><span class="no">1.2.2</span>ทำไมอิเล็กทรอนิกส์เริ่มต้นด้วยแอนะล็อก?</h2>
+  <div class="cols" style="align-items:start">
+    <div>
+      <div class="card frag" style="margin-bottom:14px"><b>① โลกเป็นแอนะล็อก</b><br><span class="small muted">ปริมาณในชีวิตประจำวันมีค่าต่อเนื่องทั้งขนาดและเวลา</span></div>
+      <div class="card frag"><b>② ดิจิทัลเปลืองชิ้นส่วน</b><br><span class="small muted">มากกว่านับสิบถึงร้อยเท่า — ยุคแรกยังผลิตชิ้นส่วนให้กะทัดรัดไม่ได้ หลักการดิจิทัลจึงเป็นแค่ทฤษฎี</span></div>
+    </div>
+    <div class="callout tip frag">
+      <span class="tag">ข้อดีของดิจิทัลเหนือแอนะล็อก</span>
+      <ul style="margin:6px 0 0">
+        <li>สร้างถูกต้องแล้ว <b>ใช้ได้ทันที</b> ไม่ต้องปรับแต่ง</li>
+        <li><b>รักษาคุณภาพสัญญาณ</b>ได้ดีกว่ามาก</li>
+        <li><b>ปรับเปลี่ยน/ปรับปรุงสัญญาณ</b>ได้ตามต้องการ</li>
+      </ul>
+    </div>
+  </div>
+  <aside class="notes">หลังปี 1946 ระบบดิจิทัลพัฒนาเร็วมาก และมีแนวโน้มแทนที่แอนะล็อกในทุกงาน</aside>
+</section>
+
+<!-- 12 ─ trend + 1.2.3 -->
+<section class="slide">
+  <h2><span class="no">1.2.2–1.2.3</span>แนวโน้ม: แอนะล็อก ⇄ ดิจิทัล</h2>
+  <svg viewBox="0 0 1100 150" style="width:100%;margin:6px 0 20px">
+    <g font-family="var(--font)" font-size="22" text-anchor="middle">
+      <rect x="0" y="40" width="190" height="70" rx="12" fill="var(--surface)" stroke="var(--wave)" stroke-width="3"/><text x="95" y="83" fill="var(--ink)">สัญญาณแอนะล็อก</text>
+      <rect x="250" y="40" width="130" height="70" rx="12" fill="var(--brand)"/><text x="315" y="83" fill="#fff" font-weight="700">ADC</text>
+      <rect x="440" y="30" width="230" height="90" rx="12" fill="var(--surface)" stroke="var(--accent)" stroke-width="3"/><text x="555" y="70" fill="var(--ink)">ประมวลผล</text><text x="555" y="100" fill="var(--accent)" font-family="var(--mono)" font-size="20">0101 1100…</text>
+      <rect x="730" y="40" width="130" height="70" rx="12" fill="var(--brand)"/><text x="795" y="83" fill="#fff" font-weight="700">DAC</text>
+      <rect x="920" y="40" width="180" height="70" rx="12" fill="var(--surface)" stroke="var(--wave)" stroke-width="3"/><text x="1010" y="83" fill="var(--ink)">แอนะล็อก</text>
+      <g stroke="var(--ink-3)" stroke-width="3" marker-end="url(#ah)"><line x1="192" y1="75" x2="244" y2="75"/><line x1="382" y1="75" x2="434" y2="75"/><line x1="672" y1="75" x2="724" y2="75"/><line x1="862" y1="75" x2="914" y2="75"/></g>
+      <text x="95" y="140" font-size="17" fill="var(--ink-3)">ต้นทาง</text><text x="1010" y="140" font-size="17" fill="var(--ink-3)">ปลายทาง</text>
+    </g>
+    <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink-3)"/></marker></defs>
+  </svg>
+  <p class="small">งานแอนะล็อกล้วน (โทรศัพท์, โทรทัศน์) → แปลงเป็นดิจิทัลที่ต้นทาง ประมวลผล แล้วแปลงกลับที่ปลายทาง — <b>สิ้นเปลืองกว่า แต่คุ้มเพราะข้อดีเหนือกว่า</b></p>
+  <div class="callout note frag small"><b>1.2.3 การควบคุมอัตโนมัติ</b> — ระบบควบคุมก็ต้องเป็นดิจิทัลตาม · เดิมไม่คุ้มสำหรับงานเล็ก แต่ VLSI ทำให้<b>ไมโครโพรเซสเซอร์</b>ราคาถูก จึงใช้ควบคุมได้ทั้งงานเล็กและใหญ่</div>
+  <aside class="notes">ยกตัวอย่างเครื่องซักผ้า เตาไมโครเวฟ เครื่องปรับอากาศอินเวอร์เตอร์ ที่ควบคุมด้วยไมโครคอนโทรลเลอร์</aside>
+</section>
+
+<!-- 13 ─ 1.3 analog -->
+<section class="slide">
+  <h2><span class="no">1.3</span>ปริมาณแอนะล็อก vs ดิจิทัล</h2>
+  <div class="cols wide-r">
+    <div>
+      <div class="card" style="border-top:5px solid var(--wave);margin-bottom:14px"><b>แอนะล็อก</b> = ค่า<b>ต่อเนื่อง</b> (continuous)<br><span class="small muted">อุณหภูมิ เวลา ความดัน ระยะทาง ความดังของเสียง</span></div>
+      <div class="card frag" style="border-top:5px solid var(--accent)"><b>ดิจิทัล</b> = ชุดค่าที่<b>แยกเป็นชิ้น ๆ</b> (discrete)</div>
+      <p class="small muted frag" style="margin-top:14px">อุณหภูมิไม่กระโดดจาก 37 °C ไป 38 °C ทันที — เป็นฟังก์ชันต่อเนื่องตามเวลา</p>
+    </div>
+    <div><div class="figbox"><img src="img/fig1-1.png" alt="รูปที่ 1.1"></div><div class="cap">รูปที่ 1.1 อุณหภูมิเทียบกับเวลา — ปริมาณแอนะล็อก</div></div>
+  </div>
+  <aside class="notes">ถาม: นาฬิกาเข็มกับนาฬิกาตัวเลข อันไหนแอนะล็อก/ดิจิทัล? (แต่ “เวลา” เองเป็นปริมาณแอนะล็อก)</aside>
+</section>
+
+<!-- 14 ─ sampling -->
+<section class="slide">
+  <h2><span class="no">1.3</span>ค่าตัวอย่าง → ตัวแทนข้อมูลดิจิทัล</h2>
+  <div class="cols wide-r">
+    <div>
+      <p>อ่านค่าอุณหภูมิ<b>ทุก 1 ชั่วโมง</b> = นำ<span class="hl">ค่าตัวอย่าง (sample)</span> มาเป็นตัวแทน</p>
+      <p class="frag">แปลงแต่ละค่าเป็น<span class="hl">รหัสดิจิทัล (digital code)</span> ของ 1 และ 0</p>
+      <p class="frag">เรียกว่า <span class="acc">ตัวแทนข้อมูลทางดิจิทัล</span> (digital representation)</p>
+    </div>
+    <div><div class="figbox"><img src="img/fig1-2.png" alt="รูปที่ 1.2"></div><div class="cap">รูปที่ 1.2 ค่าตัวอย่างที่ใช้แทนค่าอุณหภูมิ</div></div>
+  </div>
+  <aside class="notes">โยงไปบทที่ 2 (ระบบตัวเลข) ว่ารหัสดิจิทัลคือเลขฐานสอง</aside>
+</section>
+
+<!-- 15 ─ sampling widget -->
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: สุ่มค่าและเข้ารหัส</h2>
+  <div class="body" style="font-size:16px"><div data-widget="sampling"></div></div>
+  <aside class="notes">สาธิต: (1) สุ่มทุก 4 ชม. 2 บิต → เปิด “สร้างกลับจากรหัส” เห็นว่าเพี้ยนมาก (2) ปรับเป็น 1 ชม. 6 บิต → ใกล้เคียง แต่ข้อมูลเพิ่มจาก 14 เป็น 150 บิต · สรุป trade-off ความละเอียด vs ปริมาณข้อมูล (เลื่อนตารางด้านล่างได้)</aside>
+</section>
+
+<!-- 16 ─ 1.4 advantages -->
+<section class="slide">
+  <h2><span class="no">1.4</span>ข้อได้เปรียบของดิจิทัล</h2>
+  <div class="grid-3" style="font-size:22px;margin-bottom:20px">
+    <div class="card frag"><div style="font-size:42px">⚙️</div><b>ประมวลผล</b><br><span class="small muted">processing มีประสิทธิภาพ น่าเชื่อถือ</span></div>
+    <div class="card frag"><div style="font-size:42px">📡</div><b>ส่งถ่ายข้อมูล</b><br><span class="small muted">transmission ทนต่อสัญญาณรบกวน</span></div>
+    <div class="card frag"><div style="font-size:42px">💾</div><b>จัดเก็บ</b><br><span class="small muted">storage กะทัดรัด ทำซ้ำไม่เพี้ยน</span></div>
+  </div>
+  <div class="callout note frag"><b>Noise (สัญญาณรบกวน)</b> คือแรงดันของข้อมูลที่ขยับเปลี่ยนไปมาโดยไม่พึงประสงค์ — กระทบเสียงแอนะล็อกอย่างมาก แต่แทบไม่มีผลกับข้อมูลดิจิทัล</div>
+  <aside class="notes">ตัวอย่าง: สำเนาเทปคาสเซ็ตต่อกันหลายรุ่นเสียงจะแย่ลงเรื่อย ๆ แต่ copy ไฟล์ MP3 กี่ครั้งก็เหมือนเดิม</aside>
+</section>
+
+<!-- 17 ─ noise widget -->
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: noise สะสม vs สร้างสัญญาณใหม่</h2>
+  <div class="body" style="font-size:16px"><div data-widget="noise"></div></div>
+  <aside class="notes">เพิ่มจำนวนช่วงส่งต่อเป็น 8 → แอนะล็อกเพี้ยนมากขึ้นเรื่อย ๆ ส่วนดิจิทัลยังได้บิตถูกต้อง · เพิ่ม noise ไปถึง ~30% → ดิจิทัลเริ่มมีบิตผิด (แถบแดง) = noise เกินช่วงที่ตัดสินได้ → โยงไปเรื่อง noise margin ในบทที่ 3</aside>
+</section>
+
+<!-- 18 ─ ADC/DAC + analog amp -->
+<section class="slide">
+  <h2><span class="no">1.4</span>เชื่อมสองโลกด้วย ADC และ DAC</h2>
+  <div class="cols wide-r">
+    <div>
+      <p><span class="hl mono">ADC</span> Analog-to-Digital Converter<br><span class="small muted">แอนะล็อก → ดิจิทัล</span></p>
+      <p><span class="hl mono">DAC</span> Digital-to-Analog Converter<br><span class="small muted">ดิจิทัล → แอนะล็อก</span></p>
+      <p class="small frag">ระบบเสียงแอนะล็อก: เสียงพูด (ต่อเนื่อง) → <b>linear amplifier</b> ขยายให้แรงขึ้น → ขับลำโพง</p>
+    </div>
+    <div><div class="figbox"><img src="img/fig1-3.png" alt="รูปที่ 1.3"></div><div class="cap">รูปที่ 1.3 ระบบขยายเสียงแบบแอนะล็อก</div></div>
+  </div>
+  <aside class="notes">ถาม: สมาร์ตโฟนมี ADC และ DAC อยู่ที่ไหนบ้าง? (ไมโครโฟน กล้อง ลำโพง/หูฟัง เซนเซอร์ต่าง ๆ)</aside>
+</section>
+
+<!-- 19 ─ CD -->
+<section class="slide">
+  <h2><span class="no">1.4</span>ตัวอย่าง: ระบบเล่นแผ่น CD</h2>
+  <div class="figbox" style="margin-bottom:16px"><img src="img/fig1-4.png" alt="รูปที่ 1.4" style="max-height:300px"></div>
+  <div class="grid-2" style="font-size:21px">
+    <div class="card frag"><b>บันทึก:</b> ไมโครโฟน → <b class="hl">ADC</b> → ข้อมูล 0/1 → เขียนลงแผ่น</div>
+    <div class="card frag"><b>เล่น:</b> อ่านข้อมูล 0/1 → <b class="hl">DAC</b> → ภาคขยาย → ลำโพง</div>
+  </div>
+  <aside class="notes">รูปที่ 1.4 · CD เก็บเสียงที่อัตราสุ่ม 44.1 kHz 16 บิต (ข้อมูลเสริม) — เชื่อมกับแบบจำลองการสุ่มค่าที่เพิ่งลอง</aside>
+</section>
+
+<!-- 20 ─ 1.5 levels -->
+<section class="slide">
+  <h2><span class="no">1.5</span>ลักษณะของสัญญาณดิจิทัล</h2>
+  <div class="cols wide-l">
+    <div>
+      <p>บิต <b>1</b> = <span class="hl">ลอจิกหนึ่ง / HIGH</span> · บิต <b>0</b> = <span class="hl">ลอจิกศูนย์ / LOW</span></p>
+      <p class="small">แรงดันที่แทน 0/1 เรียกว่า <b>ระดับลอจิก (logic level)</b> ขึ้นกับอุปกรณ์ — ส่วนใหญ่ 1 = 5 V, 0 = 0 V (บางชนิด 12 V)</p>
+      <table class="data frag" style="font-size:19px">
+        <tr><td class="num hl">VL(min)</td><td>ต่ำสุดที่ยังเป็นลอจิก 0</td></tr>
+        <tr><td class="num hl">VL(max)</td><td>สูงสุดที่ยังเป็นลอจิก 0</td></tr>
+        <tr><td class="num hl">VH(min)</td><td>ต่ำสุดที่เป็นลอจิก 1</td></tr>
+        <tr><td class="num hl">VH(max)</td><td>สูงสุดที่เป็นลอจิก 1</td></tr>
+      </table>
+      <p class="small frag acc">ระหว่าง VL(max) ถึง VH(min) = ระบบตีความไม่ได้</p>
+    </div>
+    <div><div class="figbox"><img src="img/fig1-5.png" alt="รูปที่ 1.5" style="max-height:400px"></div><div class="cap">รูปที่ 1.5 ค่าระดับแรงดันลอจิก</div></div>
+  </div>
+  <aside class="notes">ตัวอย่างจากเอกสาร: HIGH = 2–5 V, LOW = 0–0.8 V → 3.5 V อ่านเป็น HIGH · ถามต่อ: 1.2 V ล่ะ?</aside>
+</section>
+
+<!-- 21 ─ logic level widget -->
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: แรงดันนี้เป็น 0 หรือ 1?</h2>
+  <div class="body" style="font-size:17px"><div data-widget="logiclevel"></div></div>
+  <aside class="notes">ใช้ปุ่ม “ทายผล” ให้นักศึกษาตอบพร้อมกันทั้งห้อง (ยกมือ/ชูนิ้ว 0, ?, 1) · สลับไปที่ CMOS 5 V ให้เห็นว่าค่า 2.5 V ที่เป็น HIGH สำหรับ TTL กลับตีความไม่ได้สำหรับ CMOS → เหตุผลที่ต้องเลือกไอซีให้เข้ากับระดับแรงดัน (CLO9, บทที่ 3)</aside>
+</section>
+
+<!-- 22 ─ waveform -->
+<section class="slide">
+  <h2><span class="no">1.5</span>ข้อมูลคงที่ vs เปลี่ยนตามเวลา</h2>
+  <div class="cols wide-r">
+    <div>
+      <p>ข้อมูลคงที่: <span class="mono hl">1010</span> = 4 บิต มีค่า 1, 0, 1, 0 ตลอด</p>
+      <p class="frag">ข้อมูลที่เปลี่ยนตามเวลา → อธิบายด้วย<span class="hl">ไดอะแกรมเวลา (timing diagram)</span></p>
+      <p class="frag">เรียกสัญญาณแบบนี้ว่า <span class="acc">รูปคลื่นดิจิทัล (digital waveform)</span></p>
+    </div>
+    <div><div class="figbox"><img src="img/fig1-6.png" alt="รูปที่ 1.6"></div><div class="cap">รูปที่ 1.6 สัญญาณดิจิทัลที่เปลี่ยนไปตามเวลา</div></div>
+  </div>
+  <aside class="notes">ให้นักศึกษาอ่านลำดับบิตจากรูปที่ 1.6 ร่วมกัน</aside>
+</section>
+
+<!-- 23 ─ clock & pulse -->
+<section class="slide">
+  <h2><span class="no">1.6</span>สัญญาณนาฬิกาและพัลส์</h2>
+  <div class="cols">
+    <div class="small">
+      <p><b class="hl">สัญญาณนาฬิกา (clock)</b> สลับ 0↔1 ด้วย<b>คาบเวลาแน่นอน</b> (periodic) ใช้กระตุ้นการทำงานของระบบ</p>
+      <p class="frag"><b class="hl">สัญญาณพัลส์ (pulse)</b> ส่งออกมาช่วงสั้น ๆ เพื่อกระตุ้นงานบางอย่าง</p>
+      <ul class="frag"><li><b>พัลส์แบบบวก</b> 0 → 1 → 0</li><li><b>พัลส์แบบลบ</b> 1 → 0 → 1</li></ul>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="figbox"><img src="img/fig1-7a.png" alt="periodic"><div class="cap">(ก) periodic</div></div>
+      <div class="figbox"><img src="img/fig1-7b.png" alt="non-periodic"><div class="cap">(ข) non-periodic</div></div>
+      <div class="figbox"><img src="img/fig1-7c.png" alt="positive" style="max-height:110px"><div class="cap">(ค) พัลส์แบบบวก</div></div>
+      <div class="figbox"><img src="img/fig1-7d.png" alt="negative" style="max-height:110px"><div class="cap">(ง) พัลส์แบบลบ</div></div>
+    </div>
+  </div>
+  <aside class="notes">รูปที่ 1.7 · CPU ทำงานตามจังหวะสัญญาณนาฬิกา เช่น 3 GHz</aside>
+</section>
+
+<!-- 24 ─ formulas -->
+<section class="slide">
+  <h2><span class="no">1.6</span>ความถี่ คาบเวลา และดิวตี้ไซเคิล</h2>
+  <div class="formula">
+    <div class="eq">f = <span class="frac"><span>1</span><span>T</span></span><small>ความถี่ (Hz)</small></div>
+    <div class="eq">T = <span class="frac"><span>1</span><span>f</span></span><small>คาบเวลา (s)</small></div>
+  </div>
+  <div class="formula frag">
+    <div class="eq" style="flex-basis:100%">ดิวตี้ไซเคิล = <span class="frac"><span>t<sub>w</sub></span><span>T</span></span> × 100%<small>t<sub>w</sub> = ความกว้างของพัลส์ (pulse width)</small></div>
+  </div>
+  <p class="small muted frag">ลองคิดเร็ว: สัญญาณนาฬิกา 1 GHz มีคาบเวลาเท่าใด? → <b class="mono acc">1 ns</b></p>
+  <aside class="notes">ทบทวนคำนำหน้าหน่วย: k = 10³, M = 10⁶, G = 10⁹, m = 10⁻³, µ = 10⁻⁶, n = 10⁻⁹</aside>
+</section>
+
+<!-- 25 ─ example 1.1 -->
+<section class="slide">
+  <h2>ตัวอย่างที่ 1.1</h2>
+  <p>จากสัญญาณพัลส์ในรูปที่ 1.8 จงหา (ก) คาบเวลา (ข) ความถี่ (ค) ดิวตี้ไซเคิล</p>
+  <div class="figbox" style="margin-bottom:16px"><img src="img/fig1-8.png" alt="รูปที่ 1.8" style="max-height:200px"></div>
+  <div class="grid-3" style="font-size:22px">
+    <div class="card frag"><b>(ก)</b> จากต้นพัลส์ถึงต้นพัลส์ถัดไป<br><b class="mono acc">T = 10 ms</b></div>
+    <div class="card frag"><b>(ข)</b> f = 1/T = 1/10 ms<br><b class="mono acc">f = 100 Hz</b></div>
+    <div class="card frag"><b>(ค)</b> (1 ms / 10 ms) × 100%<br><b class="mono acc">= 10%</b></div>
+  </div>
+  <aside class="notes">ให้เวลาคิด 2 นาทีก่อนกดเฉลยทีละข้อ (กด → เพื่อแสดงทีละขั้น)</aside>
+</section>
+
+<!-- 26 ─ edges & nonideal -->
+<section class="slide">
+  <h2><span class="no">1.6</span>ขอบสัญญาณ และพัลส์ที่ไม่เป็นอุดมคติ</h2>
+  <div class="cols">
+    <div class="small">
+      <table class="data" style="font-size:19px">
+        <tr><th></th><th>พัลส์แบบบวก</th><th>พัลส์แบบลบ</th></tr>
+        <tr><td><b>leading edge</b> (t<sub>0</sub>)</td><td>rising edge</td><td>falling edge</td></tr>
+        <tr><td><b>trailing edge</b> (t<sub>1</sub>)</td><td>falling edge</td><td>rising edge</td></tr>
+      </table>
+      <p class="frag">พัลส์อุดมคติเปลี่ยนค่า<b>ทันที</b> — ในความจริงทำไม่ได้</p>
+      <ul class="frag">
+        <li><b>rise time t<sub>r</sub></b>: 10% → 90%</li>
+        <li><b>fall time t<sub>f</sub></b>: 90% → 10%</li>
+        <li><b>pulse width t<sub>w</sub></b>: วัดที่ 50% ↔ 50%</li>
+      </ul>
+    </div>
+    <div><div class="figbox"><img src="img/fig1-9.png" alt="รูปที่ 1.9"></div><div class="cap">รูปที่ 1.9 พัลส์ที่ไม่เป็นอุดมคติ</div></div>
+  </div>
+  <aside class="notes">ทำไมไม่วัด 0–100%? เพราะช่วง 10% บนและล่างรูปคลื่นไม่เป็นเชิงเส้น · ในชั่วโมงปฏิบัติการจะวัด rise time จริงด้วยออสซิลโลสโคป</aside>
+</section>
+
+<!-- 27 ─ pulse widget -->
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: เครื่องกำเนิดพัลส์</h2>
+  <div class="body" style="font-size:16px"><div data-widget="pulse"></div></div>
+  <aside class="notes">กด “ตั้งค่าตามตัวอย่างที่ 1.1” เพื่อยืนยันคำตอบ · เปลี่ยนเป็นพัลส์แบบลบ ให้สังเกตชื่อขอบที่สลับกัน · เปิดโหมดไม่เป็นอุดมคติ ให้ดูจุด 10/50/90%</aside>
+</section>
+
+<!-- 28 ─ timing diagram -->
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px"><span class="no">1.6.1</span>ไดอะแกรมเวลา</h2>
+  <div class="body" style="font-size:16px"><div data-widget="timing"></div></div>
+  <aside class="notes">เวลาเดินจากซ้ายไปขวา · ค่าเริ่มต้นตรงกับรูปที่ 1.10: A, B, C เป็น HIGH พร้อมกันที่พัลส์ที่ 7 · ให้นักศึกษาลองหาว่าถ้าเลือก OR จะ HIGH ช่วงไหนบ้าง แล้วจึงกดดู · ส่วนนี้เป็นสะพานไปหัวข้อ 1.7</aside>
+</section>
+
+<!-- 29 ─ 1.7 -->
+<section class="slide">
+  <h2><span class="no">1.7</span>ตัวปฏิบัติการทางตรรกะพื้นฐาน</h2>
+  <div class="figbox" style="margin-bottom:18px"><img src="img/fig1-11.png" alt="รูปที่ 1.11" style="max-height:160px"></div>
+  <div class="cols" style="align-items:start">
+    <ul class="small">
+      <li>3 ชนิด: <b>NOT · AND · OR</b></li>
+      <li>เส้นซ้าย = <b>อินพุต</b> · เส้นขวา = <b>เอาต์พุต</b></li>
+      <li>วงจรที่ทำหน้าที่นี้ = <b class="hl">ลอจิกเกต (logic gate)</b></li>
+    </ul>
+    <ul class="small frag">
+      <li>AND, OR มีอินพุตได้<b>หลายเส้น</b> · NOT มี<b>เส้นเดียว</b></li>
+      <li><b>จริง (true)</b> = HIGH = 1 · <b>เท็จ (false)</b> = LOW = 0</li>
+    </ul>
+  </div>
+  <aside class="notes">รูปที่ 1.11 · ย้ำว่าสัญลักษณ์เหล่านี้จะใช้ตลอดวิชา บทที่ 3 จะเพิ่ม NAND NOR XOR XNOR</aside>
+</section>
+
+<!-- 30 ─ NOT AND OR -->
+<section class="slide">
+  <h2><span class="no">1.7.1–1.7.3</span>NOT · AND · OR</h2>
+  <div style="display:grid;gap:12px">
+    <div class="cols" style="grid-template-columns:1fr 1.3fr;gap:20px"><div class="small"><b class="hl">NOT</b> กลับค่าเป็นตรงข้าม — เอาต์พุตเป็น<b>นิเสธ</b>ของอินพุต (เรียก <b>อินเวอร์เตอร์</b>)</div><div class="figbox" style="padding:8px"><img src="img/fig1-12.png" alt="รูปที่ 1.12" style="max-height:80px"></div></div>
+    <div class="cols frag" style="grid-template-columns:1fr 1.3fr;gap:20px"><div class="small"><b class="hl">AND</b> เป็น HIGH <b>เฉพาะเมื่อทุกอินพุตเป็น HIGH</b></div><div class="figbox" style="padding:8px"><img src="img/fig1-13.png" alt="รูปที่ 1.13" style="max-height:150px"></div></div>
+    <div class="cols frag" style="grid-template-columns:1fr 1.3fr;gap:20px"><div class="small"><b class="hl">OR</b> เป็น HIGH <b>เมื่อมีอินพุตใดเป็น HIGH</b> · LOW เฉพาะเมื่อทุกอินพุตเป็น LOW</div><div class="figbox" style="padding:8px"><img src="img/fig1-14.png" alt="รูปที่ 1.14" style="max-height:150px"></div></div>
+  </div>
+  <aside class="notes">เปรียบเทียบกับชีวิตจริง: AND = สวิตช์ต่ออนุกรม (ประตูนิรภัยที่ต้องใช้กุญแจ 2 ดอก) · OR = สวิตช์ต่อขนาน (กริ่งที่กดได้จากหลายจุด) · NOT = ไฟฉุกเฉินที่ติดเมื่อไฟดับ</aside>
+</section>
+
+<!-- 31 ─ gates widget -->
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: สนามทดลองลอจิกเกต</h2>
+  <div class="body" style="font-size:17px"><div data-widget="gates" data-gates="NOT,AND,OR" data-start="AND"></div></div>
+  <aside class="notes">ถามทั้งห้อง: AND 3 อินพุตมีกี่กรณีที่ได้ 1? (1 กรณี) · OR 4 อินพุตมีกี่กรณีที่ได้ 0? (1 กรณี) · n อินพุตมี 2ⁿ กรณี — เตรียมไปสู่ตารางความจริงในบทที่ 3–4</aside>
+</section>
+
+<!-- 32 ─ summary -->
+<section class="slide">
+  <h2>สรุปท้ายบท</h2>
+  <ul style="font-size:23px;line-height:1.55">
+    <li class="frag">อิเล็กทรอนิกส์ 4 ยุค: <b>หลอดสุญญากาศ → ทรานซิสเตอร์ → ไอซี → VLSI</b></li>
+    <li class="frag">แอนะล็อก = <b>ต่อเนื่อง</b> · ดิจิทัล = <b>ไม่ต่อเนื่อง</b> · เชื่อมด้วย <b>ADC / DAC</b></li>
+    <li class="frag">ดิจิทัลได้เปรียบด้าน<b>ประมวลผล ส่งถ่าย จัดเก็บ</b> และทนต่อ noise</li>
+    <li class="frag">ระดับลอจิกกำหนดด้วยช่วง <b>V<sub>L</sub></b> และ <b>V<sub>H</sub></b> · ช่วงกลางตีความไม่ได้</li>
+    <li class="frag"><b class="mono">f = 1/T</b> · <b class="mono">ดิวตี้ไซเคิล = (t<sub>w</sub>/T) × 100%</b></li>
+    <li class="frag"><b>NOT</b> กลับค่า · <b>AND</b> = 1 เมื่อทุกอินพุตเป็น 1 · <b>OR</b> = 1 เมื่อมีอินพุตใดเป็น 1</li>
+  </ul>
+  <aside class="notes">ให้นักศึกษาทำแบบทดสอบท้ายบทบนเว็บ (หน้าเนื้อหา → แบบทดสอบท้ายบท) เป็นการบ้าน</aside>
+</section>
+
+<!-- 33 ─ quick check -->
+<section class="slide">
+  <h2>เช็กความเข้าใจ</h2>
+  <div class="grid-2" style="font-size:22px;gap:18px">
+    <div class="card"><b>Q1</b> อุปกรณ์กำหนด LOW 0–0.8 V, HIGH 2–5 V ป้อน 1.4 V ได้อะไร?<div class="frag acc" style="margin-top:8px">→ ตีความไม่ได้ (อยู่ระหว่าง VL(max) กับ VH(min))</div></div>
+    <div class="card"><b>Q2</b> คาบเวลา 0.5 ms มีความถี่เท่าใด?<div class="frag acc" style="margin-top:8px">→ f = 1/0.5 ms = 2 kHz</div></div>
+    <div class="card"><b>Q3</b> พัลส์แบบลบ leading edge คือขอบอะไร?<div class="frag acc" style="margin-top:8px">→ falling edge</div></div>
+    <div class="card"><b>Q4</b> OR 2 อินพุต A = 1, B = 0 ได้เท่าใด?<div class="frag acc" style="margin-top:8px">→ 1</div></div>
+  </div>
+  <aside class="notes">ใช้เป็น exit ticket ก่อนพักเข้าชั่วโมงปฏิบัติการ</aside>
+</section>
+
+<!-- 34 ─ lab -->
+<section class="slide">
+  <div class="kicker">ปฏิบัติการสัปดาห์ที่ 1</div>
+  <h2 style="font-size:34px;margin-bottom:10px">แนะนำแผงทดลองและเครื่องมือวัด</h2>
+  <div class="body" style="font-size:16px"><div data-widget="breadboard"></div></div>
+  <aside class="notes">อธิบายรางไฟ (แนวนอน) กับแถบเชื่อม 5 รู (แนวตั้ง) และร่องกลางสำหรับวางไอซี DIP · เปิด “วางไอซี 14 ขา” อธิบายการนับขาทวนเข็มนาฬิกาจากรอยบาก · ต่อจากนี้แจกใบงานปฏิบัติการที่ 1 (อยู่ท้ายหน้าเนื้อหาบทที่ 1): วัดแรงดันรางไฟ, ตรวจระดับลอจิกด้วยโพรบ, วัด T/f/ดิวตี้ไซเคิลด้วยออสซิลโลสโคป</aside>
+</section>
+
+<!-- 35 ─ next -->
+<section class="slide section">
+  <div class="kicker">สัปดาห์หน้า</div>
+  <div class="no">02</div>
+  <h2>ระบบตัวเลข ตัวปฏิบัติการทางคณิตศาสตร์<br>และรหัสตัวเลข</h2>
+  <p class="muted">เลขฐานสิบ · ฐานสอง · การแปลงเลขฐาน · การคำนวณเลขไบนารี <span class="clo-chip">CLO6</span> <span class="clo-chip">CLO7</span></p>
+  <aside class="notes">มอบหมาย: อ่านเนื้อหาบทที่ 1 บนเว็บให้ครบ ทำแบบทดสอบท้ายบท และเตรียมอ่านบทที่ 2 หัวข้อเลขฐานสอง</aside>
+</section>
+
+</div></div>
+</body>
+</html>

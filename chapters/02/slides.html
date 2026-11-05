@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สไลด์ บทที่ 2 ระบบตัวเลข ตัวปฏิบัติการทางคณิตศาสตร์ และรหัสตัวเลข · 517 112</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/slides.css">
+<script src="../../assets/js/site.js"></script>
+<script src="../../assets/js/logic.js"></script>
+<script src="../../assets/js/numbers.js"></script>
+<script src="../../assets/js/slides.js"></script>
+<script src="widgets.js"></script>
+<style>
+  .slide .calcbox { font: 600 28px/1.45 var(--mono); background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 24px; display: inline-block; }
+  .slide .calcbox .c { color: var(--accent); font-size: 18px; }
+  .slide .calcbox .r { color: var(--brand); }
+  .slide .calcbox hr { border: 0; border-top: 2px solid var(--ink); margin: 2px 0; }
+  .slide .calcbox.ra { text-align: right; white-space: pre; }
+  .slide .calcbox.ra .c { font-size: inherit; }
+  .slide table.ct { border-collapse: collapse; font: 600 26px/1.5 var(--mono); }
+  .slide table.ct td { padding: 0 6px; text-align: right; white-space: nowrap; }
+  .slide table.ct td.l { text-align: left; font: 500 19px var(--font); color: var(--ink-3); }
+  .slide table.ct tr.sum td { border-top: 2px solid var(--ink); }
+  .slide .mini { font-size: 18px; }
+  .slide table.data td, .slide table.data th { padding: 6px 12px; }
+  .slide .wk { display: inline-block; background: var(--accent); color: #fff; border-radius: 8px; padding: 2px 12px; font-size: 16px; font-weight: 700; margin-left: 10px; vertical-align: middle; }
+</style>
+</head>
+<body class="deck" data-footer="517 112 · บทที่ 2 ระบบตัวเลข ตัวปฏิบัติการทางคณิตศาสตร์ และรหัสตัวเลข" data-lesson="index.html">
+<div class="stage"><div class="canvas">
+
+<!-- ========== สัปดาห์ที่ 2 ========== -->
+<section class="slide title">
+  <div class="kicker">517 112 DIGITAL LOGIC DESIGN · สัปดาห์ที่ 2–3</div>
+  <h1 style="font-size:62px">บทที่ 2<br>ระบบตัวเลข ตัวปฏิบัติการ<br>ทางคณิตศาสตร์ และรหัสตัวเลข</h1>
+  <div class="en">Number Systems, Arithmetic Operations and Codes</div>
+  <div class="meta">CLO6 อธิบายรูปแบบตัวแทนข้อมูลดิจิทัลด้วยเลขไบนารี · CLO7 เขียนวิธีแปลงชนิดข้อมูลพื้นฐาน · PLO11</div>
+  <aside class="notes">บทนี้ใช้ 2 สัปดาห์: สไลด์ 1–16 สำหรับสัปดาห์ที่ 2 (หัวข้อ 2.1–2.4) และสไลด์ 17 เป็นต้นไป (ลิงก์ตรง slides.html#17)สำหรับสัปดาห์ที่ 3 (หัวข้อ 2.5–2.11) · ทุกสัปดาห์มีแบบฝึกหัดท้ายหัวข้อในหน้าเนื้อหา</aside>
+</section>
+
+<section class="slide">
+  <div class="kicker">ทบทวนบทที่ 1 → บทที่ 2</div>
+  <h2>ทำไมต้องเรียนระบบตัวเลข?</h2>
+  <div class="cols">
+    <div>
+      <p>บทที่ 1: ระบบดิจิทัลแทนข้อมูลด้วย <b class="hl">0 (LOW)</b> และ <b class="hl">1 (HIGH)</b></p>
+      <p class="frag">ข้อมูลทุกชนิด — ตัวเลข ตัวอักษร เสียง ภาพ — ต้องถูก<b>เข้ารหัสเป็นเลขไบนารี</b></p>
+      <p class="frag">วงจรต้อง <b>บวก ลบ คูณ หาร</b> และจัดการ<b>จำนวนติดลบ / ทศนิยม</b> ได้</p>
+    </div>
+    <div class="card frag" style="font-size:22px">
+      <b>🎯 จุดประสงค์</b>
+      <ol class="mini" style="margin-top:6px">
+        <li>อธิบายเลขฐานสิบ/ฐานสองด้วยค่าน้ำหนักประจำหลัก</li>
+        <li>แปลงฐานสิบ (จำนวนเต็มและเศษส่วน) ⇄ ไบนารี</li>
+        <li>บวก ลบ คูณ หารเลขไบนารี</li>
+        <li>หา 1’s/2’s complement, เลขติดเครื่องหมาย, floating-point</li>
+        <li>คำนวณด้วย 2’s complement และตรวจ overflow</li>
+        <li>แปลงฐาน 2 · 8 · 10 · 16</li>
+        <li>ใช้ BCD รหัสเกรย์ และ ASCII</li>
+      </ol>
+    </div>
+  </div>
+  <aside class="notes">ถามนำ: คอมพิวเตอร์เก็บเลข −5 หรือ 3.14 อย่างไร ในเมื่อมีแค่ 0 กับ 1?</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.1</span>ระบบเลขฐานสิบ — ค่าน้ำหนักประจำหลัก</h2>
+  <p>สัญลักษณ์ 10 ตัว (0–9) = <b class="hl">ฐาน (base) 10</b> · ค่าน้ำหนัก (weight) เพิ่มทีละ 10 เท่าจากขวาไปซ้าย</p>
+  <div class="calcbox" style="margin:10px 0 20px">… 10<sup>3</sup> 10<sup>2</sup> 10<sup>1</sup> 10<sup>0</sup> <span style="color:var(--accent)">.</span> 10<sup>−1</sup> 10<sup>−2</sup> 10<sup>−3</sup> …</div>
+  <div class="grid-2" style="font-size:22px">
+    <div class="card frag"><b>ตัวอย่างที่ 2.1</b><br><span class="mono">984 = (9×10²) + (8×10¹) + (4×10⁰)</span><br><span class="mono muted">= 900 + 80 + 4</span></div>
+    <div class="card frag"><b>ตัวอย่างที่ 2.2</b><br><span class="mono">12.806 = (1×10¹)+(2×10⁰)+(8×10⁻¹)+(0×10⁻²)+(6×10⁻³)</span><br><span class="mono muted">= 10 + 2 + 0.8 + 0.006</span></div>
+  </div>
+  <aside class="notes">ย้ำคำว่า “ค่าประจำหลัก” — หลักการนี้ใช้กับทุกฐาน แค่เปลี่ยนเลขฐานจาก 10 เป็น 2, 8, 16</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.2.1</span>การนับแบบไบนารี</h2>
+  <div class="cols wide-r">
+    <table class="data" style="font-size:20px">
+      <tr><th>ฐานสิบ</th><th>ไบนารี</th><th>ฐานสิบ</th><th>ไบนารี</th></tr>
+      <tr><td>0</td><td class="num">0000</td><td>8</td><td class="num">1000</td></tr>
+      <tr><td>1</td><td class="num">0001</td><td>9</td><td class="num">1001</td></tr>
+      <tr><td>2</td><td class="num">0010</td><td>10</td><td class="num">1010</td></tr>
+      <tr><td>3</td><td class="num">0011</td><td>11</td><td class="num">1011</td></tr>
+      <tr><td>4</td><td class="num">0100</td><td>12</td><td class="num">1100</td></tr>
+      <tr><td>5</td><td class="num">0101</td><td>13</td><td class="num">1101</td></tr>
+      <tr><td>6</td><td class="num">0110</td><td>14</td><td class="num">1110</td></tr>
+      <tr><td>7</td><td class="num">0111</td><td>15</td><td class="num">1111</td></tr>
+    </table>
+    <div>
+      <p>ใช้เพียง <b>0 และ 1</b> → เปลี่ยนหลักเร็วกว่าฐานสิบ · แต่ละหลักเรียกว่า <b class="hl">บิต (bit)</b></p>
+      <p class="frag small muted">สังเกตแบบรูป: บิตขวาสุดสลับทุกครั้ง · บิตถัดไปสลับทุก 2 · ทุก 4 · ทุก 8</p>
+      <div class="callout tip frag"><b>n บิต นับได้ 0 ถึง 2<sup>n</sup> − 1</b><br><span class="mono">5 บิต: 2⁵ − 1 = 31 · 6 บิต: 2⁶ − 1 = 63</span></div>
+    </div>
+  </div>
+  <aside class="notes">ตารางที่ 2.1 · ให้นักศึกษานับนิ้วแบบไบนารี: นิ้วเดียวแทน 1 บิต มือเดียวนับได้ถึง 31</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.2.2</span>ค่าน้ำหนักของบิต · LSB และ MSB</h2>
+  <table class="data" style="font-size:19px;margin-bottom:16px">
+    <tr><th colspan="8">กำลังของสอง (จำนวนเต็ม)</th><th colspan="6" style="background:var(--accent)">กำลังติดลบของสอง (เศษส่วน)</th></tr>
+    <tr><td>2⁷</td><td>2⁶</td><td>2⁵</td><td>2⁴</td><td>2³</td><td>2²</td><td>2¹</td><td>2⁰</td><td>2⁻¹</td><td>2⁻²</td><td>2⁻³</td><td>2⁻⁴</td><td>2⁻⁵</td><td>2⁻⁶</td></tr>
+    <tr class="num"><td>128</td><td>64</td><td>32</td><td>16</td><td>8</td><td>4</td><td>2</td><td>1</td><td>.5</td><td>.25</td><td>.125</td><td>.0625</td><td>.03125</td><td>.015625</td></tr>
+  </table>
+  <div class="grid-2" style="font-size:22px">
+    <div class="card frag"><b class="hl">LSB</b> (Least Significant Bit) — บิตขวาสุดของจำนวนเต็ม ค่าน้ำหนัก 2⁰ = 1</div>
+    <div class="card frag"><b class="hl">MSB</b> (Most Significant Bit) — บิตซ้ายสุด · หลัง <b>จุดทวินิยม (binary point)</b> บิตแรกมีค่า 2⁻¹ = 0.5</div>
+  </div>
+  <aside class="notes">ตารางที่ 2.2 · ให้ท่องค่ากำลังของสองถึง 2¹⁰ = 1024 ได้จะช่วยมาก</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.2.3</span>ไบนารี → ฐานสิบ: บวกค่าน้ำหนักของบิตที่เป็น 1</h2>
+  <div class="grid-2" style="font-size:23px">
+    <div class="card"><b>ตัวอย่างที่ 2.3</b> &nbsp;1011001₂
+      <div class="frag mono" style="margin-top:8px">= 2⁶ + 2⁴ + 2³ + 2⁰<br>= 64 + 16 + 8 + 1 = <b class="acc">89</b></div></div>
+    <div class="card"><b>ตัวอย่างที่ 2.4</b> &nbsp;0.1101₂
+      <div class="frag mono" style="margin-top:8px">= 2⁻¹ + 2⁻² + 2⁻⁴<br>= 0.5 + 0.25 + 0.0625 = <b class="acc">0.8125</b></div></div>
+  </div>
+  <p class="small muted frag" style="margin-top:20px">บิตที่เป็น 0 ไม่ต้องสนใจ</p>
+  <aside class="notes">ให้ลองทำในใจ: 11111111₂ = ? (255 = 2⁸ − 1)</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: ค่าน้ำหนักประจำบิต</h2>
+  <div class="body"><div data-widget="bitweights"></div></div>
+  <aside class="notes">กด +1 ซ้ำ ๆ ให้เห็นแบบรูปการนับ · ป้อน 23.75 แล้วดูส่วนเศษส่วน · ให้นักศึกษาหาเลข 8 บิตที่มากที่สุด</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.3.1</span>ฐานสิบ → ไบนารี: วิธีผลรวมของค่าน้ำหนัก</h2>
+  <p>แยกเลขเป็นผลบวกของกำลังสอง แล้วใส่ 1 ในบิตนั้น ๆ · เช่น 9 = 8 + 1 = 2³ + 2⁰ = <b class="mono acc">1001</b></p>
+  <table class="data" style="font-size:22px">
+    <tr><th>ตัวอย่างที่ 2.5</th><th>แยกค่าน้ำหนัก</th><th>ผลลัพธ์</th></tr>
+    <tr class="frag"><td>13</td><td>8 + 4 + 1</td><td class="num"><b class="acc">1101</b></td></tr>
+    <tr class="frag"><td>47</td><td>32 + 8 + 4 + 2 + 1</td><td class="num"><b class="acc">101111</b></td></tr>
+    <tr class="frag"><td>68</td><td>64 + 4</td><td class="num"><b class="acc">1000100</b></td></tr>
+    <tr class="frag"><td>95</td><td>64 + 16 + 8 + 4 + 2 + 1</td><td class="num"><b class="acc">1011111</b></td></tr>
+  </table>
+  <aside class="notes">เทคนิค: หากำลังสองที่ใหญ่ที่สุดที่ไม่เกินจำนวนนั้น แล้วลบออกไปเรื่อย ๆ</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.3.2</span>วิธีหารด้วย 2 แบบวนซ้ำ (จำนวนเต็ม)</h2>
+  <div class="cols">
+    <div class="calcbox">
+      <table class="ct">
+        <tr><td>14</td><td>÷ 2 =</td><td>7</td><td class="l">เศษ</td><td class="r">0</td><td class="l" style="color:var(--accent)">← LSB</td></tr>
+        <tr class="frag"><td>7</td><td>÷ 2 =</td><td>3</td><td class="l">เศษ</td><td class="r">1</td><td></td></tr>
+        <tr class="frag"><td>3</td><td>÷ 2 =</td><td>1</td><td class="l">เศษ</td><td class="r">1</td><td></td></tr>
+        <tr class="frag"><td>1</td><td>÷ 2 =</td><td>0</td><td class="l">เศษ</td><td class="r">1</td><td class="l" style="color:var(--accent)">← MSB</td></tr>
+      </table>
+    </div>
+    <div>
+      <ul class="small">
+        <li>หารด้วย 2 ไปเรื่อย ๆ จนผลหารเป็น 0</li>
+        <li>เศษตัวแรก = <b>LSB</b> · เศษตัวสุดท้าย = <b>MSB</b></li>
+        <li><b>อ่านเศษจากล่างขึ้นบน</b></li>
+      </ul>
+      <div class="callout tip frag">14₁₀ = <b class="mono">1110₂</b><br><span class="small">ตัวอย่างที่ 2.6: 17 = 10001 · 53 = 110101</span></div>
+    </div>
+  </div>
+  <aside class="notes">ใช้ได้เฉพาะจำนวนเต็ม · ส่วนเศษส่วนใช้การคูณด้วย 2</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.3.3</span>เศษส่วนฐานสิบ → ไบนารี</h2>
+  <div class="cols">
+    <div>
+      <p><b>① ผลรวมของค่าน้ำหนัก</b><br><span class="mono">0.625 = 0.5 + 0.125 = 2⁻¹ + 2⁻³ = <b class="acc">0.101</b></span></p>
+      <p class="frag"><b>② คูณด้วย 2 แบบวนซ้ำ</b> — ส่วนจำนวนเต็มของผลคูณคือบิต <b>อ่านจากบนลงล่าง</b> หยุดเมื่อเศษส่วนเป็น 0 (หรือได้จำนวนบิตที่ต้องการ)</p>
+    </div>
+    <div class="calcbox frag">
+      <table class="ct">
+        <tr><td>0.3125</td><td>× 2 =</td><td>0.625</td><td>→</td><td class="r">0</td><td class="l" style="color:var(--accent)">← MSB</td></tr>
+        <tr><td>0.625</td><td>× 2 =</td><td>1.25</td><td>→</td><td class="r">1</td><td></td></tr>
+        <tr><td>0.25</td><td>× 2 =</td><td>0.5</td><td>→</td><td class="r">0</td><td></td></tr>
+        <tr><td>0.5</td><td>× 2 =</td><td>1.0</td><td>→</td><td class="r">1</td><td></td></tr>
+        <tr class="sum"><td colspan="6" style="text-align:left">0.3125 = <span class="r">0.0101₂</span></td></tr>
+      </table>
+    </div>
+  </div>
+  <aside class="notes">ให้ลองกับ 0.1 ในแบบจำลองถัดไป — ได้บิตวนซ้ำไม่จบ เป็นเหตุผลที่ 0.1 + 0.2 ≠ 0.3 ในภาษาโปรแกรม</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: หาร/คูณด้วย 2 ทีละขั้น</h2>
+  <div class="body"><div data-widget="dec2bin"></div></div>
+  <aside class="notes">ป้อน 23.75 → ใช้ทั้งสองวิธีพร้อมกัน · ป้อน 0.1 → เห็นคำเตือนเรื่องบิตวนซ้ำ</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.4.1</span>การบวกเลขไบนารี</h2>
+  <div class="cols">
+    <table class="data" style="font-size:24px">
+      <tr><th>บวก</th><th>ผล</th><th>sum</th><th>carry</th></tr>
+      <tr><td class="num">0 + 0</td><td class="num">0</td><td>0</td><td>0</td></tr>
+      <tr><td class="num">0 + 1</td><td class="num">1</td><td>1</td><td>0</td></tr>
+      <tr><td class="num">1 + 0</td><td class="num">1</td><td>1</td><td>0</td></tr>
+      <tr><td class="num">1 + 1</td><td class="num"><b class="acc">1</b>0</td><td>0</td><td><b class="acc">1</b></td></tr>
+      <tr class="frag"><td class="num">1 + 1 + 1</td><td class="num"><b class="acc">1</b>1</td><td>1</td><td><b class="acc">1</b></td></tr>
+    </table>
+    <div>
+      <p class="small">เมื่อมี<b>ตัวทด (carry)</b> จะกลายเป็นการบวก 3 บิต (2 บิตของตัวเลข + ตัวทด)</p>
+      <div class="calcbox ra frag"><span class="c">1 1  </span><br>0 1 1<br>+ 0 0 1<hr><span class="r">1 0 0</span></div>
+      <p class="small muted frag">11 + 1 = 100 (3 + 1 = 4)</p>
+    </div>
+  </div>
+  <aside class="notes">ตารางนี้คือที่มาของวงจร half adder / full adder ในบทที่ 7</aside>
+</section>
+
+<section class="slide">
+  <h2>ตัวอย่างที่ 2.7 · บวกเลขไบนารี</h2>
+  <div class="grid-2" style="grid-template-columns:repeat(4,1fr);font-size:20px">
+    <div class="card"><b>(I)</b><div class="calcbox" style="font-size:24px;text-align:right;white-space:pre">10<br>+ 11<hr><span class="r frag">101</span></div><div class="frag mini muted">2 + 3 = 5</div></div>
+    <div class="card"><b>(II)</b><div class="calcbox" style="font-size:24px;text-align:right;white-space:pre">101<br>+ 10<hr><span class="r frag">111</span></div><div class="frag mini muted">5 + 2 = 7</div></div>
+    <div class="card"><b>(III)</b><div class="calcbox" style="font-size:24px;text-align:right;white-space:pre">110<br>+ 11<hr><span class="r frag">1001</span></div><div class="frag mini muted">6 + 3 = 9</div></div>
+    <div class="card"><b>(IV)</b><div class="calcbox" style="font-size:24px;text-align:right;white-space:pre">101<br>+100<hr><span class="r frag">1001</span></div><div class="frag mini muted">5 + 4 = 9</div></div>
+  </div>
+  <aside class="notes">ตรวจคำตอบด้วยฐานสิบทุกครั้ง</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.4.2–2.4.4</span>ลบ · คูณ · หาร</h2>
+  <div class="grid-3" style="font-size:21px">
+    <div class="card"><b class="hl">ลบ</b><br><span class="mono">0 − 0 = 0<br>1 − 1 = 0<br>1 − 0 = 1<br>10 − 1 = 1<br>0 − 1 → ยืม 1 จากหลักซ้าย</span><div class="frag mini" style="margin-top:6px">ตย. 2.8: 10 − 01 = <b class="acc mono">01</b> · 11 − 10 = <b class="acc mono">01</b></div></div>
+    <div class="card frag"><b class="hl">คูณ</b><br><span class="mono">0 × 0 = 0<br>0 × 1 = 0<br>1 × 0 = 0<br>1 × 1 = 1</span><div class="mini" style="margin-top:6px">ผลคูณย่อย + เลื่อนซ้าย แล้วบวก<br>ตย. 2.9: 101 × 111 = <b class="acc mono">100011</b> (5×7=35)</div></div>
+    <div class="card frag"><b class="hl">หาร</b><br>ทำเหมือนหารยาวฐานสิบ<div class="mini" style="margin-top:6px">ตย. 2.10: 110 ÷ 11 = <b class="acc mono">10</b> (6÷3=2)<br>100 ÷ 10 = <b class="acc mono">10</b> (4÷2=2)</div></div>
+  </div>
+  <aside class="notes">การคูณไบนารีง่ายมากเพราะแต่ละผลคูณย่อยเป็นได้แค่ “ตัวตั้งเอง” หรือ “ศูนย์”</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: เครื่องคิดเลขไบนารีแบบแสดงวิธีทำ</h2>
+  <div class="body"><div data-widget="binarith"></div></div>
+  <aside class="notes">ใช้โจทย์แบบฝึกหัดที่ 2.3: 1101 + 1010, 10111 + 01101, 1101 − 0100, 1001 − 0111, 110 × 111, 1100 ÷ 011 · ให้นักศึกษาทำบนกระดาษก่อนแล้วตรวจกับแบบจำลอง</aside>
+</section>
+
+<section class="slide">
+  <h2>สรุปสัปดาห์ที่ 2 · งานที่มอบหมาย</h2>
+  <div class="cols" style="align-items:start">
+    <ul style="font-size:22px">
+      <li>ค่าประจำหลัก: ค่า = Σ (เลขในหลัก × ฐาน<sup>ตำแหน่ง</sup>)</li>
+      <li>n บิตนับได้ 0 ถึง 2ⁿ − 1</li>
+      <li>ฐานสิบ → ไบนารี: ผลรวมค่าน้ำหนัก, หาร 2 (อ่านล่าง→บน), คูณ 2 (อ่านบน→ล่าง)</li>
+      <li>บวก 1 + 1 = 10 (ตัวทด) · ลบ 0 − 1 ต้องยืม</li>
+    </ul>
+    <div class="card" style="font-size:20px">
+      <b>✍️ แบบฝึกหัด</b> (ในหน้าเนื้อหา)<br>แบบฝึกหัดที่ 2.1 · 2.2 · 2.3
+      <p class="mini muted" style="margin-top:10px">สัปดาห์หน้า: 1’s/2’s complement · เลขติดเครื่องหมาย · floating-point · ฐานสิบหก/แปด · BCD · Gray · ASCII</p>
+    </div>
+  </div>
+  <aside class="notes">ปิดท้ายสัปดาห์ที่ 2 — สัปดาห์ที่ 3 เริ่มที่สไลด์ถัดไป</aside>
+</section>
+
+<!-- ========== สัปดาห์ที่ 3 ========== -->
+<section class="slide section">
+  <div class="kicker">สัปดาห์ที่ 3</div>
+  <div class="no">02</div>
+  <h2>เลขติดเครื่องหมาย · ฐานสิบหก · รหัสดิจิทัล</h2>
+  <p class="muted">หัวข้อ 2.5–2.11</p>
+  <aside class="notes">ทบทวนสั้น ๆ: ให้แปลง 45 เป็นไบนารี (101101) และบวก 1011 + 0110 (10001) เป็นการวอร์มอัป</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.5</span>1’s complement และ 2’s complement</h2>
+  <div class="grid-2" style="font-size:23px">
+    <div class="card"><b class="hl">1’s complement</b> = กลับทุกบิต (0↔1)<div class="calcbox" style="margin-top:10px;font-size:24px">1 0 1 1 0 1 0 0<br><span class="r">0 1 0 0 1 0 1 1</span></div><div class="mini muted" style="margin-top:6px">วงจร: เกท NOT ทีละบิต (รูปที่ 2.1)</div></div>
+    <div class="card frag"><b class="hl">2’s complement</b> = 1’s complement + 1<div class="calcbox ra" style="margin-top:10px;font-size:24px">0 1 0 0 1 0 1 1<br>+ 1<hr><span class="r">0 1 0 0 1 1 0 0</span></div><div class="mini muted" style="margin-top:6px">วงจร: NOT + วงจรบวก (รูปที่ 2.2)</div></div>
+  </div>
+  <div class="callout tip frag" style="font-size:20px"><b>ทางลัด (ตัวอย่างที่ 2.12):</b> ลอกบิตจาก LSB ไปจนถึง 1 ตัวแรก (รวม 1 นั้น) แล้วกลับบิตที่เหลือทั้งหมด → 1011<u>0100</u> → 0100<u>1100</u></div>
+  <aside class="notes">อภิปราย: ถ้าได้ 2’s complement มา จะหาเลขเดิม (true binary) อย่างไร? → ทำ 2’s complement ซ้ำอีกครั้ง</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: 1’s และ 2’s complement</h2>
+  <div class="body"><div data-widget="complement"></div></div>
+  <aside class="notes">ลอง 00000000 และ 10000000 — 2’s complement ได้ค่าเดิม เป็นกรณีพิเศษ (0 และ −128)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.6</span>ตัวเลขติดเครื่องหมาย 3 รูปแบบ</h2>
+  <div class="statement" style="background:var(--accent-soft);border-left:6px solid var(--accent);padding:10px 18px;border-radius:0 12px 12px 0;font-size:22px;margin-bottom:18px"><b>sign bit</b> = บิตซ้ายสุด · 0 = บวก · 1 = ลบ</div>
+  <table class="data" style="font-size:22px">
+    <tr><th>รูปแบบ</th><th>+23</th><th>−23</th><th>วิธีหาค่าลบ</th></tr>
+    <tr><td>sign-magnitude</td><td class="num">00010111</td><td class="num"><b class="acc">1</b>0010111</td><td>เปลี่ยน sign bit เป็น 1</td></tr>
+    <tr class="frag"><td>1’s complement</td><td class="num">00010111</td><td class="num"><b class="acc">11101000</b></td><td>1’s complement ของค่าบวก</td></tr>
+    <tr class="frag"><td>2’s complement ⭐</td><td class="num">00010111</td><td class="num"><b class="acc">11101001</b></td><td>2’s complement ของค่าบวก</td></tr>
+  </table>
+  <p class="small frag" style="margin-top:14px">ตัวอย่างที่ 2.13: −75 → SM <span class="mono">11001011</span> · 1’s <span class="mono">10110100</span> · 2’s <span class="mono">10110101</span></p>
+  <aside class="notes">ค่าบวกเหมือนกันทั้งสามรูปแบบ ต่างกันแค่ค่าลบ · ⭐ 2’s complement นิยมที่สุด</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.6.5</span>หาค่าฐานสิบของเลขติดเครื่องหมาย</h2>
+  <div class="grid-3" style="font-size:20px">
+    <div class="card"><b class="hl">sign-magnitude</b><br>บวกค่าน้ำหนัก magnitude แล้วใส่เครื่องหมาย<div class="mono mini" style="margin-top:8px">ตย. 2.14: 11010101<br>64+16+4+1 = 85 → <b class="acc">−85</b></div></div>
+    <div class="card frag"><b class="hl">1’s complement</b><br>sign bit มีค่า −2⁷ · ถ้าเป็นลบ บวกเพิ่ม 1<div class="mono mini" style="margin-top:8px">ตย. 2.15: 11001100<br>−128+64+8+4 = −52<br>−52 + 1 = <b class="acc">−51</b></div></div>
+    <div class="card frag"><b class="hl">2’s complement</b><br>sign bit มีค่า −2⁷ แล้วบวกได้เลย<div class="mono mini" style="margin-top:8px">ตย. 2.16: 11101101<br>−128+64+32+8+4+1<br>= <b class="acc">−19</b></div></div>
+  </div>
+  <aside class="notes">อภิปราย: ทำไม 2’s complement นิยมที่สุด? → มีศูนย์ตัวเดียว, หาค่าด้วยวิธีเดียวทั้งบวกและลบ, ลบด้วยการบวกได้เลย</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.6.6</span>ช่วงของเลขติดเครื่องหมาย (2’s complement)</h2>
+  <table class="data" style="font-size:22px">
+    <tr><th>ไบต์</th><th>บิต</th><th>จำนวนรูปแบบ</th><th>ช่วงเลขติดเครื่องหมาย</th></tr>
+    <tr><td>1</td><td>8</td><td class="num">256 (2⁸)</td><td class="num">−128 ถึง +127</td></tr>
+    <tr><td>2</td><td>16</td><td class="num">65,536 (2¹⁶)</td><td class="num">−32,768 ถึง +32,767</td></tr>
+    <tr><td>4</td><td>32</td><td class="num">4,294,967,296 (2³²)</td><td class="num">−2,147,483,648 ถึง +2,147,483,647</td></tr>
+    <tr class="frag"><td>n/8</td><td>n</td><td class="num">2ⁿ</td><td class="num"><b class="acc">−(2ⁿ⁻¹) ถึง +(2ⁿ⁻¹ − 1)</b></td></tr>
+  </table>
+  <aside class="notes">ตารางที่ 2.3 · เชื่อมกับ int8/int16/int32 ในภาษาโปรแกรม</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: บิตชุดเดียว ตีความ 3 แบบ</h2>
+  <div class="body"><div data-widget="signed" data-view="table"></div></div>
+  <aside class="notes">คลิกบิตแล้วดูค่าในแต่ละรูปแบบ · ลอง 10000000 (−0 / −127 / −128) · ป้อน −23 และ −75 ในช่องแปลงค่า</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: วงล้อเลข 4 บิต</h2>
+  <div class="body"><div data-widget="signed" data-view="wheel"></div></div>
+  <aside class="notes">สลับ 3 รูปแบบ ให้สังเกต −0 ใน sign-magnitude และ 1’s complement · 2’s complement มีศูนย์ตัวเดียวจึงได้ −8 · การเดินจาก 0111 → 1000 คือ overflow (โยงไปหัวข้อ 2.7)</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.6.7</span>Floating-point แบบ Single-precision (IEEE 754)</h2>
+  <svg viewBox="0 0 1100 120" style="width:100%;margin-bottom:10px">
+    <g font-family="var(--mono)" font-size="22" text-anchor="middle">
+      <rect x="0" y="20" width="60" height="60" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/><text x="30" y="58" fill="var(--accent)" font-weight="700">S</text>
+      <rect x="60" y="20" width="300" height="60" fill="var(--brand-soft)" stroke="var(--brand)" stroke-width="2"/><text x="210" y="58" fill="var(--brand)" font-weight="700">E (8 บิต)</text>
+      <rect x="360" y="20" width="740" height="60" fill="var(--hi-soft)" stroke="var(--hi)" stroke-width="2"/><text x="730" y="58" fill="var(--hi)" font-weight="700">F — fraction / mantissa (23 บิต)</text>
+      <text x="30" y="108" font-size="15" fill="var(--ink-3)">31</text><text x="210" y="108" font-size="15" fill="var(--ink-3)">30 … 23</text><text x="730" y="108" font-size="15" fill="var(--ink-3)">22 … 0</text>
+    </g>
+  </svg>
+  <div class="cols" style="align-items:start">
+    <ul class="small">
+      <li>มาตรฐาน ANSI/IEEE 754-1985: single 32 · double 64 · extended 80 บิต</li>
+      <li class="frag">เขียนเป็น <b>1.xxxx × 2<sup>e</sup></b> → เก็บเฉพาะ xxxx (ได้บิต “1.” ฟรี = 24 บิต)</li>
+      <li class="frag"><b>biased exponent</b> E = e + 127 (e ตั้งแต่ −126 ถึง +127)</li>
+    </ul>
+    <div class="card frag" style="font-size:22px">ค่าตัวเลข = (−1)<sup>S</sup> (1 + F) (2<sup>E − 127</sup>)<br><span class="mini muted">กรณีพิเศษ: ทุกบิต 0 = 0.0 · E เป็น 1 ทั้งหมด + F เป็น 0 = infinity</span></div>
+  </div>
+  <aside class="notes">รูปที่ 2.3 · ตัวอย่างในเล่ม: 1011010010001 = 1.011010010001 × 2¹² → E = 139 = 10001011</aside>
+</section>
+
+<section class="slide">
+  <h2>ตัวอย่างที่ 2.17 · 3.619 × 10⁵ → single-precision</h2>
+  <ol class="small" style="line-height:1.9">
+    <li class="frag">3.619 × 10⁵ = 361900 = <span class="mono">1011000010110101100₂</span></li>
+    <li class="frag">= <span class="mono">1.011000010110101100 × 2¹⁸</span> → S = <b class="acc">0</b> (บวก)</li>
+    <li class="frag">E = 18 + 127 = 145 = <span class="mono hl">10010001</span></li>
+    <li class="frag">F = <span class="mono" style="color:var(--hi)">011000010110101100</span> + เติม 0 อีก 5 บิตให้ครบ 23 บิต</li>
+  </ol>
+  <div class="calcbox frag" style="font-size:24px"><span class="acc">0</span> <span class="hl">10010001</span> <span style="color:var(--hi)">01100001011010110000000</span></div>
+  <aside class="notes">ย้อนกลับ: 11001000110001110001000000000000 → S=1, E=145, F=.10001110001 → −1.10001110001 × 2¹⁸ = −407,680</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: IEEE 754 single-precision</h2>
+  <div class="body"><div data-widget="float"></div></div>
+  <aside class="notes">ลอง 0.1 → ค่าที่เก็บได้จริงไม่ตรง (0.100000001…) · คลิกบิต exponent ให้เห็นค่าเพิ่ม/ลดทีละเท่าตัว · กด ∞</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.7.1</span>บวกเลขติดเครื่องหมาย (2’s complement, 8 บิต)</h2>
+  <div class="grid-2" style="grid-template-columns:repeat(4,1fr);font-size:18px">
+    <div class="card"><b>กรณี 1</b><br>บวก + บวก
+      <table class="ct" style="font-size:19px;margin-top:4px">
+        <tr><td></td><td>00000111</td><td class="l" style="font-size:15px">(+7)</td></tr>
+        <tr><td></td><td>00000100</td><td class="l" style="font-size:15px">(+4)</td></tr>
+        <tr class="sum"><td></td><td><b class="acc">00001011</b></td><td class="l" style="font-size:15px">(+11)</td></tr>
+      </table></div>
+    <div class="card frag"><b>กรณี 2</b><br>บวก &gt; |ลบ|
+      <table class="ct" style="font-size:19px;margin-top:4px">
+        <tr><td></td><td>00001111</td><td class="l" style="font-size:15px">(+15)</td></tr>
+        <tr><td></td><td>11111010</td><td class="l" style="font-size:15px">(−6)</td></tr>
+        <tr class="sum"><td><s style="color:var(--ink-3)">1</s></td><td><b class="acc">00001001</b></td><td class="l" style="font-size:15px">(+9)</td></tr>
+      </table><div class="mini muted">ละทิ้งตัวทด</div></div>
+    <div class="card frag"><b>กรณี 3</b><br>|ลบ| &gt; บวก
+      <table class="ct" style="font-size:19px;margin-top:4px">
+        <tr><td></td><td>00010000</td><td class="l" style="font-size:15px">(+16)</td></tr>
+        <tr><td></td><td>11101000</td><td class="l" style="font-size:15px">(−24)</td></tr>
+        <tr class="sum"><td></td><td><b class="acc">11111000</b></td><td class="l" style="font-size:15px">(−8)</td></tr>
+      </table><div class="mini muted">ผลเป็น 2’s comp.</div></div>
+    <div class="card frag"><b>กรณี 4</b><br>ลบ + ลบ
+      <table class="ct" style="font-size:19px;margin-top:4px">
+        <tr><td></td><td>11111011</td><td class="l" style="font-size:15px">(−5)</td></tr>
+        <tr><td></td><td>11110111</td><td class="l" style="font-size:15px">(−9)</td></tr>
+        <tr class="sum"><td><s style="color:var(--ink-3)">1</s></td><td><b class="acc">11110010</b></td><td class="l" style="font-size:15px">(−14)</td></tr>
+      </table><div class="mini muted">ละทิ้งตัวทด</div></div>
+  </div>
+  <div class="callout warn frag" style="font-size:20px;margin-top:16px"><b>Overflow</b> — เกิดได้เฉพาะเมื่อ<b>เครื่องหมายเหมือนกัน</b> แล้วผลต้องใช้บิตเกินที่มี → sign bit ผิด เช่น 01111101 (+125) + 00111010 (+58) = 10110111 (อ่านได้ −73 ✗ ที่จริงคือ +183)</div>
+  <aside class="notes">ตัวเลขในแต่ละกรณีเป็นตัวอย่างประกอบ ตรวจด้วยแบบจำลองถัดไป · ตัวอย่าง overflow ในเล่ม: +151 ต้องใช้ magnitude 8 บิต</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.7.2–2.7.3</span>ลบ = บวกด้วย 2’s complement · คูณ/หาร = บวก/ลบซ้ำ</h2>
+  <div class="cols" style="align-items:start">
+    <div>
+      <p class="small"><b class="hl">A − B = A + (2’s complement ของ B)</b> แล้วละทิ้งตัวทด</p>
+      <div class="calcbox frag" style="font-size:22px"><div style="font:600 18px var(--font);margin-bottom:4px">ตย. 2.18 (I): 10 − 2</div>
+        <table class="ct" style="font-size:24px">
+          <tr><td></td><td>00001010</td><td class="l">(+10)</td></tr>
+          <tr><td>+</td><td>11111110</td><td class="l">(−2)</td></tr>
+          <tr class="sum"><td><s style="color:var(--accent)">1</s></td><td class="r">00001000</td><td class="l">(+8)</td></tr>
+        </table></div>
+    </div>
+    <div class="small">
+      <p class="frag"><b class="hl">คูณ</b> — direct addition: บวกตัวตั้งซ้ำตามตัวคูณ<br><span class="mini mono">ตย. 2.19: 01001101 × 4 = 77+77+77+77 = 308 (ต้องใช้ 9 บิต!)</span></p>
+      <p class="frag"><b class="hl">หาร</b> — ลบตัวหารซ้ำ (บวก 2’s complement) นับจำนวนครั้ง<br><span class="mini mono">ตย. 2.20: 100 ÷ 25 → ลบได้ 4 ครั้ง → 00000100</span></p>
+    </div>
+  </div>
+  <aside class="notes">ประเด็นสำคัญ: วงจรบวกตัวเดียว + วงจร 2’s complement ทำได้ทั้ง + − × ÷ · อภิปรายข้อดี/ข้อเสียของ direct addition (ง่ายแต่ช้า)</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: บวก/ลบ 2’s complement และ overflow</h2>
+  <div class="body"><div data-widget="signedadd"></div></div>
+  <aside class="notes">กดปุ่มกรณี 1–4 ตามเล่ม แล้วกด overflow · ลองตัวอย่างที่ 2.18 (IV) −120 − (−30) = −90</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.8</span>เลขฐานสิบหก (Hexadecimal)</h2>
+  <div class="cols wide-r">
+    <table class="data" style="font-size:19px">
+      <tr><th>10</th><th>2</th><th>16</th><th>10</th><th>2</th><th>16</th></tr>
+      <tr><td>0</td><td class="num">0000</td><td>0</td><td>8</td><td class="num">1000</td><td>8</td></tr>
+      <tr><td>1</td><td class="num">0001</td><td>1</td><td>9</td><td class="num">1001</td><td>9</td></tr>
+      <tr><td>2</td><td class="num">0010</td><td>2</td><td>10</td><td class="num">1010</td><td><b class="acc">A</b></td></tr>
+      <tr><td>3</td><td class="num">0011</td><td>3</td><td>11</td><td class="num">1011</td><td><b class="acc">B</b></td></tr>
+      <tr><td>4</td><td class="num">0100</td><td>4</td><td>12</td><td class="num">1100</td><td><b class="acc">C</b></td></tr>
+      <tr><td>5</td><td class="num">0101</td><td>5</td><td>13</td><td class="num">1101</td><td><b class="acc">D</b></td></tr>
+      <tr><td>6</td><td class="num">0110</td><td>6</td><td>14</td><td class="num">1110</td><td><b class="acc">E</b></td></tr>
+      <tr><td>7</td><td class="num">0111</td><td>7</td><td>15</td><td class="num">1111</td><td><b class="acc">F</b></td></tr>
+    </table>
+    <div class="small">
+      <p>16 สัญลักษณ์: 0–9 และ A–F · <b class="hl">1 หลัก = 4 บิตพอดี</b> → เขียนไบนารีให้สั้นลง</p>
+      <p class="frag">นับต่อ: … 1E, 1F, 20, 21 … · FF₁₆ = 255 · 100₁₆ = 256 · FFFF₁₆ = 65,535</p>
+    </div>
+  </div>
+  <aside class="notes">ตารางที่ 2.4 · ยกตัวอย่างการใช้งานจริง: สี #FF8800, ที่อยู่หน่วยความจำ, MAC address</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.8.2–2.8.5</span>แปลงฐานสิบหก</h2>
+  <div class="grid-2" style="font-size:20px">
+    <div class="card"><b class="hl">ไบนารี → hex</b> จับกลุ่มละ 4 บิตจากขวา<div class="mono mini">1101 1001 0110 1111 = <b class="acc">D96F</b><br><span style="color:var(--accent)">00</span>11 1101 1010 1110 1011 = <b class="acc">3DAEB</b></div></div>
+    <div class="card frag"><b class="hl">hex → ไบนารี</b> แทนแต่ละหลักด้วย 4 บิต<div class="mono mini">2A5C = 0010 1010 0101 1100<br>BEAD = 1011 1110 1010 1101</div></div>
+    <div class="card frag"><b class="hl">hex → ฐานสิบ</b> ถ่วงน้ำหนัก 16ⁿ<div class="mono mini">C4 = 12×16 + 4 = <b class="acc">196</b><br>A25D = 40960+512+80+13 = <b class="acc">41565</b></div></div>
+    <div class="card frag"><b class="hl">ฐานสิบ → hex</b> หารด้วย 16 แบบวนซ้ำ<div class="mono mini">420 ÷ 16 = 26 เศษ 4<br>26 ÷ 16 = 1 เศษ 10 (A)<br>1 ÷ 16 = 0 เศษ 1 → <b class="acc">1A4</b></div></div>
+  </div>
+  <aside class="notes">ตัวอย่างที่ 2.21–2.25</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.9</span>เลขฐานแปด (Octal)</h2>
+  <div class="cols">
+    <table class="data" style="font-size:22px">
+      <tr><th>ฐานสิบ</th><th>ไบนารี</th><th>ฐานแปด</th></tr>
+      <tr><td>0</td><td class="num">000</td><td>0</td></tr><tr><td>1</td><td class="num">001</td><td>1</td></tr>
+      <tr><td>2</td><td class="num">010</td><td>2</td></tr><tr><td>3</td><td class="num">011</td><td>3</td></tr>
+      <tr><td>4</td><td class="num">100</td><td>4</td></tr><tr><td>5</td><td class="num">101</td><td>5</td></tr>
+      <tr><td>6</td><td class="num">110</td><td>6</td></tr><tr><td>7</td><td class="num">111</td><td>7</td></tr>
+    </table>
+    <div>
+      <p><b class="hl">1 หลัก = 3 บิต</b> · ปัจจุบันลดความนิยมลง</p>
+      <div class="callout note frag small"><b>อภิปราย:</b> ใช้หลักเดียวกับฐานสิบหก — การนับ, ไบนารี ⇄ ฐานแปด (จับกลุ่ม 3 บิต), ฐานแปด → ฐานสิบ (ถ่วงน้ำหนัก 8ⁿ), ฐานสิบ → ฐานแปด (หารด้วย 8)</div>
+      <p class="mini muted frag">ลอง: 236₈ = 2×64 + 3×8 + 6 = 158₁₀ · 46₁₀ = 56₈</p>
+    </div>
+  </div>
+  <aside class="notes">ตารางที่ 2.5 · ให้ทำแบบฝึกหัดที่ 2.6 เป็นกลุ่ม แล้วตรวจกับแบบจำลองถัดไป · ตัวอย่างการใช้งาน: สิทธิ์ไฟล์ chmod 755 ใน Linux</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: แปลงเลขฐาน 2 · 8 · 10 · 16</h2>
+  <div class="body"><div data-widget="baseconv"></div></div>
+  <aside class="notes">กดตัวอย่างในเล่มทีละอัน · พิมพ์ในช่องฐานแปดเพื่อตรวจแบบฝึกหัดที่ 2.6</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.10</span>BCD (Binary Coded Decimal) · รหัส 8421</h2>
+  <table class="data" style="font-size:20px;margin-bottom:14px">
+    <tr><th>ฐานสิบ</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
+    <tr><th>BCD</th><td class="num">0000</td><td class="num">0001</td><td class="num">0010</td><td class="num">0011</td><td class="num">0100</td><td class="num">0101</td><td class="num">0110</td><td class="num">0111</td><td class="num">1000</td><td class="num">1001</td></tr>
+  </table>
+  <div class="cols" style="align-items:start">
+    <div class="small">
+      <p>แทน<b>ทีละหลัก</b>ของเลขฐานสิบด้วย 4 บิต · <b class="acc">1010–1111 = invalid codes</b></p>
+      <p class="frag mono mini">ตย. 2.26: 8376 = 1000 0011 0111 0110<br>ตย. 2.27: 0001 0100 1000 0111 = 1487</p>
+    </div>
+    <div class="callout tip frag small"><b>การบวก BCD</b><br>1) บวกแบบไบนารี<br>2) กลุ่มที่ผล ≤ 9 → ถูกต้อง<br>3) ผล > 9 หรือมีตัวทดจาก 4 บิต → <b>บวก 0110 (6)</b> แล้วส่งตัวทดไปกลุ่มถัดไป</div>
+  </div>
+  <aside class="notes">ทำไมบวก 6? เพราะต้องข้าม invalid codes 6 ตัว (1010–1111) · BCD ใช้ในจอแสดงผล 7-segment (บทที่ 7) และนาฬิกา</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: การบวก BCD</h2>
+  <div class="body"><div data-widget="bcd"></div></div>
+  <aside class="notes">ตัวอย่างที่ 2.28 (ไม่ต้องบวกแก้) และ 2.29 (ต้องบวกแก้) · กด 9+9 → 10010 ต้องบวก 6 แม้ 4 บิตล่างจะดูเหมือนถูก (0010) เพราะมีตัวทด</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.11.1</span>รหัสเกรย์ (Gray Code)</h2>
+  <div class="cols">
+    <div class="small">
+      <p>ไม่มีค่าน้ำหนัก คำนวณไม่ได้ แต่<b class="hl">ค่าติดกันต่างกันเพียง 1 บิต</b> → ใช้กับตำแหน่งเชิงมุมของเพลาหมุน</p>
+      <p class="frag"><b>ไบนารี → เกรย์:</b> MSB เหมือนเดิม แล้วบวกบิตคู่ติดกันโดยไม่สนตัวทด<br><span class="mono">10011 → <b class="acc">11010</b></span></p>
+      <p class="frag"><b>เกรย์ → ไบนารี:</b> MSB เหมือนเดิม แล้วบวกบิตไบนารีล่าสุดกับบิตเกรย์ถัดไป<br><span class="mono">11010 → <b class="acc">10011</b></span></p>
+    </div>
+    <table class="data" style="font-size:17px">
+      <tr><th>10</th><th>ไบนารี</th><th>เกรย์</th><th>10</th><th>ไบนารี</th><th>เกรย์</th></tr>
+      <tr><td>0</td><td class="num">0000</td><td class="num">0000</td><td>8</td><td class="num">1000</td><td class="num">1100</td></tr>
+      <tr><td>1</td><td class="num">0001</td><td class="num">0001</td><td>9</td><td class="num">1001</td><td class="num">1101</td></tr>
+      <tr><td>2</td><td class="num">0010</td><td class="num">0011</td><td>10</td><td class="num">1010</td><td class="num">1111</td></tr>
+      <tr><td>3</td><td class="num">0011</td><td class="num">0010</td><td>11</td><td class="num">1011</td><td class="num">1110</td></tr>
+      <tr><td>4</td><td class="num">0100</td><td class="num">0110</td><td>12</td><td class="num">1100</td><td class="num">1010</td></tr>
+      <tr><td>5</td><td class="num">0101</td><td class="num">0111</td><td>13</td><td class="num">1101</td><td class="num">1011</td></tr>
+      <tr><td>6</td><td class="num">0110</td><td class="num">0101</td><td>14</td><td class="num">1110</td><td class="num">1001</td></tr>
+      <tr><td>7</td><td class="num">0111</td><td class="num">0100</td><td>15</td><td class="num">1111</td><td class="num">1000</td></tr>
+    </table>
+  </div>
+  <aside class="notes">ตารางที่ 2.6 · “บวกโดยไม่สนตัวทด” คือ XOR ซึ่งจะเรียนในบทที่ 3</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: รหัสเกรย์และจานเข้ารหัส</h2>
+  <div class="body"><div data-widget="gray"></div></div>
+  <aside class="notes">สลับเป็น “จานรหัสไบนารี” แล้วเลื่อนไปตำแหน่ง 7 → 8 เห็น 4 บิตเปลี่ยนพร้อมกัน — เหตุผลที่ encoder ใช้รหัสเกรย์</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">2.11.2</span>รหัสแอสกี้ (ASCII)</h2>
+  <div class="cols">
+    <ul class="small">
+      <li><b>American Standard Code for Information Interchange</b> — รหัส alphanumeric</li>
+      <li class="frag"><b>128 ตัว = 7 บิต</b> (ใช้ 8 บิตโดย MSB = 0) → 00–7F₁₆</li>
+      <li class="frag"><b>00–1F</b>: control characters (NUL, LF, CR, ESC …) พิมพ์ไม่ได้</li>
+      <li class="frag"><b>20–7F</b>: ตัวอักษร ตัวเลข เครื่องหมาย</li>
+      <li class="frag"><b>Extended ASCII</b> (IBM PC): 80–FF เพิ่มอีก 128 ตัว (ไม่เป็นทางการ)</li>
+    </ul>
+    <div class="card frag" style="font-size:22px">
+      <span class="mono">'A' = 41₁₆ = 65 = 1000001</span><br>
+      <span class="mono">'a' = 61₁₆ = 97 = 1100001</span><br>
+      <span class="mono">'0' = 30₁₆ = 48 = 0110000</span><br>
+      <span class="mini muted">พิมพ์ใหญ่/เล็กต่างกันที่บิต 5 (32) · ตัวเลข '0'–'9' = 30–39₁₆</span>
+    </div>
+  </div>
+  <aside class="notes">ตารางที่ 2.7–2.8 · เชื่อมโยง: ภาษาไทยใช้ TIS-620 / Unicode (UTF-8) ซึ่งขยายจากแนวคิดเดียวกัน</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: ข้อความ ⇄ ASCII</h2>
+  <div class="body"><div data-widget="ascii"></div></div>
+  <aside class="notes">ให้นักศึกษาพิมพ์ชื่อตัวเองเป็นภาษาอังกฤษ แล้วอ่านรหัส hex · ถอดรหัส 48 65 6C 6C 6F</aside>
+</section>
+
+<section class="slide">
+  <h2>สรุปท้ายบท</h2>
+  <ul style="font-size:21px;line-height:1.5">
+    <li class="frag">ค่าประจำหลัก: ค่า = ผลรวม (เลขในหลัก × ค่าน้ำหนัก) · n บิตนับได้ 0 ถึง 2ⁿ − 1</li>
+    <li class="frag">ฐานสิบ → ไบนารี: ผลรวมค่าน้ำหนัก · หาร 2 (จำนวนเต็ม) · คูณ 2 (เศษส่วน)</li>
+    <li class="frag">1’s = กลับทุกบิต · 2’s = 1’s + 1 → การลบกลายเป็นการบวก</li>
+    <li class="frag">เลขติดเครื่องหมาย 3 แบบ — 2’s complement นิยมสุด ช่วง −(2ⁿ⁻¹) ถึง +(2ⁿ⁻¹ − 1) · overflow เมื่อบวกเครื่องหมายเดียวกัน</li>
+    <li class="frag">IEEE 754 single: S 1 + E 8 (biased +127) + F 23 บิต</li>
+    <li class="frag">hex 1 หลัก = 4 บิต · octal 1 หลัก = 3 บิต</li>
+    <li class="frag">BCD (บวก 6 เมื่อเกิน 9) · Gray (ต่างกัน 1 บิต) · ASCII (7 บิต 128 ตัว)</li>
+  </ul>
+  <aside class="notes">มอบหมาย: แบบฝึกหัดที่ 2.4–2.6 และแบบทดสอบท้ายบทบนเว็บ</aside>
+</section>
+
+<section class="slide">
+  <h2>เช็กความเข้าใจ</h2>
+  <div class="grid-2" style="font-size:21px;gap:16px">
+    <div class="card"><b>Q1</b> −19 ในรูป 2’s complement 8 บิต?<div class="frag acc mono" style="margin-top:6px">→ 11101101</div></div>
+    <div class="card"><b>Q2</b> 01100100 + 01000001 เกิด overflow หรือไม่?<div class="frag acc" style="margin-top:6px">→ เกิด (100 + 65 = 165 > 127 ได้ 10100101 = −91)</div></div>
+    <div class="card"><b>Q3</b> 2F₁₆ เป็นฐานสิบและฐานแปด?<div class="frag acc" style="margin-top:6px">→ 47₁₀ = 57₈</div></div>
+    <div class="card"><b>Q4</b> BCD 0111 + 0110 ได้อะไร?<div class="frag acc" style="margin-top:6px">→ 1101 > 9 → +0110 → 0001 0011 (13)</div></div>
+  </div>
+  <aside class="notes">ใช้เป็น exit ticket ท้ายสัปดาห์ที่ 3</aside>
+</section>
+
+<section class="slide section">
+  <div class="kicker">สัปดาห์หน้า</div>
+  <div class="no">03</div>
+  <h2>ลอจิกเกท</h2>
+  <p class="muted">NOT AND OR NAND NOR XOR XNOR · ผังเวลา · ตระกูลไอซี TTL/CMOS · noise margin · fan-out <span class="clo-chip">CLO4</span> <span class="clo-chip">CLO8</span> <span class="clo-chip">CLO9</span></p>
+  <aside class="notes">สัปดาห์หน้ามีปฏิบัติการทดสอบเกทพื้นฐานด้วยไอซีตระกูล 74 และอ่าน datasheet — ให้ทบทวนการใช้แผงทดลองจากบทที่ 1</aside>
+</section>
+
+</div></div>
+</body>
+</html>

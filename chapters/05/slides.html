@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>สไลด์ บทที่ 5 การลดรูปนิพจน์บูลีน · 517 112</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/slides.css">
+<script src="../../assets/js/site.js"></script>
+<script src="../../assets/js/logic.js"></script>
+<script src="../../assets/js/numbers.js"></script>
+<script src="../../assets/js/boolean.js"></script>
+<script src="../../assets/js/slides.js"></script>
+<script src="widgets.js"></script>
+<style>
+  .slide .eq { font: 700 26px var(--mono); }
+  .slide .deriv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; font: 700 21px var(--mono); align-items: baseline; }
+  .slide .deriv .why { font: 500 16px var(--font); color: var(--ink-3); }
+  .slide table.data td, .slide table.data th { padding: 4px 12px; }
+</style>
+</head>
+<body class="deck" data-footer="517 112 · บทที่ 5 การลดรูปนิพจน์บูลีน" data-lesson="index.html">
+<div class="stage"><div class="canvas">
+
+<section class="slide title">
+  <div class="kicker">517 112 DIGITAL LOGIC DESIGN · สัปดาห์ที่ 6</div>
+  <h1>บทที่ 5<br>การลดรูปนิพจน์บูลีน</h1>
+  <div class="en">Simplification of Boolean Expressions</div>
+  <div class="meta">CLO2 อธิบายเทคนิคการลดรูปวงจรตรรกะ<br>ปฏิบัติการ: ลดรูปและต่อวงจรเปรียบเทียบ</div>
+  <aside class="notes">บทนี้ออกสอบกลางภาคเยอะ — เน้นฝึกแผนผังคาร์โนห์ให้คล่อง</aside>
+</section>
+
+<section class="slide">
+  <div class="kicker">บทที่ 5</div>
+  <h2>จุดประสงค์ และเนื้อหาในบทนี้</h2>
+  <div class="cols wide-r" style="align-items:start">
+    <div class="card" style="font-size:20px"><b>🎯 จุดประสงค์</b>
+      <ol style="margin-top:6px;line-height:1.5"><li>ลดรูปด้วยพีชคณิตบูลีน</li><li>แปลงนิพจน์เป็น SOP</li><li>แปลงนิพจน์เป็น POS</li><li>ใช้แผนผังคาร์โนห์ลดรูปนิพจน์และวงจร</li></ol></div>
+    <ol style="font-size:22px;list-style:none;padding:0">
+      <li><span class="mono hl">5.1</span> ลดรูปด้วยพีชคณิตบูลีน</li><li><span class="mono hl">5.2</span> รูปแบบมาตรฐาน SOP / POS</li>
+      <li><span class="mono hl">5.3</span> นิพจน์ ⇄ ตารางค่าความจริง</li><li><span class="mono hl">5.4</span> แผนผังคาร์โนห์</li>
+      <li><span class="mono hl">5.5</span> แผนผังฯ ลดรูป SOP · don’t care</li><li><span class="mono hl">5.6</span> แผนผังฯ ลดรูป POS</li>
+    </ol>
+  </div>
+  <aside class="notes">ทำไมต้องลดรูป? → ใช้เกทน้อยลง ไอซีน้อยลง ราคาถูก กินไฟน้อย เร็วขึ้น</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">5.1</span>ลดรูปด้วยพีชคณิตบูลีน · ตัวอย่างที่ 5.1</h2>
+  <div class="cols wide-l" style="align-items:start">
+    <div class="deriv">
+      <span style="grid-column:1 / -1">AB + A(B + C) + B(B + C)</span>
+      <span class="frag">= AB + AB + AC + BB + BC</span><span class="why frag">กระจาย</span>
+      <span class="frag">= AB + AB + AC + B + BC</span><span class="why frag">ข้อ 7: BB = B</span>
+      <span class="frag">= AB + AC + B + BC</span><span class="why frag">ข้อ 5</span>
+      <span class="frag">= AB + AC + B</span><span class="why frag">ข้อ 10: B + BC = B</span>
+      <span class="frag acc">= B + AC</span><span class="why frag">ข้อ 10: AB + B = B</span>
+    </div>
+    <div class="frag"><div class="figbox"><img src="img/fig5-1.png" alt="รูปที่ 5.1" style="max-height:280px"></div><div class="cap">รูปที่ 5.1 · 5 เกท → 2 เกท ผลลัพธ์เหมือนกันทุกกรณี</div></div>
+  </div>
+  <aside class="notes">ตัวอย่างที่ 5.2–5.4 อยู่ในแบบจำลองถัดไป — ให้นักศึกษาเดาขั้นถัดไปก่อนกด</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: ลดรูปทีละขั้นและนับเกท</h2>
+  <div class="body"><div data-widget="algsimp"></div></div>
+  <aside class="notes">ตัวอย่างที่ 5.4 ใช้ DeMorgan ก่อน · แท็บ “ลองเอง” พิมพ์แบบฝึกหัดที่ 5.1 เพื่อตรวจคำตอบ</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">5.2</span>รูปแบบมาตรฐาน: SOP และ POS</h2>
+  <div class="grid-2" style="font-size:20px">
+    <div class="card"><b class="hl">Sum-of-products (SOP)</b><br>ผลบวกของพจน์การคูณ<div class="eq" style="font-size:20px;margin:6px 0">AB + BCD + AC</div>วงจร <b>AND-OR</b><div class="figbox" style="margin-top:8px"><img src="img/fig5-2.png" alt="รูปที่ 5.2" style="max-height:150px"></div></div>
+    <div class="card frag"><b class="hl">Product-of-sums (POS)</b><br>ผลคูณของพจน์การบวก<div class="eq" style="font-size:20px;margin:6px 0">(A + B)(B + C + D)(A + C)</div>วงจร <b>OR-AND</b><div class="figbox" style="margin-top:8px"><img src="img/fig5-3.png" alt="รูปที่ 5.3" style="max-height:150px"></div></div>
+  </div>
+  <p class="small frag" style="margin-top:12px"><b>โดเมน</b> = เซตตัวแปรในนิพจน์ · <b>มาตรฐาน</b> = ทุกพจน์มีตัวแปร<b>ครบทุกตัว</b>ในโดเมน · ขีดคร่อมหลายตัวแปร เช่น <span class="ov">ABC</span> ไม่ใช่พจน์การคูณ</p>
+  <aside class="notes">ตัวอย่างที่ 5.5: แปลงเป็น SOP ด้วยการกระจาย/DeMorgan</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">5.2</span>ทำให้เป็นมาตรฐาน · ค่าไบนารีตัวแทน</h2>
+  <div class="grid-2" style="font-size:19px">
+    <div class="card"><b>SOP มาตรฐาน</b> คูณด้วย (X + <span class="ov">X</span>) = 1<div class="mono" style="margin:6px 0">A<span class="ov">B</span>C = A<span class="ov">B</span>C(D + <span class="ov">D</span>) = A<span class="ov">B</span>CD + A<span class="ov">B</span>C<span class="ov">D</span></div>
+      <div class="frag">ค่าไบนารี: พจน์การคูณ = 1 เมื่อ <b>1 → ตัวแปร, 0 → complement</b><br><span class="mono">A<span class="ov">B</span>C<span class="ov">D</span> ↔ 1010</span></div></div>
+    <div class="card frag"><b>POS มาตรฐาน</b> บวก X<span class="ov">X</span> = 0 (ใช้ข้อ 12)<div class="mono" style="margin:6px 0">A + <span class="ov">B</span> + C = (A + <span class="ov">B</span> + C + D)(A + <span class="ov">B</span> + C + <span class="ov">D</span>)</div>
+      <div>ค่าไบนารี: พจน์การบวก = 0 เมื่อ <b>0 → ตัวแปร, 1 → complement</b><br><span class="mono">A + <span class="ov">B</span> + C + <span class="ov">D</span> ↔ 0101</span></div></div>
+  </div>
+  <div class="callout tip frag" style="font-size:20px;margin-top:14px"><b>SOP ↔ POS (ตย. 5.10):</b> 000, 010, 011, 101, 111 ใน SOP → combination ที่เหลือ 001, 100, 110 คือ POS<br><span class="mono">(A + B + <span class="ov">C</span>)(<span class="ov">A</span> + B + C)(<span class="ov">A</span> + <span class="ov">B</span> + C)</span></div>
+  <aside class="notes">ตัวอย่างที่ 5.6–5.10 ตรวจได้ในแบบจำลองถัดไป</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: SOP มาตรฐาน ⇄ POS มาตรฐาน</h2>
+  <div class="body"><div data-widget="stdform"></div></div>
+  <aside class="notes">ใช้กับแบบฝึกหัดที่ 5.2 · สังเกตว่า SOP + POS ครบทุก combination พอดี</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">5.3</span>นิพจน์มาตรฐาน ⇄ ตารางค่าความจริง</h2>
+  <div class="cols" style="align-items:start;grid-template-columns:1fr 1.7fr;gap:20px">
+    <ul class="tiny" style="line-height:1.5">
+      <li><b>SOP → ตาราง:</b> ใส่ 1 ในแถวของแต่ละพจน์การคูณ ที่เหลือ 0 (ตย. 5.11)</li>
+      <li class="frag"><b>POS → ตาราง:</b> ใส่ 0 ในแถวของแต่ละพจน์การบวก ที่เหลือ 1 (ตย. 5.12)</li>
+      <li class="frag"><b>ตาราง → SOP:</b> แถวที่ได้ 1 → 1 = ตัวแปร, 0 = complement</li>
+      <li class="frag"><b>ตาราง → POS:</b> แถวที่ได้ 0 → 0 = ตัวแปร, 1 = complement</li>
+    </ul>
+    <div class="body"><div data-widget="tt2expr"></div></div>
+  </div>
+  <aside class="notes">ค่าเริ่มต้นคือตารางที่ 5.3 (ตัวอย่างที่ 5.13) · คลิกเปลี่ยนเอาต์พุตแล้วดูนิพจน์เปลี่ยนตาม</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">5.4</span>แผนผังคาร์โนห์ (Karnaugh Map)</h2>
+  <div class="cols">
+    <div>
+      <div class="figbox"><img src="img/fig5-5b.png" alt="รูปที่ 5.5" style="max-height:300px"></div><div class="cap">รูปที่ 5.5 (ข) แผนผัง 4 ตัวแปร</div>
+    </div>
+    <ul class="small">
+      <li>จำนวน cell = 2ⁿ: 3 ตัวแปร = 8 · 4 ตัวแปร = 16</li>
+      <li class="frag">แถว AB · คอลัมน์ C หรือ CD เรียงแบบ<b class="hl">รหัสเกรย์</b> 00, 01, 11, 10</li>
+      <li class="frag">cell ที่<b>ติดกัน</b> (บน ล่าง ซ้าย ขวา) ต่างกัน <b>1 บิต</b> — แนวทแยงไม่นับ</li>
+      <li class="frag">ขอบซ้าย–ขวา และบน–ล่าง <b>ม้วนบรรจบ</b>กัน (รูปที่ 5.6)</li>
+    </ul>
+  </div>
+  <aside class="notes">ถามท้าย 5.4.1: ค่าไบนารี 010 อยู่ cell ไหนในแผนผัง 3 ตัวแปร?</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: cell ใดบ้างที่ติดกัน</h2>
+  <div class="body"><div data-widget="adjacency"></div></div>
+  <aside class="notes">คลิกมุมทั้งสี่ (0000, 0010, 1000, 1010) — ให้อภิปรายว่าทั้งสี่มุมติดกันอย่างไร</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">5.5.3</span>กฎการจัดกลุ่ม และการอ่านพจน์</h2>
+  <div class="cols" style="align-items:start">
+    <ol class="small">
+      <li>กลุ่มมี <b>1, 2, 4, 8, 16</b> cell</li>
+      <li class="frag">cell ในกลุ่มต้องติดกัน</li>
+      <li class="frag">กลุ่ม<b>ใหญ่ที่สุด</b> และ<b>น้อยกลุ่มที่สุด</b></li>
+      <li class="frag">1 ทุกตัวต้องอยู่ในกลุ่ม · ซ้อนกันได้ถ้าแต่ละกลุ่มมี 1 ที่ไม่ซ้ำ</li>
+    </ol>
+    <div class="frag">
+      <table class="data" style="font-size:18px"><tr><th>กลุ่ม</th><th>3 ตัวแปร</th><th>4 ตัวแปร</th></tr>
+        <tr><td>1 cell</td><td>3 ตัวแปร</td><td>4 ตัวแปร</td></tr><tr><td>2 cell</td><td>2</td><td>3</td></tr>
+        <tr><td>4 cell</td><td>1</td><td>2</td></tr><tr><td>8 cell</td><td>= 1</td><td>1</td></tr><tr><td>16 cell</td><td>—</td><td>= 1</td></tr></table>
+      <p class="small" style="margin-top:10px">อ่านพจน์: กำจัด<b class="acc">ตัวแปรขัดแย้ง</b> (ตัวแปรที่มีทั้งปกติและ complement ในกลุ่ม)</p>
+    </div>
+  </div>
+  <aside class="notes">ตัวอย่างที่ 5.18–5.20 · ตย. 5.19: B + <span class="ov">A</span>C + A<span class="ov">C</span>D</aside>
+</section>
+
+<section class="slide">
+  <h2 style="font-size:34px;margin-bottom:10px">ลองเอง: แผนผังคาร์โนห์ลดรูป SOP</h2>
+  <div class="body"><div data-widget="kmap" data-preset="5.21"></div></div>
+  <aside class="notes">กด “จัดกลุ่มถัดไป” ทีละกลุ่ม · 5.21: กลุ่ม 4 cell ม้วนบรรจบบน–ล่างให้ <span class="ov">B</span> · 5.22: ม้วนสองแนวได้ <span class="ov">D</span> + <span class="ov">B</span>C · ลองคลิก cell เปลี่ยนค่าเอง</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">5.5.4–5.5.5</span>จากตารางค่าความจริง · Don’t care</h2>
+  <div class="cols">
+    <div><div class="figbox"><img src="img/fig5-9b.png" alt="รูปที่ 5.9" style="max-height:300px"></div><div class="cap">รูปที่ 5.9 (ข)</div></div>
+    <div class="small">
+      <p>combination ที่<b>ไม่มีวันเกิด</b> เช่น BCD 1010–1111 → เขียน <b class="acc">X</b></p>
+      <p class="frag">X เป็น 0 หรือ 1 ก็ได้ → นำไป<b>ร่วมกลุ่ม</b>เมื่อช่วยให้กลุ่มใหญ่ขึ้น</p>
+      <div class="callout tip frag" style="font-size:19px">ไม่ใช้ X: A<span class="ov">B</span><span class="ov">C</span> + <span class="ov">A</span>BCD<br>ใช้ X: <b>A + BCD</b></div>
+    </div>
+  </div>
+  <aside class="notes">แบบจำลองในหน้าเนื้อหาหัวข้อ 5.5.5 กดปุ่ม “รูป 5.9” ให้ผลทั้งสองแบบ</aside>
+</section>
+
+<section class="slide">
+  <h2><span class="no">5.6</span>ลดรูป POS: จัดกลุ่มของ 0</h2>
+  <div class="cols" style="align-items:start">
+    <ul class="small">
+      <li>ใส่ <b>0</b> ใน cell ของแต่ละพจน์การบวก (ตย. 5.23)</li>
+      <li class="frag">จัดกลุ่ม 0 ด้วยกฎเดียวกับ SOP</li>
+      <li class="frag">อ่านพจน์การบวก: <b>0 → ตัวแปร, 1 → complement</b></li>
+      <li class="frag">ตย. 5.24: POS = <b class="acc">A(<span class="ov">B</span> + C)</b> · SOP ที่เทียบเท่า (จัดกลุ่ม 1) = A<span class="ov">B</span> + AC</li>
+    </ul>
+    <div class="body"><div data-widget="kmap" data-mode="pos" data-preset="5.24 (POS)"></div></div>
+  </div>
+  <aside class="notes">ลองสลับโหมด SOP ⇄ POS ในแผนผังเดียวกันให้เห็นว่าได้นิพจน์ที่เทียบเท่ากัน · ตย. 5.25 = (C + D)(A + B + D)(<span class="ov">A</span> + B + C)</aside>
+</section>
+
+<section class="slide">
+  <h2>สรุปท้ายบท</h2>
+  <ul style="font-size:21px;line-height:1.55">
+    <li class="frag">ลดรูปด้วยกฎ หลักเกณฑ์ และ DeMorgan → เกทน้อยลง ผลลัพธ์เหมือนเดิม</li>
+    <li class="frag">SOP = ผลบวกของพจน์การคูณ · POS = ผลคูณของพจน์การบวก · มาตรฐาน = ตัวแปรครบโดเมน</li>
+    <li class="frag">ขยายพจน์: × (X + <span class="ov">X</span>) สำหรับ SOP · + X<span class="ov">X</span> สำหรับ POS · หรือ numerical expansion</li>
+    <li class="frag">แผนผังคาร์โนห์เรียงตามรหัสเกรย์ · cell ติดกันต่าง 1 บิต (รวมการม้วนบรรจบ)</li>
+    <li class="frag">กลุ่ม 1, 2, 4, 8, 16 ให้ใหญ่และน้อยที่สุด → กำจัดตัวแปรขัดแย้ง · กลุ่ม 1 → SOP · กลุ่ม 0 → POS</li>
+    <li class="frag">don’t care (X) ร่วมกลุ่มได้เพื่อลดรูปให้เล็กลงอีก</li>
+  </ul>
+  <aside class="notes">มอบหมาย: แบบฝึกหัดที่ 5.1–5.5 และแบบทดสอบท้ายบท · สัปดาห์หน้าเป็นบทสุดท้ายก่อนสอบกลางภาค</aside>
+</section>
+
+<section class="slide">
+  <h2>เช็กความเข้าใจ</h2>
+  <div class="grid-2" style="font-size:21px;gap:16px">
+    <div class="card"><b>Q1</b> 1011 ในแผนผัง 4 ตัวแปร อยู่แถว/คอลัมน์ใด?<div class="frag acc" style="margin-top:6px">→ แถว AB = 10 (ล่างสุด) · คอลัมน์ CD = 11</div></div>
+    <div class="card"><b>Q2</b> กลุ่ม 8 cell ในแผนผัง 4 ตัวแปรให้พจน์กี่ตัวแปร?<div class="frag acc" style="margin-top:6px">→ 1 ตัวแปร</div></div>
+    <div class="card"><b>Q3</b> ลดรูป <span class="ov">A</span>B<span class="ov">C</span> + <span class="ov">A</span>BC + AB<span class="ov">C</span> + ABC<div class="frag acc" style="margin-top:6px">→ B (กลุ่ม 4 cell แถว 01 และ 11)</div></div>
+    <div class="card"><b>Q4</b> แถว 110 เอาต์พุต 0 ให้พจน์ใดใน POS?<div class="frag acc" style="margin-top:6px">→ (<span class="ov">A</span> + <span class="ov">B</span> + C)</div></div>
+  </div>
+  <aside class="notes">exit ticket</aside>
+</section>
+
+<section class="slide">
+  <div class="kicker">ปฏิบัติการสัปดาห์ที่ 6</div>
+  <h2>ลดรูปและต่อวงจรเปรียบเทียบ</h2>
+  <ol class="small" style="line-height:1.7">
+    <li>รูปที่ 5.1: วงจร 5 เกท เทียบวงจร 2 เกท ครบ 8 กรณี</li>
+    <li>ตย. 5.21: ลดรูปด้วยแผนผัง → ต่อ <span class="ov">B</span> + <span class="ov">A</span>C</li>
+    <li>เขียนใหม่เป็น NAND-NAND แล้วต่อด้วย 7400</li>
+    <li>Don’t care: วงจรตรวจ BCD = 7, 8, 9 (รูปที่ 5.9)</li>
+    <li>ตย. 5.24: ต่อทั้งแบบ POS และ SOP เปรียบเทียบจำนวนเกท</li>
+  </ol>
+  <p class="mini muted">รายละเอียดอยู่ท้ายหน้าเนื้อหาบทที่ 5</p>
+  <aside class="notes">ใบงานปฏิบัติการที่ 4</aside>
+</section>
+
+<section class="slide section">
+  <div class="kicker">สัปดาห์หน้า</div>
+  <div class="no">06</div>
+  <h2>การวิเคราะห์วงจรลอจิกแบบคอมไบเนชัน</h2>
+  <p class="muted">AND-OR · AND-OR-Invert · XOR/XNOR · สร้างวงจรจากนิพจน์และตารางค่าความจริง · มอบหมายโครงงานกลุ่ม <span class="clo-chip">CLO3</span> <span class="clo-chip">CLO5</span></p>
+  <aside class="notes">สัปดาห์ที่ 8 สอบกลางภาค (บทที่ 1–6)</aside>
+</section>
+
+</div></div>
+</body>
+</html>

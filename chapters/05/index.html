@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>บทที่ 5 การลดรูป นิพจน์บูลีน · 517 112</title>
+<meta name="description" content="517 112 การออกแบบวงจรตรรกะเชิงเลข — บทที่ 5 การลดรูป นิพจน์บูลีน (Simplification of Boolean Expressions)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Prompt:wght@400;600;700&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/book.css">
+<link rel="stylesheet" href="chapter.css">
+<script src="../../assets/js/site.js"></script>
+<script src="../../assets/js/logic.js"></script>
+<script src="../../assets/js/numbers.js"></script>
+<script src="../../assets/js/boolean.js"></script>
+<script src="widgets.js"></script>
+</head>
+<body>
+<!-- สร้างอัตโนมัติด้วย web/tools/build_chapter.py — แก้เนื้อหาที่ source/content_ch5.html หรือ chapter.json แล้วรันใหม่ -->
+<header class="topbar">
+  <a class="brand" href="../../index.html"><span class="chip">517 112</span><span>Digital Logic Design</span></a>
+  <span class="crumb">/ บทที่ 5 การลดรูป นิพจน์บูลีน</span>
+  <span class="spacer"></span>
+  <a class="btn sm" href="slides.html">▶ สไลด์</a>
+  <button class="btn sm icon" data-theme-toggle title="สลับโหมดสว่าง/มืด" aria-label="สลับธีม">◐</button>
+</header>
+
+<div class="layout">
+  <nav class="toc-side" aria-label="สารบัญบทที่ 5">
+    <h4>บทที่ 5</h4>
+    <ol><li><a href="#overview">ภาพรวมและจุดประสงค์</a></li><li><a href="#s5-1">5.1 การลดรูปนิพจน์บูลีนด้วยการใช้พีช…</a></li><li><a href="#s5-2">5.2 รูปแบบมาตรฐานของนิพจน์บูลีน</a></li><li class="sub"><a href="#s5-2-1">5.2.1 รูปแบบ Sum-of-products (SOP)</a></li><li class="sub"><a href="#s5-2-2">5.2.2 รูปแบบ Product-of-sums (POS)</a></li><li class="sub"><a href="#s5-2-3">5.2.3 การแปลงนิพจน์ SOP มาตรฐานให้เป็น…</a></li><li><a href="#s5-3">5.3 นิพจน์บูลีนและตารางค่าความจริง</a></li><li class="sub"><a href="#s5-3-1">5.3.1 การแปลงนิพจน์ SOP ให้เป็นตารางค่…</a></li><li class="sub"><a href="#s5-3-2">5.3.2 การแปลงนิพจน์ POS ให้เป็นตารางค่…</a></li><li class="sub"><a href="#s5-3-3">5.3.3 การสร้างนิพจน์มาตรฐานจากตารางค่า…</a></li><li><a href="#s5-4">5.4 แผนผังคาร์โนห์ (Karnaugh Map)</a></li><li class="sub"><a href="#s5-4-1">5.4.1 แผนผังคาร์โนห์แบบ 3 ตัวแปร</a></li><li class="sub"><a href="#s5-4-2">5.4.2 แผนผังคาร์โนห์แบบ 4 ตัวแปร</a></li><li class="sub"><a href="#s5-4-3">5.4.3 Cell Adjacency</a></li><li><a href="#s5-5">5.5 การใช้แผนผังคาร์โนห์สำหรับการลดร…</a></li><li class="sub"><a href="#s5-5-1">5.5.1 การจัดนิพจน์ SOP มาตรฐานเข้าสู่แ…</a></li><li class="sub"><a href="#s5-5-2">5.5.2 การจัดนิพจน์ SOP ที่ไม่เป็นมาตรฐ…</a></li><li class="sub"><a href="#s5-5-3">5.5.3 การใช้แผนผังคาร์โนห์เพื่อการลดรู…</a></li><li class="sub"><a href="#s5-5-4">5.5.4 การจัดแผนผังคาร์โนห์จากตารางค่าค…</a></li><li class="sub"><a href="#s5-5-5">5.5.5 เงื่อนไข “Don’t Care”</a></li><li><a href="#s5-6">5.6 การใช้แผนผังคาร์โนห์สำหรับการลดร…</a></li><li class="sub"><a href="#s5-6-1">5.6.1 การจัดนิพจน์ POS มาตรฐานเข้าสู่แ…</a></li><li class="sub"><a href="#s5-6-2">5.6.2 การใช้แผนผังคาร์โนห์เพื่อการลดรู…</a></li><li><a href="#summary">สรุปท้ายบท</a></li><li><a href="#quiz">แบบทดสอบท้ายบท</a></li><li><a href="#lab">ปฏิบัติการสัปดาห์ที่ 6</a></li></ol>
+    <div class="side-actions">
+      <a class="btn primary" href="slides.html">▶ เปิดสไลด์บรรยาย</a>
+      <a class="btn" href="../../index.html">← หน้ารายวิชา</a>
+    </div>
+  </nav>
+
+  <main class="lesson">
+    <div class="hero">
+      <div class="ch-label">CHAPTER 05 · สัปดาห์ที่ 6</div>
+      <h1>การลดรูป นิพจน์บูลีน</h1>
+      <div class="en">Simplification of Boolean Expressions</div>
+      <div class="meta"><span>บรรยาย 2 ชม. + ปฏิบัติการ 2 ชม.</span><span>CLO2</span><span>PLO10</span><span>6 หัวข้อ · 7 แบบจำลองเชิงโต้ตอบ</span></div>
+      <div class="hero-actions">
+        <a class="btn" href="slides.html">▶ สไลด์บรรยาย</a>
+        <a class="btn ghost" href="#quiz">แบบทดสอบท้ายบท</a>
+        <a class="btn ghost" href="#lab">ใบงานปฏิบัติการ</a>
+      </div>
+    </div>
+
+    <section id="overview">
+      <div class="grid-2">
+        <div class="card objectives">
+          <h3 style="font-size:18px">🎯 จุดประสงค์ของบทเรียน</h3>
+          <ol><li>สามารถลดรูปนิพจน์บูลีนให้อยู่ในรูปอย่างง่ายด้วยการใช้พีชคณิตบูลีน</li><li>สามารถแปลงนิพจน์บูลีนใด ๆ ให้อยู่ในรูปแบบ sum-of-products (SOP) ได้</li><li>สามารถแปลงนิพจน์บูลีนใด ๆ ให้อยู่ในรูปแบบ product-of-sums (POS) ได้</li><li>ใช้แผนผังคาร์โนห์ในการลดรูปนิพจน์และวงจรลอจิกได้</li></ol>
+        </div>
+        <div class="card">
+          <h3 style="font-size:18px">🧭 ความเชื่อมโยงกับ มคอ.3</h3>
+          <p style="margin:0 0 8px"><span class="clo-chip">CLO2</span> อธิบายเทคนิคการลดรูปวงจรตรรกะ</p>
+          <p style="margin:0;font-size:15px;color:var(--ink-2)"><b>กิจกรรม:</b> บรรยาย / แบบฝึกหัด · ปฏิบัติการ: ลดรูปและต่อวงจรเปรียบเทียบ<br><b>การประเมิน:</b> แบบฝึกหัดและรายงานผลการทดลอง (20%) · สอบกลางภาค บทที่ 1–6 (30%)</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="book">
+<section class="sec"><h2 id="s5-1"><span class="no">5.1</span> การลดรูปนิพจน์บูลีนด้วยการใช้พีชคณิตบูลีน</h2>
+<p class="lead">ในบทที่ 4 เราได้เรียนรู้พีชคณิตบูลีนในเรื่องของกฎ หลักเกณฑ์ และทฤษฎีบทของ DeMorgan ซึ่งเป็นความรู้พื้นฐานในการนำไปประยุกต์ใช้ในการลดรูปนิพจน์ลอจิก ซึ่งเมื่อนิพจน์สามารถถูกลดรูปให้อยู่ในรูปแบบที่ง่ายแล้ว ผลลัพธ์คือการที่เราจะใช้จำนวนเกทได้น้อยที่สุดเท่าที่จะเป็นไปได้นั่นเอง ลองพิจารณาจากตัวอย่างที่ 5.1 ในการลดรูปนิพจน์บูลีน</p>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.1</span></div>
+<div class="q">
+<p>จงใช้เทคนิคของพีชคณิตบูลีนเพื่อทำการลดรูปนิพจน์ต่อไปนี้</p>
+<div class="expr" data-k="e51"><span class="m">AB + A(B + C) + B(B + C)</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>ในแต่ละขั้นตอนให้พยายามใช้พีชคณิตเพื่อลดรูปนิพจน์ให้อยู่ในรูปแบบที่ง่ายที่สุด ซึ่งที่ปรากฏนี้เป็นเพียงแนวทางหนึ่งเท่านั้น</p>
+<ol class="steps">
+<li><span class="step">ขั้นที่ 1</span> ใช้กฎการกระจายในส่วนของพจน์ที่ 2 และพจน์ที่ 3 จะได้เป็น<div class="expr" data-k="e51"><span class="m">AB + AB + AC + BB + BC</span></div></li>
+<li><span class="step">ขั้นที่ 2</span> ใช้หลักเกณฑ์ข้อที่ 7 <span class="nw">(<span data-k="r7"><span class="m">BB = B</span></span>)</span> กับพจน์ที่ 4<div class="expr" data-k="e51"><span class="m">AB + AB + AC + B + BC</span></div></li>
+<li><span class="step">ขั้นที่ 3</span> ใช้หลักเกณฑ์ข้อที่ 5 <span class="nw">(<span data-k="r5"><span class="m">AB + AB = AB</span></span>)</span> กับสองพจน์แรก<div class="expr" data-k="e51"><span class="m">AB + AC + B + BC</span></div></li>
+<li><span class="step">ขั้นที่ 4</span> ใช้หลักเกณฑ์ข้อที่ 10 <span class="nw">(<span data-k="r10a"><span class="m">B + BC = B</span></span>)</span> กับสองพจน์สุดท้าย<div class="expr" data-k="e51"><span class="m">AB + AC + B</span></div></li>
+<li><span class="step">ขั้นที่ 5</span> ใช้หลักเกณฑ์ข้อที่ 10 <span class="nw">(<span data-k="r10b"><span class="m">AB + B = B</span></span>)</span> กับพจน์แรกและพจน์สุดท้าย<div class="expr" data-k="e51"><span class="m">B + AC</span></div></li>
+</ol>
+<p>ในจุดนี้จะพบว่านิพจน์ผลลัพธ์นี้ไม่สามารถลดรูปได้อีกต่อไป จึงได้ <span class="ans" data-k="e51"><span class="m">B + AC</span></span> เป็นคำตอบของการลดรูป</p>
+</details></div>
+<p>ถ้าเราลองนำนิพจน์ตั้งต้นและนิพจน์ผลลัพธ์จากตัวอย่างที่ 5.1 มาเขียนเป็นวงจร เราจะได้ผลดังแสดงในรูปที่ 5.1</p>
+<figure class="c"><img alt="รูปที่ 5.1 วงจรเกทสำหรับนิพจน์ในตัวอย่างที่ 5.1" loading="lazy" src="img/fig5-1.png" style="width:652px"/>
+<div class="sublab"><span style="left:31%">(ก)</span><span style="left:78%">(ข)</span></div>
+<figcaption><span class="cap-no">รูปที่ 5.1</span> วงจรเกทสำหรับนิพจน์ในตัวอย่างที่ 5.1</figcaption></figure>
+<p>เราจะเห็นอย่างชัดเจนว่านิพจน์ตั้งต้น <span data-k="e51"><span class="m">AB + A(B + C) + B(B + C)</span></span> ที่แสดงในส่วน (ก) นั้นจะต้องใช้เกทต่าง ๆ ถึง 5 ตัว ในขณะที่นิพจน์ที่เกิดจากการลดรูปที่แสดงในส่วน (ข) นั้นใช้เกทเพียง 2 ตัวเท่านั้น แต่วงจรเกททั้งสองนี้จะได้ผลลัพธ์ที่เหมือนกันทุกประการ กล่าวคือ ทั้งสองวงจรมีอินพุต <em>A</em>, <em>B</em> และ <em>C</em> และให้เอาต์พุตเท่ากันในทุกกรณี ต่อไปลองพิจารณาตัวอย่างต่าง ๆ ต่อไปนี้เพื่อเป็นแนวทางและความเข้าใจให้มากขึ้น</p>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.2</span></div>
+<div class="q">
+<p>จงลดรูปนิพจน์ต่อไปนี้</p>
+<div class="expr" data-k="e52"><span class="m">[A<span class="ov">B</span>(C + BD) + <span class="ov">A</span><span class="ov">B</span>]C</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<ol class="steps">
+<li><span class="step">ขั้นที่ 1</span> ใช้กฎการกระจายเพื่อจัดการพจน์ที่อยู่ในวงเล็บเหลี่ยม<div class="expr" data-k="e52"><span class="m">(A<span class="ov">B</span>C + A<span class="ov">B</span>BD + <span class="ov">A</span><span class="ov">B</span>)C</span></div></li>
+<li><span class="step">ขั้นที่ 2</span> ใช้หลักเกณฑ์ข้อที่ 8 <span class="nw">(<span data-k="r8"><span class="m"><span class="ov">B</span>B = 0</span></span>)</span> กับพจน์ที่สองที่อยู่ในวงเล็บ<div class="expr" data-k="e52"><span class="m">(A<span class="ov">B</span>C + A·0·D + <span class="ov">A</span><span class="ov">B</span>)C</span></div></li>
+<li><span class="step">ขั้นที่ 3</span> ใช้หลักเกณฑ์ข้อที่ 3 <span class="nw">(<span data-k="r3"><span class="m">A·0·D = 0</span></span>)</span> กับพจน์ที่สองที่อยู่ในวงเล็บ<div class="expr" data-k="e52"><span class="m">(A<span class="ov">B</span>C + 0 + <span class="ov">A</span><span class="ov">B</span>)C</span></div></li>
+<li><span class="step">ขั้นที่ 4</span> ใช้หลักเกณฑ์ข้อที่ 1 (ละ 0 ที่อยู่ในวงเล็บออกไป)<div class="expr" data-k="e52"><span class="m">(A<span class="ov">B</span>C + <span class="ov">A</span><span class="ov">B</span>)C</span></div></li>
+<li><span class="step">ขั้นที่ 5</span> ใช้กฎการกระจาย<div class="expr" data-k="e52"><span class="m">A<span class="ov">B</span>CC + <span class="ov">A</span><span class="ov">B</span>C</span></div></li>
+<li><span class="step">ขั้นที่ 6</span> ใช้หลักเกณฑ์ข้อที่ 7 <span class="nw">(<span data-k="r7c"><span class="m">CC = C</span></span>)</span> กับพจน์แรก<div class="expr" data-k="e52"><span class="m">A<span class="ov">B</span>C + <span class="ov">A</span><span class="ov">B</span>C</span></div></li>
+<li><span class="step">ขั้นที่ 7</span> แยกตัวประกอบ เอา <span class="m"><span class="m"><span class="ov">B</span>C</span></span> ออก<div class="expr" data-k="e52"><span class="m"><span class="ov">B</span>C(A + <span class="ov">A</span>)</span></div></li>
+<li><span class="step">ขั้นที่ 8</span> ใช้หลักเกณฑ์ข้อที่ 6 <span class="nw">(<span data-k="r6"><span class="m">A + <span class="ov">A</span> = 1</span></span>)</span><div class="expr" data-k="e52"><span class="m"><span class="ov">B</span>C·1</span></div></li>
+<li><span class="step">ขั้นที่ 9</span> ใช้หลักเกณฑ์ข้อที่ 4 โดยทำการละ 1 ออกได้<div class="expr ans" data-k="e52"><span class="m"><span class="ov">B</span>C</span></div></li>
+</ol>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.3</span></div>
+<div class="q">
+<p>จงลดรูปนิพจน์ต่อไปนี้</p>
+<div class="expr" data-k="e53"><span class="m"><span class="ov">A</span>BC + A<span class="ov">B</span><span class="ov">C</span> + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span> + A<span class="ov">B</span>C + ABC</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<ol class="steps">
+<li><span class="step">ขั้นที่ 1</span> ทำการแยกตัวประกอบโดยเอา <span class="m"><span class="m">BC</span></span> ออกจากพจน์แรกกับพจน์สุดท้าย จะได้เป็น<div class="expr" data-k="e53"><span class="m">BC(<span class="ov">A</span> + A) + A<span class="ov">B</span><span class="ov">C</span> + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span> + A<span class="ov">B</span>C</span></div></li>
+<li><span class="step">ขั้นที่ 2</span> ใช้หลักเกณฑ์ข้อที่ 6 <span class="nw">(<span data-k="r6b"><span class="m"><span class="ov">A</span> + A = 1</span></span>)</span> กับพจน์ที่อยู่ในวงเล็บ และทำการแยกตัวประกอบ <span class="m"><span class="m">A<span class="ov">B</span></span></span> ออกจากพจน์ที่สองและพจน์สุดท้าย<div class="expr" data-k="e53"><span class="m">BC·1 + A<span class="ov">B</span>(<span class="ov">C</span> + C) + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span></span></div></li>
+<li><span class="step">ขั้นที่ 3</span> ใช้หลักเกณฑ์ข้อที่ 4 ทำการละ 1 ที่อยู่ในพจน์แรกทิ้ง และใช้หลักเกณฑ์ข้อที่ 6 <span class="nw">(<span data-k="r6c"><span class="m"><span class="ov">C</span> + C = 1</span></span>)</span> กับพจน์ที่อยู่ในวงเล็บ<div class="expr" data-k="e53"><span class="m">BC + A<span class="ov">B</span>·1 + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span></span></div></li>
+<li><span class="step">ขั้นที่ 4</span> ใช้หลักเกณฑ์ข้อที่ 4 เพื่อละ 1 ออกจากพจน์ที่สอง<div class="expr" data-k="e53"><span class="m">BC + A<span class="ov">B</span> + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span></span></div></li>
+<li><span class="step">ขั้นที่ 5</span> แยกตัวประกอบ <span class="m"><span class="m"><span class="ov">B</span></span></span> ออกจากพจน์ที่สองและสาม<div class="expr" data-k="e53"><span class="m">BC + <span class="ov">B</span>(A + <span class="ov">A</span><span class="ov">C</span>)</span></div></li>
+<li><span class="step">ขั้นที่ 6</span> ใช้หลักเกณฑ์ข้อที่ 11 <span class="nw">(<span data-k="r11"><span class="m">A + <span class="ov">A</span><span class="ov">C</span> = A + <span class="ov">C</span></span></span>)</span> กับพจน์ในวงเล็บ<div class="expr" data-k="e53"><span class="m">BC + <span class="ov">B</span>(A + <span class="ov">C</span>)</span></div></li>
+<li><span class="step">ขั้นที่ 7</span> ใช้กฎการกระจายและกฎการสลับที่ จะได้ผลลัพธ์เป็น<div class="expr ans" data-k="e53"><span class="m">BC + A<span class="ov">B</span> + <span class="ov">B</span><span class="ov">C</span></span></div></li>
+</ol>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.4</span></div>
+<div class="q">
+<p>จงลดรูปนิพจน์บูลีนต่อไปนี้</p>
+<div class="expr" data-k="e54"><span class="m"><span class="ov">AB + AC</span> + <span class="ov">A</span><span class="ov">B</span>C</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<ol class="steps">
+<li><span class="step">ขั้นที่ 1</span> ใช้ทฤษฎีบทของ DeMorgan กับพจน์แรก<div class="expr" data-k="e54"><span class="m">(<span class="ov">AB</span>)(<span class="ov">AC</span>) + <span class="ov">A</span><span class="ov">B</span>C</span></div></li>
+<li><span class="step">ขั้นที่ 2</span> ใช้ทฤษฎีบทของ DeMorgan กับพจน์ที่อยู่ในวงเล็บทั้งสอง<div class="expr" data-k="e54"><span class="m">(<span class="ov">A</span> + <span class="ov">B</span>)(<span class="ov">A</span> + <span class="ov">C</span>) + <span class="ov">A</span><span class="ov">B</span>C</span></div></li>
+<li><span class="step">ขั้นที่ 3</span> ใช้กฎการกระจายกับพจน์ในวงเล็บทั้งสอง<div class="expr" data-k="e54"><span class="m"><span class="ov">A</span><span class="ov">A</span> + <span class="ov">A</span><span class="ov">C</span> + <span class="ov">A</span><span class="ov">B</span> + <span class="ov">B</span><span class="ov">C</span> + <span class="ov">A</span><span class="ov">B</span>C</span></div></li>
+<li><span class="step">ขั้นที่ 4</span> ใช้หลักเกณฑ์ข้อที่ 7 <span class="nw">(<span data-k="r7a"><span class="m"><span class="ov">A</span><span class="ov">A</span> = <span class="ov">A</span></span></span>)</span> กับพจน์แรก และใช้หลักเกณฑ์ข้อที่ 10 <span class="nw">[<span data-k="r10c"><span class="m"><span class="ov">A</span><span class="ov">B</span> + <span class="ov">A</span><span class="ov">B</span>C = <span class="ov">A</span><span class="ov">B</span>(1 + C) = <span class="ov">A</span><span class="ov">B</span></span></span>]</span> กับพจน์ที่สามและพจน์สุดท้าย<div class="expr" data-k="e54"><span class="m"><span class="ov">A</span> + <span class="ov">A</span><span class="ov">C</span> + <span class="ov">A</span><span class="ov">B</span> + <span class="ov">B</span><span class="ov">C</span></span></div></li>
+<li><span class="step">ขั้นที่ 5</span> ใช้หลักเกณฑ์ข้อที่ 10 <span class="nw">[<span data-k="r10d"><span class="m"><span class="ov">A</span> + <span class="ov">A</span><span class="ov">C</span> = <span class="ov">A</span>(1 + <span class="ov">C</span>) = <span class="ov">A</span></span></span>]</span> กับสองพจน์แรก<div class="expr" data-k="e54"><span class="m"><span class="ov">A</span> + <span class="ov">A</span><span class="ov">B</span> + <span class="ov">B</span><span class="ov">C</span></span></div></li>
+<li><span class="step">ขั้นที่ 6</span> ใช้หลักเกณฑ์ข้อที่ 10 <span class="nw">[<span data-k="r10e"><span class="m"><span class="ov">A</span> + <span class="ov">A</span><span class="ov">B</span> = <span class="ov">A</span>(1 + <span class="ov">B</span>) = <span class="ov">A</span></span></span>]</span> กับสองพจน์แรก<div class="expr ans" data-k="e54"><span class="m"><span class="ov">A</span> + <span class="ov">B</span><span class="ov">C</span></span></div></li>
+</ol>
+</details></div>
+<div class="exercise"><div class="ex-title">✍️ แบบฝึกหัดที่ 5.1</div><div class="ex-body">
+<p>จงลดรูปนิพจน์ต่อไปนี้</p>
+<ol class="rom c2 r4">
+<li><span class="m">A<span class="ov">B</span> + A(<span class="ov">B + C</span>) + B(<span class="ov">B + C</span>)</span></li>
+<li><span class="m">[AB(C + <span class="ov">BD</span>) + <span class="ov">AB</span>]CD</span></li>
+<li><span class="m">AB<span class="ov">C</span> + <span class="ov">A</span><span class="ov">B</span>C + <span class="ov">A</span>BC + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span></span></li>
+<li><span class="m"><span class="ov">AB</span> + <span class="ov">A</span><span class="ov">C</span> + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span></span></li>
+<li><span class="m">A + AB + A<span class="ov">B</span>C</span></li>
+<li><span class="m">(<span class="ov">A</span> + B)C + ABC</span></li>
+<li><span class="m">A<span class="ov">B</span>C(BD + CDE) + A<span class="ov">C</span></span></li>
+</ol>
+<p>เมื่อได้ผลลัพธ์ของการลดรูปนิพจน์เหล่านี้แล้ว ลองเขียนวงจรเกทของนิพจน์ตั้งต้นและวงจรเกทของนิพจน์ผลลัพธ์ แล้วเปรียบเทียบจำนวนเกทที่ต้องใช้ของวงจรแต่ละคู่</p>
+</div></div>
+<div data-widget="algsimp"></div></section><section class="sec"><h2 id="s5-2"><span class="no">5.2</span> รูปแบบมาตรฐานของนิพจน์บูลีน</h2>
+<p>นิพจน์บูลีนใด ๆ ไม่ว่าจะมีรูปแบบใด สามารถเขียนให้อยู่ในรูปของรูปแบบมาตรฐานได้ไม่อย่างใดก็อย่างหนึ่ง ได้แก่</p>
+<ol class="nsteps">
+<li>รูปแบบ Sum-of-products</li>
+<li>รูปแบบ Product-of-sums</li>
+</ol>
+<h3 id="s5-2-1"><span class="no">5.2.1</span> รูปแบบ Sum-of-products (SOP)</h3>
+<p><strong>พจน์ของการคูณ</strong> (<em>product term</em>) คือพจน์ที่ประกอบด้วยการคูณกัน (แบบบูลีน) ของ literal ต่าง ๆ (อาจเป็นตัวแปรหรือเป็น complement) เมื่อมีพจน์ของการคูณตั้งแต่สองพจน์ขึ้นไปรวมเข้าด้วยกันโดยการบวกแบบบูลีน เราจะเรียกนิพจน์ลักษณะนี้ว่า <strong>sum-of-products (SOP)</strong> ยกตัวอย่างเช่น</p>
+<div class="expr-block">
+<div><span class="m">AB + ABC</span></div>
+<div><span class="m">ABC + CDE + <span class="ov">B</span>C<span class="ov">D</span></span></div>
+<div><span class="m"><span class="ov">A</span>B + <span class="ov">A</span>B<span class="ov">C</span> + AC</span></div>
+</div>
+<p>นิพจน์ที่เป็น SOP ใด ๆ สามารถมีพจน์ที่เป็นตัวแปรเดียวก็ได้ เช่น <span class="m"><span class="m">A + <span class="ov">A</span><span class="ov">B</span>C + BC<span class="ov">D</span></span></span> นอกจากนี้ SOP ยังประกอบด้วยพจน์ที่มีตัวแปรหลายตัวขีดเส้นบน (complement) แยกของใครของมันได้ เช่น <span class="m"><span class="m"><span class="ov">A</span><span class="ov">B</span><span class="ov">C</span></span></span> แต่ถ้าเป็นพจน์ที่มีการขีดเส้นบนคร่อมหลาย ๆ ตัวแปรจะ<strong>ไม่ถือ</strong>ว่าเป็นพจน์การคูณ เช่น <span class="m"><span class="m"><span class="ov">ABC</span></span></span></p>
+<p class="sub4"><span class="n">5.2.1.1</span>โดเมนของนิพจน์บูลีน</p>
+<p><strong>โดเมน</strong> (<em>domain</em>) ของนิพจน์บูลีนทั่ว ๆ ไปนั้นเป็นเซตของตัวแปรที่ปรากฏอยู่ในนิพจน์นั้น ๆ ไม่ว่าจะอยู่ในรูปปกติหรือแบบ complemented ยกตัวอย่างเช่น โดเมนของนิพจน์ <span class="m"><span class="m"><span class="ov">A</span>B + A<span class="ov">B</span>C</span></span> เป็นเซตของตัวแปร <em>A</em>, <em>B</em> และ <em>C</em> และโดเมนของนิพจน์ <span class="m"><span class="m">AB<span class="ov">C</span> + C<span class="ov">D</span>E + <span class="ov">B</span>C<span class="ov">D</span></span></span> เป็นเซตของตัวแปร <em>A</em>, <em>B</em>, <em>C</em>, <em>D</em> และ <em>E</em></p>
+<p class="sub4"><span class="n">5.2.1.2</span>การสร้างวงจรจากนิพจน์แบบ SOP ด้วยการใช้ AND/OR</p>
+<p>การสร้างวงจรจากนิพจน์แบบ SOP สามารถทำได้โดยง่าย ด้วยการนำอินพุตมา AND เข้าด้วยกันเป็นชุด ๆ ตามพจน์แต่ละพจน์ด้วย <span class="gate">AND</span> gate และสุดท้ายก็นำเอาต์พุตจาก AND gate แต่ละตัวมาใช้เป็นอินพุตของ <span class="gate">OR</span> gate เพื่อให้ได้ผลลัพธ์เป็นไปตามนิพจน์ดังกล่าว เราจึงเรียกวงจรลักษณะนี้ว่า <strong>วงจรลอจิก AND-OR</strong> ยกตัวอย่างเช่น นิพจน์ <span class="m"><span class="m">AB + BCD + AC</span></span> ที่แสดงวงจรเอาไว้ในรูปที่ 5.2 ซึ่งเอาต์พุต <em>X</em> เป็นเอาต์พุตที่ได้เท่ากับนิพจน์ SOP ดังกล่าวนี้</p>
+<figure class="c"><img alt="รูปที่ 5.2 วงจรลอจิก AND-OR ของนิพจน์ SOP AB + BCD + AC" loading="lazy" src="img/fig5-2.png" style="width:373px"/><figcaption><span class="cap-no">รูปที่ 5.2</span> วงจรลอจิก AND-OR ของนิพจน์ SOP <span class="m"><span class="m">AB + BCD + AC</span></span></figcaption></figure>
+<p class="sub4"><span class="n">5.2.1.3</span>การแปลงนิพจน์ทั่วไปให้อยู่ในรูปแบบ SOP</p>
+<p>เราสามารถแปลงนิพจน์ทางลอจิกใด ๆ ให้เขียนในรูปของ SOP ได้โดยการใช้เทคนิคของพีชคณิตบูลีน ยกตัวอย่างเช่น นิพจน์ <span class="m"><span class="m">A(B + CD)</span></span> สามารถเขียนให้อยู่ในรูปของ SOP ได้โดยการใช้กฎการกระจาย ซึ่งจะได้เป็น</p>
+<div class="expr-block" data-k="sopx"><span class="m">A(B + CD) = AB + ACD</span></div>
+<div class="example"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.5</span></div>
+<div class="q">
+<p>จงแปลงนิพจน์บูลีนต่อไปนี้ให้เขียนอยู่ในรูปแบบ SOP</p>
+<div class="parts3"><span><span class="pn">(I)</span><span class="m"><span class="m">AB + B(CD + EF)</span></span></span><span><span class="pn">(II)</span><span class="m"><span class="m">(A + B)(B + C + D)</span></span></span><span><span class="pn">(III)</span><span class="m"><span class="m"><span class="ov">(<span class="ov">A + B</span>) + C</span></span></span></span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<div class="expr-block" style="margin-left:9px">
+<div><span class="pn">(I)</span> <span data-k="e55a"><span class="m">AB + B(CD + EF) = </span></span><span class="ans" data-k="e55a"><span class="m">AB + BCD + BEF</span></span></div>
+<div><span class="pn">(II)</span> <span data-k="e55b"><span class="m">(A + B)(B + C + D) = </span></span><span class="ans" data-k="e55b"><span class="m">AB + AC + AD + BB + BC + BD</span></span></div>
+<div><span class="pn">(III)</span> <span data-k="e55c"><span class="m"><span class="ov">(<span class="ov">A + B</span>) + C</span> = (<span class="ov"><span class="ov">A + B</span></span>)<span class="ov">C</span> = (A + B)<span class="ov">C</span> = </span></span><span class="ans" data-k="e55c"><span class="m">A<span class="ov">C</span> + B<span class="ov">C</span></span></span></div>
+</div>
+</details></div>
+<p class="sub4"><span class="n">5.2.1.4</span>รูปแบบมาตรฐานของ SOP</p>
+<p>นิพจน์ SOP ที่ผ่านมานั้น เราจะไม่เห็นว่าพจน์ผลคูณทุกพจน์ที่ประกอบอยู่ในนิพจน์นั้น ๆ จะมีจำนวนตัวแปรครบถ้วนตามที่ปรากฏในโดเมนของนิพจน์นั้น ๆ เช่น นิพจน์ <span class="m"><span class="m"><span class="ov">A</span>B<span class="ov">C</span> + A<span class="ov">B</span>D + <span class="ov">A</span>B<span class="ov">C</span>D</span></span> มีโดเมนที่ประกอบด้วยตัวแปร <em>A</em>, <em>B</em>, <em>C</em> และ <em>D</em> ซึ่งเราจะเห็นว่าในพจน์แรกนั้นจะขาด <span class="m"><span class="m">D</span></span> หรือ <span class="m"><span class="m"><span class="ov">D</span></span></span> หรือในพจน์ที่สองที่ขาด <span class="m"><span class="m">C</span></span> หรือ <span class="m"><span class="m"><span class="ov">C</span></span></span> ไป</p>
+<p><strong>รูปแบบมาตรฐานของนิพจน์ SOP</strong> นั้น คือทุกพจน์การคูณที่ประกอบอยู่ในนิพจน์จะต้องมีตัวแปรทุกตัวที่อยู่ในโดเมนของนิพจน์นั้น เช่น <span class="m"><span class="m">A<span class="ov">B</span>CD + <span class="ov">A</span><span class="ov">B</span>C<span class="ov">D</span> + AB<span class="ov">C</span><span class="ov">D</span></span></span> สามารถเรียกว่าเป็นนิพจน์ SOP มาตรฐาน ซึ่งเป็นสิ่งที่สำคัญในการสร้างตารางค่าความจริงและการใช้เทคนิคแผนผังคาร์โนห์เพื่อการลดรูปวงจรที่จะกล่าวถึงในหัวข้อต่อ ๆ ไป ทั้งนี้นิพจน์ที่ไม่ใช่ SOP มาตรฐานนั้นสามารถแปลงให้เป็นมาตรฐานได้โดยการใช้พีชคณิตบูลีน</p>
+<p><span class="ul">การแปลงพจน์การคูณเพื่อให้เป็น SOP มาตรฐาน</span> พจน์ใด ๆ ที่มีตัวแปรไม่ครบโดเมนของนิพจน์ SOP นั้น ๆ เราสามารถขยายให้มีตัวแปรให้ครบได้ โดยมีขั้นตอนที่ประยุกต์ใช้หลักเกณฑ์ข้อที่ 6 <span class="nw">(<span data-k="r6d"><span class="m">A + <span class="ov">A</span> = 1</span></span>)</span> ดังต่อไปนี้</p>
+<ol class="steps">
+<li><span class="step">ขั้นที่ 1</span> ทำการคูณพจน์ที่ไม่มาตรฐานด้วยพจน์ที่สร้างจากผลบวกของตัวแปรที่หายไปกับ complement ของตัวแปรนั้น ซึ่งจะได้ผลลัพธ์ที่ขยายจากหนึ่งพจน์กลายเป็นสองพจน์ ทั้งนี้จากหลักที่ว่าการคูณ 1 เข้าไปจะไม่ทำให้เกิดการเปลี่ยนแปลงของผลลัพธ์</li>
+<li><span class="step">ขั้นที่ 2</span> ทำขั้นตอนที่ 1 กับพจน์ที่ได้ใหม่ในกรณีที่ยังคงมีตัวแปรไม่ครบในโดเมน ซึ่งการแปลงจากพจน์ที่ไม่มาตรฐานให้เป็นพจน์ที่มาตรฐานนั้น จะเป็นการทวีคูณพจน์ขึ้นมาตามปริมาณของตัวแปรที่หายไป ลองดูตัวอย่างที่ 5.6 เพื่อทำความเข้าใจ</li>
+</ol>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.6</span></div>
+<div class="q">
+<p>จงแปลงนิพจน์ต่อไปนี้ให้เป็นนิพจน์ SOP มาตรฐาน</p>
+<div class="expr" data-k="e56"><span class="m">A<span class="ov">B</span>C + <span class="ov">A</span><span class="ov">B</span> + AB<span class="ov">C</span>D</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>นิพจน์นี้มีโดเมนของตัวแปร <em>A</em>, <em>B</em>, <em>C</em> และ <em>D</em> ซึ่งเราจะทำการแปลงพจน์ที่ไม่เป็นมาตรฐาน อันได้แก่พจน์แรกและพจน์ที่สองทีละพจน์ เริ่มจากพจน์แรกซึ่งขาดตัวแปร <span class="m"><span class="m">D</span></span> หรือ <span class="m"><span class="m"><span class="ov">D</span></span></span> ดังนั้นเราจะทำการคูณพจน์แรกด้วย <span class="m"><span class="m">D + <span class="ov">D</span></span></span> ซึ่งจะได้ผลลัพธ์ดังต่อไปนี้</p>
+<div class="expr" data-k="e56a"><span class="m">A<span class="ov">B</span>C = A<span class="ov">B</span>C(D + <span class="ov">D</span>) = A<span class="ov">B</span>CD + A<span class="ov">B</span>C<span class="ov">D</span></span></div>
+<p>สำหรับกรณีนี้เราจะได้ผลลัพธ์เป็นพจน์มาตรฐานขึ้นมา 2 พจน์</p>
+<p>สำหรับพจน์ที่สอง <span class="m"><span class="m"><span class="ov">A</span><span class="ov">B</span></span></span> นั้นตัวแปรที่หายไปได้แก่ <span class="m"><span class="m">C</span></span> หรือ <span class="m"><span class="m"><span class="ov">C</span></span></span> และตัวแปร <span class="m"><span class="m">D</span></span> หรือ <span class="m"><span class="m"><span class="ov">D</span></span></span> ดังนั้นเราจะเริ่มโดยการคูณพจน์นี้ด้วย <span class="m"><span class="m">C + <span class="ov">C</span></span></span> เข้าไปก่อน ซึ่งจะได้ผลลัพธ์ต่อไปนี้</p>
+<div class="expr" data-k="e56b"><span class="m"><span class="ov">A</span><span class="ov">B</span> = <span class="ov">A</span><span class="ov">B</span>(C + <span class="ov">C</span>) = <span class="ov">A</span><span class="ov">B</span>C + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span></span></div>
+<p>พจน์ที่เป็นผลลัพธ์ที่ได้มาทั้งสองพจน์นั้นยังคงขาดตัวแปร <span class="m"><span class="m">D</span></span> หรือ <span class="m"><span class="m"><span class="ov">D</span></span></span> ซึ่งยังไม่เป็นมาตรฐาน ดังนั้นจะต้องคูณทั้งสองพจน์นี้ด้วย <span class="m"><span class="m">D + <span class="ov">D</span></span></span> ซึ่งจะมีกระบวนการดังต่อไปนี้</p>
+<div class="expr-block sm" data-k="e56b">
+<div><span class="m"><span class="ov">A</span><span class="ov">B</span> = <span class="ov">A</span><span class="ov">B</span>C + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span> = <span class="ov">A</span><span class="ov">B</span>C(D + <span class="ov">D</span>) + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>(D + <span class="ov">D</span>)</span></div>
+<div>   <span class="m">= <span class="ov">A</span><span class="ov">B</span>CD + <span class="ov">A</span><span class="ov">B</span>C<span class="ov">D</span> + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>D + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span><span class="ov">D</span></span></div>
+</div>
+<p>ซึ่งเราจะได้นิพจน์ SOP มาตรฐานดังต่อไปนี้</p>
+<div class="expr-block sm" data-k="e56">
+<div><span class="m">A<span class="ov">B</span>C + <span class="ov">A</span><span class="ov">B</span> + AB<span class="ov">C</span>D</span></div>
+<div class="ans"><span class="m">= A<span class="ov">B</span>CD + A<span class="ov">B</span>C<span class="ov">D</span> + <span class="ov">A</span><span class="ov">B</span>CD + <span class="ov">A</span><span class="ov">B</span>C<span class="ov">D</span></span></div>
+<div class="ans"> <span class="m">+ <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>D + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span><span class="ov">D</span> + AB<span class="ov">C</span>D</span></div>
+</div>
+</details></div>
+<p><span class="ul">ค่าไบนารีตัวแทนของพจน์การคูณมาตรฐาน</span> พจน์การคูณมาตรฐานจะมีค่าเท่ากับ 1 กรณีเมื่อแต่ละ literal มีค่าเท่ากับ 1 เช่น พจน์การคูณ <span class="m"><span class="m">A<span class="ov">B</span>C<span class="ov">D</span></span></span> จะมีค่าเท่ากับ 1 เฉพาะเมื่อ <span class="m">A = 1, B = 0, C = 1, D = 0</span> จากหลักการดังต่อไปนี้</p>
+<div class="expr" data-k="v1010" data-v="1010"><span class="m">A<span class="ov">B</span>C<span class="ov">D</span> = 1·<span class="ov">0</span>·1·<span class="ov">0</span> = 1·1·1·1 = 1</span></div>
+<p>ดังนั้นพจน์การคูณนี้มีค่าไบนารีตัวแทนเป็น <span class="bits">1010</span></p>
+<div class="callout bk-callout"><p class="thm">นิพจน์ SOP จะมีค่าเท่ากับ 1 เมื่อพจน์การคูณพจน์ใดพจน์หนึ่งหรือทุกพจน์ในนิพจน์นั้น ๆ มีค่าเท่ากับ 1</p></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.7</span></div>
+<div class="q">
+<p>จงหาค่าไบนารีสำหรับนิพจน์ SOP มาตรฐานดังต่อไปนี้</p>
+<div class="expr"><span class="m">ABCD + A<span class="ov">B</span><span class="ov">C</span>D + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span><span class="ov">D</span></span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>พจน์ <span class="m"><span class="m">ABCD</span></span> มีค่าเท่ากับ 1 เมื่อ <span class="m">A = 1, B = 1, C = 1, D = 1</span></p>
+<div class="expr" data-k="v1111" data-v="1111"><span class="m">ABCD = 1·1·1·1 = 1</span></div>
+<p>พจน์ <span class="m"><span class="m">A<span class="ov">B</span><span class="ov">C</span>D</span></span> มีค่าเท่ากับ 1 เมื่อ <span class="m">A = 1, B = 0, C = 0, D = 1</span></p>
+<div class="expr" data-k="v1001" data-v="1001"><span class="m">A<span class="ov">B</span><span class="ov">C</span>D = 1·<span class="ov">0</span>·<span class="ov">0</span>·1 = 1·1·1·1 = 1</span></div>
+<p>พจน์ <span class="m"><span class="m"><span class="ov">A</span><span class="ov">B</span><span class="ov">C</span><span class="ov">D</span></span></span> มีค่าเท่ากับ 1 เมื่อ <span class="m">A = 0, B = 0, C = 0, D = 0</span></p>
+<div class="expr" data-k="v0000" data-v="0000"><span class="m"><span class="ov">A</span><span class="ov">B</span><span class="ov">C</span><span class="ov">D</span> = <span class="ov">0</span>·<span class="ov">0</span>·<span class="ov">0</span>·<span class="ov">0</span> = 1·1·1·1 = 1</span></div>
+<p>นิพจน์ SOP ดังกล่าวนี้จะมีค่าเป็น 1 เมื่อพจน์ใดพจน์หนึ่งหรือทั้งสามพจน์มีค่าเท่ากับ 1 (เนื่องจากเป็นการ OR กัน)</p>
+</details></div>
+<h3 id="s5-2-2"><span class="no">5.2.2</span> รูปแบบ Product-of-sums (POS)</h3>
+<p><strong>พจน์ของการบวก</strong> (<em>sum term</em>) คือพจน์ที่ประกอบด้วยการบวกกัน (แบบบูลีน) ของ literal ต่าง ๆ (อาจเป็นตัวแปรหรือเป็น complement) เมื่อมีพจน์ของการบวกตั้งแต่สองพจน์ขึ้นไปคูณเข้าด้วยกันโดยการคูณแบบบูลีน เราจะเรียกนิพจน์ลักษณะนี้ว่า <strong>product-of-sums (POS)</strong> ยกตัวอย่างเช่น</p>
+<div class="expr-block">
+<div><span class="m">(<span class="ov">A</span> + B)(A + <span class="ov">B</span> + C)</span></div>
+<div><span class="m">(<span class="ov">A</span> + <span class="ov">B</span> + <span class="ov">C</span>)(C + <span class="ov">D</span> + E)(<span class="ov">B</span> + C + D)</span></div>
+<div><span class="m">(A + B)(A + <span class="ov">B</span> + C)(<span class="ov">A</span> + C)</span></div>
+</div>
+<p>นิพจน์ที่เป็น POS ใด ๆ สามารถมีพจน์ที่เป็นตัวแปรเดียวก็ได้ เช่น <span class="m"><span class="m"><span class="ov">A</span>(A + <span class="ov">B</span> + C)(<span class="ov">B</span> + <span class="ov">C</span> + D)</span></span> นอกจากนี้ POS ยังประกอบด้วยพจน์ที่มีตัวแปรหลายตัวขีดเส้นบน (complement) แยกของใครของมันได้ เช่น <span class="m"><span class="m"><span class="ov">A</span> + <span class="ov">B</span> + <span class="ov">C</span></span></span> แต่ถ้าเป็นพจน์ที่มีการขีดเส้นบนคร่อมหลาย ๆ ตัวแปรจะ<strong>ไม่ถือ</strong>ว่าเป็นพจน์การบวก เช่น <span class="m"><span class="m"><span class="ov">A + B + C</span></span></span></p>
+<p class="sub4"><span class="n">5.2.2.1</span>การสร้างวงจรจากนิพจน์แบบ POS</p>
+<p>การสร้างวงจรจากนิพจน์แบบ POS สามารถทำได้โดยง่าย ด้วยการนำอินพุตมา OR เข้าด้วยกันเป็นชุด ๆ ด้วย <span class="gate">OR</span> gate และสุดท้ายก็นำเอาต์พุตจาก OR gate แต่ละตัวมาใช้เป็นอินพุตของ <span class="gate">AND</span> gate เพื่อให้ได้ผลลัพธ์เป็นไปตามนิพจน์ดังกล่าว ยกตัวอย่างเช่น นิพจน์ <span class="m"><span class="m">(A + B)(B + C + D)(A + C)</span></span> ที่แสดงวงจรเอาไว้ในรูปที่ 5.3 ซึ่งเอาต์พุต <em>X</em> เป็นเอาต์พุตที่ได้เท่ากับนิพจน์ POS ดังกล่าวนี้</p>
+<figure class="c"><img alt="รูปที่ 5.3 วงจรลอจิกของนิพจน์ POS (A + B)(B + C + D)(A + C)" loading="lazy" src="img/fig5-3.png" style="width:444px"/><figcaption><span class="cap-no">รูปที่ 5.3</span> วงจรลอจิกของนิพจน์ POS <span class="m"><span class="m">(A + B)(B + C + D)(A + C)</span></span></figcaption></figure>
+<p class="sub4"><span class="n">5.2.2.2</span>รูปแบบมาตรฐานของ POS</p>
+<p>นิพจน์ POS บางนิพจน์ เราจะไม่เห็นว่าพจน์ผลบวกทุกพจน์ที่ประกอบอยู่ในนิพจน์นั้น ๆ จะมีจำนวนตัวแปรครบถ้วนตามที่ปรากฏในโดเมนของนิพจน์นั้น ๆ เช่น นิพจน์</p>
+<div class="expr"><span class="m">(A + <span class="ov">B</span> + C)(A + B + <span class="ov">D</span>)(A + <span class="ov">B</span> + <span class="ov">C</span> + D)</span></div>
+<p>มีโดเมนที่ประกอบด้วยตัวแปร <em>A</em>, <em>B</em>, <em>C</em> และ <em>D</em> ซึ่งเราจะเห็นว่าในพจน์แรกนั้นจะขาด <span class="m"><span class="m">D</span></span> หรือ <span class="m"><span class="m"><span class="ov">D</span></span></span> หรือในพจน์ที่สองที่ขาด <span class="m"><span class="m">C</span></span> หรือ <span class="m"><span class="m"><span class="ov">C</span></span></span> ไป</p>
+<p><strong>รูปแบบมาตรฐานของนิพจน์ POS</strong> นั้น คือทุกพจน์การบวกที่ประกอบอยู่ในนิพจน์จะต้องมีตัวแปรทุกตัวที่อยู่ในโดเมนของนิพจน์นั้น เช่น</p>
+<div class="expr"><span class="m">(<span class="ov">A</span> + <span class="ov">B</span> + <span class="ov">C</span> + <span class="ov">D</span>)(A + <span class="ov">B</span> + C + D)(A + B + <span class="ov">C</span> + D)</span></div>
+<p>สามารถเรียกว่าเป็นนิพจน์ POS มาตรฐาน ทั้งนี้นิพจน์ที่ไม่ใช่ POS มาตรฐานนั้นสามารถแปลงให้เป็นมาตรฐานได้โดยการใช้พีชคณิตบูลีนดังต่อไปนี้</p>
+<p><span class="ul">การแปลงพจน์การบวกเพื่อให้เป็น POS มาตรฐาน</span> พจน์ใด ๆ ที่มีตัวแปรไม่ครบโดเมนของนิพจน์ POS นั้น ๆ เราสามารถขยายให้มีตัวแปรให้ครบได้ โดยมีขั้นตอนที่ประยุกต์ใช้หลักเกณฑ์ข้อที่ 8 <span class="nw">(<span data-k="r8b"><span class="m">A·<span class="ov">A</span> = 0</span></span>)</span> ดังต่อไปนี้</p>
+<ol class="steps">
+<li><span class="step">ขั้นที่ 1</span> บวกแต่ละพจน์ที่ไม่เป็นพจน์มาตรฐานด้วยพจน์การคูณที่ประกอบด้วยตัวแปรและ complement ของตัวแปรที่หายไป ซึ่งจะได้ผลลัพธ์ที่ขยายออกเป็นสองพจน์ ซึ่งการบวก 0 เข้าไปจะไม่เกิดผลกระทบต่อผลลัพธ์ของนิพจน์เลย ทั้งนี้ให้ใช้หลักเกณฑ์ข้อที่ 12 ในการกระทำการ <span data-k="r12"><span class="m">A + BC = (A + B)(A + C)</span></span></li>
+<li><span class="step">ขั้นที่ 2</span> ทำขั้นตอนที่ 1 กับพจน์ที่ได้ใหม่ในกรณีที่ยังคงมีตัวแปรไม่ครบในโดเมน ซึ่งการแปลงจากพจน์ที่ไม่มาตรฐานให้เป็นพจน์ที่มาตรฐานนั้น จะเป็นการทวีคูณพจน์ขึ้นมาตามปริมาณของตัวแปรที่หายไป ลองดูตัวอย่างที่ 5.8 เพื่อทำความเข้าใจ</li>
+</ol>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.8</span></div>
+<div class="q">
+<p>จงแปลงนิพจน์ต่อไปนี้ให้อยู่ในรูป POS มาตรฐาน</p>
+<div class="expr" data-k="e58"><span class="m">(A + <span class="ov">B</span> + C)(<span class="ov">B</span> + C + <span class="ov">D</span>)(A + <span class="ov">B</span> + <span class="ov">C</span> + D)</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>นิพจน์นี้มีโดเมนของตัวแปร <em>A</em>, <em>B</em>, <em>C</em> และ <em>D</em> ซึ่งเราจะทำการแปลงพจน์ที่ไม่เป็นมาตรฐาน อันได้แก่พจน์แรกและพจน์ที่สองทีละพจน์ เริ่มจากพจน์แรกซึ่งขาดตัวแปร <span class="m"><span class="m">D</span></span> หรือ <span class="m"><span class="m"><span class="ov">D</span></span></span> ดังนั้นเราจะทำการบวกพจน์แรกด้วย <span class="m"><span class="m">D<span class="ov">D</span></span></span> ซึ่งจะได้ผลลัพธ์ดังต่อไปนี้</p>
+<div class="expr-block sm" data-k="e58a"><div><span class="m">A + <span class="ov">B</span> + C = A + <span class="ov">B</span> + C + D<span class="ov">D</span></span></div><div>    <span class="m">= (A + <span class="ov">B</span> + C + D)(A + <span class="ov">B</span> + C + <span class="ov">D</span>)</span></div></div>
+<p>สำหรับพจน์ที่สองนั้นตัวแปร <span class="m"><span class="m">A</span></span> หรือ <span class="m"><span class="m"><span class="ov">A</span></span></span> หายไป เราจึงต้องบวก <span class="m"><span class="m">A<span class="ov">A</span></span></span> เข้าไป ซึ่งจะได้ผลลัพธ์ดังนี้</p>
+<div class="expr-block sm" data-k="e58b"><div><span class="m"><span class="ov">B</span> + C + <span class="ov">D</span> = <span class="ov">B</span> + C + <span class="ov">D</span> + A<span class="ov">A</span></span></div><div>    <span class="m">= (A + <span class="ov">B</span> + C + <span class="ov">D</span>)(<span class="ov">A</span> + <span class="ov">B</span> + C + <span class="ov">D</span>)</span></div></div>
+<p>ดังนั้นผลลัพธ์สุดท้ายจะได้ว่า</p>
+<div class="expr-block sm" data-k="e58">
+<div><span class="m">(A + <span class="ov">B</span> + C)(<span class="ov">B</span> + C + <span class="ov">D</span>)(A + <span class="ov">B</span> + <span class="ov">C</span> + D)</span></div>
+<div class="ans"><span class="m">= (A + <span class="ov">B</span> + C + D)(A + <span class="ov">B</span> + C + <span class="ov">D</span>)(A + <span class="ov">B</span> + C + <span class="ov">D</span>)</span></div>
+<div class="ans">  <span class="m">(<span class="ov">A</span> + <span class="ov">B</span> + C + <span class="ov">D</span>)(A + <span class="ov">B</span> + <span class="ov">C</span> + D)</span></div>
+</div>
+</details></div>
+<p><span class="ul">ค่าไบนารีตัวแทนของพจน์การบวกมาตรฐาน</span> พจน์การบวกมาตรฐานจะมีค่าเท่ากับ 0 กรณีเมื่อแต่ละ literal มีค่าเท่ากับ 0 เช่น พจน์การบวก <span class="m"><span class="m">A + <span class="ov">B</span> + C + <span class="ov">D</span></span></span> จะมีค่าเท่ากับ 0 เฉพาะเมื่อ <span class="m">A = 0, B = 1, C = 0, D = 1</span> จากหลักการดังต่อไปนี้</p>
+<div class="expr" data-k="s0101" data-v="0101"><span class="m">A + <span class="ov">B</span> + C + <span class="ov">D</span> = 0 + <span class="ov">1</span> + 0 + <span class="ov">1</span> = 0 + 0 + 0 + 0 = 0</span></div>
+<p>ดังนั้นพจน์การบวกนี้มีค่าไบนารีตัวแทนเป็น <span class="bits">0101</span></p>
+<div class="callout bk-callout"><p class="thm">นิพจน์ POS จะมีค่าเท่ากับ 0 เมื่อพจน์การบวกพจน์ใดพจน์หนึ่งหรือทุกพจน์ในนิพจน์นั้น ๆ มีค่าเท่ากับ 0</p></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.9</span></div>
+<div class="q">
+<p>จงหาค่าไบนารีของแต่ละตัวแปรที่จะทำให้นิพจน์ POS มาตรฐานต่อไปนี้มีค่าเท่ากับ 0</p>
+<div class="expr"><span class="m">(A + B + C + D)(A + <span class="ov">B</span> + <span class="ov">C</span> + D)(<span class="ov">A</span> + <span class="ov">B</span> + <span class="ov">C</span> + <span class="ov">D</span>)</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>พจน์ <span class="m"><span class="m">A + B + C + D</span></span> มีค่าเท่ากับ 0 เมื่อ <span class="m">A = 0, B = 0, C = 0, D = 0</span></p>
+<div class="expr" data-k="s0000" data-v="0000"><span class="m">A + B + C + D = 0 + 0 + 0 + 0 = 0</span></div>
+<p>พจน์ <span class="m"><span class="m">A + <span class="ov">B</span> + <span class="ov">C</span> + D</span></span> มีค่าเท่ากับ 0 เมื่อ <span class="m">A = 0, B = 1, C = 1, D = 0</span></p>
+<div class="expr" data-k="s0110" data-v="0110"><span class="m">A + <span class="ov">B</span> + <span class="ov">C</span> + D = 0 + <span class="ov">1</span> + <span class="ov">1</span> + 0 = 0 + 0 + 0 + 0 = 0</span></div>
+<p>พจน์ <span class="m"><span class="m"><span class="ov">A</span> + <span class="ov">B</span> + <span class="ov">C</span> + <span class="ov">D</span></span></span> มีค่าเท่ากับ 0 เมื่อ <span class="m">A = 1, B = 1, C = 1, D = 1</span></p>
+<div class="expr" data-k="s1111" data-v="1111"><span class="m"><span class="ov">A</span> + <span class="ov">B</span> + <span class="ov">C</span> + <span class="ov">D</span> = <span class="ov">1</span> + <span class="ov">1</span> + <span class="ov">1</span> + <span class="ov">1</span> = 0 + 0 + 0 + 0 = 0</span></div>
+<p>นิพจน์ POS นี้จะเท่ากับ 0 เมื่อพจน์การบวกพจน์ใดพจน์หนึ่งเป็น 0</p>
+</details></div>
+<h3 id="s5-2-3"><span class="no">5.2.3</span> การแปลงนิพจน์ SOP มาตรฐานให้เป็นนิพจน์ POS มาตรฐาน</h3>
+<p>สามารถทำได้ดังขั้นตอนต่อไปนี้</p>
+<ol class="steps">
+<li><span class="step">ขั้นที่ 1</span> ประเมินแต่ละพจน์การคูณที่ปรากฏในนิพจน์ SOP เพื่อดูว่ามีค่าไบนารีใดที่เป็นตัวแทนพจน์การคูณนั้น ๆ (ดังที่เราได้เห็นวิธีการในตัวอย่างที่ 5.7)</li>
+<li><span class="step">ขั้นที่ 2</span> ให้ดูว่ามีค่าไบนารีใดบ้างที่ไม่ได้ปรากฏในขั้นตอนที่ 1</li>
+<li><span class="step">ขั้นที่ 3</span> เขียนพจน์การบวกสำหรับค่าไบนารีที่พิจารณาได้จากขั้นตอนที่ 2 เพื่อประกอบกันเป็นนิพจน์ผลลัพธ์แบบ POS</li>
+</ol>
+<p>เราสามารถแปลงจาก POS ให้เป็น SOP ด้วยขั้นตอนที่คล้ายกันนี้</p>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.10</span></div>
+<div class="q">
+<p>จงแปลงนิพจน์ SOP ต่อไปนี้ให้เป็นนิพจน์ POS ที่เทียบเท่ากัน</p>
+<div class="expr" data-k="e510"><span class="m"><span class="ov">A</span><span class="ov">B</span><span class="ov">C</span> + <span class="ov">A</span>B<span class="ov">C</span> + <span class="ov">A</span>BC + A<span class="ov">B</span>C + ABC</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>ทำการประเมินค่าไบนารีจากนิพจน์นี้จะได้</p>
+<div class="expr" data-mins="e510:000,010,011,101,111">000 + 010 + 011 + 101 + 111</div>
+<p>เนื่องจากมีตัวแปร 3 ตัวในโดเมนของนิพจน์นี้ ดังนั้นจึงมี combination อยู่ 8 (2<sup>3</sup>) ซึ่งนิพจน์ดังกล่าวนี้มีส่วนประกอบไป 5 combination แล้ว ดังนั้นพจน์ POS จึงจะมีค่าที่เหลืออยู่ 3 combination ได้แก่ <span class="bits">001</span>, <span class="bits">100</span> และ <span class="bits">110</span></p>
+<p>เราจะต้องนำค่าไบนารีทั้งสามนั้นมาสร้างแต่ละพจน์การบวกที่ได้มีค่าของการบวกเป็น 0 ดังนั้นนิพจน์ POS เทียบเท่าจะเป็น</p>
+<div class="expr ans" data-k="e510"><span class="m">(A + B + <span class="ov">C</span>)(<span class="ov">A</span> + B + C)(<span class="ov">A</span> + <span class="ov">B</span> + C)</span></div>
+</details></div>
+<div class="exercise"><div class="ex-title">✍️ แบบฝึกหัดที่ 5.2</div><div class="ex-body">
+<ol class="num">
+<li>จงระบุว่านิพจน์ต่อไปนี้เป็น SOP, SOP มาตรฐาน, POS หรือ POS มาตรฐาน
+      <ol class="rom c2 r2">
+<li><span class="m">AB + <span class="ov">A</span>BD + <span class="ov">A</span>C<span class="ov">D</span></span></li>
+<li><span class="m">(A + <span class="ov">B</span> + C)(A + B + <span class="ov">C</span>)</span></li>
+<li><span class="m"><span class="ov">A</span>BC + AB<span class="ov">C</span></span></li>
+<li><span class="m">A(A + <span class="ov">C</span>)(A + B)</span></li>
+</ol></li>
+<li>จงเปลี่ยนนิพจน์ SOP ในคำถามที่ 1 ให้อยู่ในรูป SOP มาตรฐาน</li>
+<li>จงเปลี่ยนนิพจน์ POS ในคำถามที่ 1 ให้อยู่ในรูป POS มาตรฐาน</li>
+</ol>
+</div></div>
+<div data-widget="stdform"></div></section><section class="sec"><h2 id="s5-3"><span class="no">5.3</span> นิพจน์บูลีนและตารางค่าความจริง</h2>
+<p>เราสามารถแปลงนิพจน์บูลีนมาตรฐานเพื่อเขียนตารางค่าความจริงด้วยการใช้ค่าไบนารีของแต่ละพจน์ที่ปรากฏอยู่ ตารางค่าความจริงนี้จะเป็นวิธีในการแสดงปฏิบัติการทางลอจิกที่เกิดขึ้นสำหรับวงจรนั้น ๆ ในทางกลับกัน นิพจน์ SOP หรือ POS มาตรฐานก็จะสามารถสร้างได้จากตารางค่าความจริงได้เช่นเดียวกัน</p>
+<h3 id="s5-3-1"><span class="no">5.3.1</span> การแปลงนิพจน์ SOP ให้เป็นตารางค่าความจริง</h3>
+<p>เราได้รู้มาว่านิพจน์ SOP จะมีค่าเท่ากับ 1 เมื่อมีอย่างน้อยพจน์หนึ่งที่มีค่าเท่ากับ 1 ซึ่งตารางค่าความจริงนั้นเป็นรายการแสดง combination ของตัวแปรอินพุตที่เป็นไปได้และผลลัพธ์เอาต์พุต (1 หรือ 0) ของ combination นั้น ๆ ดังนั้นนิพจน์ที่มีตัวแปรอินพุต 2 ตัวในโดเมนจะมี 4 combination (2<sup>2</sup> = 4) ส่วนนิพจน์ที่มีตัวแปรอินพุต 3 ตัวในโดเมนจะมี 8 combination (2<sup>3</sup> = 8) และนิพจน์ที่มีตัวแปรอินพุต 4 ตัวในโดเมนจะมี 16 combination (2<sup>4</sup> = 16) และถ้ามีอินพุตมากกว่านี้ก็จะใช้วิธีเดียวกันนี้เพื่อให้ทราบขนาดของตารางค่าความจริง</p>
+<p>ขั้นตอนแรกของการสร้างตารางค่าความจริงคือการสร้างลิสต์ของ combination ของค่าไบนารีของตัวแปรที่ปรากฏในโดเมนของนิพจน์นั้น ๆ หลังจากนั้นถ้านิพจน์ SOP ที่กำหนดให้ไม่อยู่ในรูปแบบมาตรฐานก็ให้ดำเนินการเปลี่ยนให้อยู่ในรูปแบบมาตรฐาน และขั้นสุดท้ายให้ใส่ค่า 1 ลงในคอลัมน์เอาต์พุต (<em>X</em>) สำหรับแต่ละค่าไบนารีที่ทำให้นิพจน์ SOP มาตรฐานมีค่าเป็น 1 ส่วนแถวที่เหลือซึ่งไม่ได้ทำให้เอาต์พุตเป็น 1 ให้เราใส่ 0 เข้าไป ลองดูตัวอย่างที่ 5.11</p>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.11</span></div>
+<div class="q">
+<p>จงสร้างตารางค่าความจริงสำหรับนิพจน์ SOP มาตรฐาน <span class="m" data-k="t51"><span class="m"><span class="ov">A</span><span class="ov">B</span>C + A<span class="ov">B</span><span class="ov">C</span> + ABC</span></span></p>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>ในโดเมนนี้มีตัวแปรอยู่ 3 ตัว ดังนั้นจะทำให้มี 8 combination ซึ่งสามารถสร้างเป็นตารางขนาด 8 แถวดังที่เห็นในตารางที่ 5.1 ซึ่งค่าไบนารีที่ทำให้พจน์การคูณที่ปรากฏอยู่ในนิพจน์มีค่าเป็น 1 นั้นมีดังนี้ <span class="m"><span class="m"><span class="ov">A</span><span class="ov">B</span>C</span></span> : <span class="bits">001</span>, <span class="m"><span class="m">A<span class="ov">B</span><span class="ov">C</span></span></span> : <span class="bits">100</span>, <span class="m"><span class="m">ABC</span></span> : <span class="bits">111</span> ซึ่งสามารถนำ 1 ไปวางยัง combination นั้น ๆ ได้ดังในตาราง ส่วนที่เหลือให้ใส่ 0 ไปทั้งหมด</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 5.1</span> ตารางค่าความจริงของนิพจน์ <span class="m"><span class="m"><span class="ov">A</span><span class="ov">B</span>C + A<span class="ov">B</span><span class="ov">C</span> + ABC</span></span></div>
+<div class="tbl-scroll"><table class="tt" data-tt="t51:sop">
+<thead><tr><th class="vr" colspan="3">Inputs</th><th class="vr">Output</th><th rowspan="2" style="vertical-align:bottom">Product Term</th></tr>
+<tr><th class="v">A</th><th class="v">B</th><th class="v vr">C</th><th class="v vr">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="vr">0</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr class="hit"><td>0</td><td>0</td><td class="vr">1</td><td class="out vr">1</td><td class="term"><span class="m"><span class="ov">A</span><span class="ov">B</span>C</span></td></tr>
+<tr><td>0</td><td>1</td><td class="vr">0</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr><td>0</td><td>1</td><td class="vr">1</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr class="hit"><td>1</td><td>0</td><td class="vr">0</td><td class="out vr">1</td><td class="term"><span class="m">A<span class="ov">B</span><span class="ov">C</span></span></td></tr>
+<tr><td>1</td><td>0</td><td class="vr">1</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr><td>1</td><td>1</td><td class="vr">0</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr class="hit"><td>1</td><td>1</td><td class="vr">1</td><td class="out vr">1</td><td class="term"><span class="m">ABC</span></td></tr>
+</tbody>
+</table></div></div>
+</details></div>
+<h3 id="s5-3-2"><span class="no">5.3.2</span> การแปลงนิพจน์ POS ให้เป็นตารางค่าความจริง</h3>
+<p>เราได้รู้มาว่านิพจน์ POS จะมีค่าเท่ากับ 0 เมื่อมีอย่างน้อยพจน์หนึ่งที่มีค่าเท่ากับ 0 ขั้นตอนแรกของการสร้างตารางค่าความจริงคือการสร้างลิสต์ของ combination ของค่าไบนารีของตัวแปรที่ปรากฏในโดเมนของนิพจน์นั้น ๆ หลังจากนั้นถ้านิพจน์ POS ที่กำหนดให้ไม่อยู่ในรูปแบบมาตรฐานก็ให้ดำเนินการเปลี่ยนให้อยู่ในรูปแบบมาตรฐาน และขั้นสุดท้ายให้ใส่ค่า 0 ลงในคอลัมน์เอาต์พุต (<em>X</em>) สำหรับแต่ละค่าไบนารีที่ทำให้นิพจน์ POS มาตรฐานมีค่าเป็น 0 ส่วนแถวที่เหลือซึ่งไม่ได้ทำให้เอาต์พุตเป็น 0 ให้เราใส่ 1 เข้าไป ลองดูตัวอย่างที่ 5.12</p>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.12</span></div>
+<div class="q">
+<p>จงสร้างตารางค่าความจริงสำหรับนิพจน์ POS มาตรฐาน</p>
+<div class="expr sm" data-k="t52"><span class="m">(A + B + C)(A + <span class="ov">B</span> + C)(A + <span class="ov">B</span> + <span class="ov">C</span>)(<span class="ov">A</span> + B + <span class="ov">C</span>)(<span class="ov">A</span> + <span class="ov">B</span> + C)</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>ในโดเมนนี้มีตัวแปรอยู่ 3 ตัว ดังนั้นจะทำให้มี 8 combination ซึ่งสามารถสร้างเป็นตารางขนาด 8 แถวดังที่เห็นในตารางที่ 5.2 ซึ่งค่าไบนารีที่ทำให้พจน์การบวกที่ปรากฏอยู่ในนิพจน์มีค่าเป็น 0 นั้นมีดังนี้ <span class="m"><span class="m">A + B + C</span></span> : <span class="bits">000</span>, <span class="m"><span class="m">A + <span class="ov">B</span> + C</span></span> : <span class="bits">010</span>, <span class="m"><span class="m">A + <span class="ov">B</span> + <span class="ov">C</span></span></span> : <span class="bits">011</span>, <span class="m"><span class="m"><span class="ov">A</span> + B + <span class="ov">C</span></span></span> : <span class="bits">101</span>, <span class="m"><span class="m"><span class="ov">A</span> + <span class="ov">B</span> + C</span></span> : <span class="bits">110</span> ซึ่งสามารถนำ 0 ไปวางยัง combination นั้น ๆ ได้ดังในตาราง ส่วนที่เหลือให้ใส่ 1 ไปทั้งหมด</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 5.2</span> ตารางค่าความจริงของนิพจน์ POS ในตัวอย่างที่ 5.12</div>
+<div class="tbl-scroll"><table class="tt" data-tt="t52:pos">
+<thead><tr><th class="vr" colspan="3">Inputs</th><th class="vr">Output</th><th rowspan="2" style="vertical-align:bottom">Sum Term</th></tr>
+<tr><th class="v">A</th><th class="v">B</th><th class="v vr">C</th><th class="v vr">X</th></tr></thead>
+<tbody>
+<tr class="hit"><td>0</td><td>0</td><td class="vr">0</td><td class="out vr">0</td><td class="term"><span class="m">(A + B + C)</span></td></tr>
+<tr><td>0</td><td>0</td><td class="vr">1</td><td class="out vr">1</td><td class="term"></td></tr>
+<tr class="hit"><td>0</td><td>1</td><td class="vr">0</td><td class="out vr">0</td><td class="term"><span class="m">(A + <span class="ov">B</span> + C)</span></td></tr>
+<tr class="hit"><td>0</td><td>1</td><td class="vr">1</td><td class="out vr">0</td><td class="term"><span class="m">(A + <span class="ov">B</span> + <span class="ov">C</span>)</span></td></tr>
+<tr><td>1</td><td>0</td><td class="vr">0</td><td class="out vr">1</td><td class="term"></td></tr>
+<tr class="hit"><td>1</td><td>0</td><td class="vr">1</td><td class="out vr">0</td><td class="term"><span class="m">(<span class="ov">A</span> + B + <span class="ov">C</span>)</span></td></tr>
+<tr class="hit"><td>1</td><td>1</td><td class="vr">0</td><td class="out vr">0</td><td class="term"><span class="m">(<span class="ov">A</span> + <span class="ov">B</span> + C)</span></td></tr>
+<tr><td>1</td><td>1</td><td class="vr">1</td><td class="out vr">1</td><td class="term"></td></tr>
+</tbody>
+</table></div></div>
+</details></div>
+<h3 id="s5-3-3"><span class="no">5.3.3</span> การสร้างนิพจน์มาตรฐานจากตารางค่าความจริง</h3>
+<p>การสร้างนิพจน์ SOP มาตรฐานจากตารางค่าความจริงนั้น ให้เลือกแถวที่เอาต์พุตมีค่าเป็น 1 แล้วแปลงค่าไบนารีของอินพุตที่สอดคล้องกับเอาต์พุตนั้น ๆ โดยการแทนค่า 1 ด้วยชื่อตัวแปรนั้น และแทนค่า 0 ด้วย complement ของตัวแปรนั้น ยกตัวอย่างเช่น ค่าไบนารี <span class="bits">1010</span> จะสามารถแปลงให้เป็นพจน์การคูณได้ดังนี้</p>
+<div class="expr-block" data-map="p:1010">1010 → <span class="m">A<span class="ov">B</span>C<span class="ov">D</span></span></div>
+<p>ถ้าเราลองแทนค่าดู จะพบว่าค่าของพจน์นี้จะมีค่าเท่ากับ 1</p>
+<div class="expr-block" data-k="v1010b" data-v="1010"><span class="m">A<span class="ov">B</span>C<span class="ov">D</span> = 1·<span class="ov">0</span>·1·<span class="ov">0</span> = 1·1·1·1 = 1</span></div>
+<p>สำหรับการสร้างนิพจน์ POS มาตรฐานจากตารางค่าความจริงนั้น ให้เลือกแถวที่เอาต์พุตมีค่าเป็น 0 แล้วแปลงค่าไบนารีของอินพุตที่สอดคล้องกับเอาต์พุตนั้น ๆ โดยการแทนค่า 0 ด้วยชื่อตัวแปรนั้น และแทนค่า 1 ด้วย complement ของตัวแปรนั้น ยกตัวอย่างเช่น ค่าไบนารี <span class="bits">1001</span> จะสามารถแปลงให้เป็นพจน์การบวกได้ดังนี้</p>
+<div class="expr-block" data-map="s:1001">1001 → <span class="m"><span class="ov">A</span> + B + C + <span class="ov">D</span></span></div>
+<p>ถ้าเราลองแทนค่าดู จะพบว่าค่าของพจน์นี้จะมีค่าเท่ากับ 0</p>
+<div class="expr-block" data-k="s1001" data-v="1001"><span class="m"><span class="ov">A</span> + B + C + <span class="ov">D</span> = <span class="ov">1</span> + 0 + 0 + <span class="ov">1</span> = 0 + 0 + 0 + 0 = 0</span></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.13</span></div>
+<div class="q">
+<p>จากตารางค่าความจริงที่แสดงในตารางที่ 5.3 จงสร้างนิพจน์ SOP มาตรฐานและนิพจน์ POS มาตรฐานที่เทียบเท่ากัน</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 5.3</span> ตารางค่าความจริงสำหรับตัวอย่างที่ 5.13</div>
+<div class="tbl-scroll"><table class="tt" data-tt="t53:plain">
+<thead><tr><th class="vr" colspan="3">อินพุต</th><th>เอาต์พุต</th></tr>
+<tr><th class="v">A</th><th class="v">B</th><th class="v vr">C</th><th class="v">X</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="vr">0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>0</td><td class="vr">1</td><td class="out">0</td></tr>
+<tr><td>0</td><td>1</td><td class="vr">0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>1</td><td class="vr">1</td><td class="out">1</td></tr>
+<tr><td>1</td><td>0</td><td class="vr">0</td><td class="out">1</td></tr>
+<tr><td>1</td><td>0</td><td class="vr">1</td><td class="out">0</td></tr>
+<tr><td>1</td><td>1</td><td class="vr">0</td><td class="out">1</td></tr>
+<tr><td>1</td><td>1</td><td class="vr">1</td><td class="out">1</td></tr>
+</tbody>
+</table></div></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>จะเห็นว่ามีเอาต์พุตที่เป็น 1 อยู่ 4 กรณี อันได้แก่อินพุตที่เป็น <span class="bits">011</span>, <span class="bits">100</span>, <span class="bits">110</span> และ <span class="bits">111</span> ทำการแปลงให้เป็นพจน์การคูณเราจะได้ว่า</p>
+<div class="expr-block">
+<div data-map="p:011">011 → <span class="m"><span class="ov">A</span>BC</span></div>
+<div data-map="p:100">100 → <span class="m">A<span class="ov">B</span><span class="ov">C</span></span></div>
+<div data-map="p:110">110 → <span class="m">AB<span class="ov">C</span></span></div>
+<div data-map="p:111">111 → <span class="m">ABC</span></div>
+</div>
+<p>ซึ่งผลลัพธ์ที่ได้จะเป็นนิพจน์ SOP มาตรฐานสำหรับเอาต์พุต <em>X</em> คือ</p>
+<div class="expr ans" data-k="t53"><span class="m">X = <span class="ov">A</span>BC + A<span class="ov">B</span><span class="ov">C</span> + AB<span class="ov">C</span> + ABC</span></div>
+<p>สำหรับการสร้างนิพจน์ POS เอาต์พุตที่เป็น 0 จะเกิดเมื่ออินพุตเป็น <span class="bits">000</span>, <span class="bits">001</span>, <span class="bits">010</span> และ <span class="bits">101</span> ทำการแปลงให้เป็นพจน์การบวกเราจะได้ว่า</p>
+<div class="expr-block">
+<div data-map="s:000">000 → <span class="m">A + B + C</span></div>
+<div data-map="s:001">001 → <span class="m">A + B + <span class="ov">C</span></span></div>
+<div data-map="s:010">010 → <span class="m">A + <span class="ov">B</span> + C</span></div>
+<div data-map="s:101">101 → <span class="m"><span class="ov">A</span> + B + <span class="ov">C</span></span></div>
+</div>
+<p>ซึ่งผลลัพธ์ที่ได้จะเป็นนิพจน์ POS มาตรฐานสำหรับเอาต์พุต <em>X</em> คือ</p>
+<div class="expr ans" data-k="t53"><span class="m">X = (A + B + C)(A + B + <span class="ov">C</span>)(A + <span class="ov">B</span> + C)(<span class="ov">A</span> + B + <span class="ov">C</span>)</span></div>
+</details></div>
+<div data-widget="tt2expr"></div></section><section class="sec"><h2 id="s5-4"><span class="no">5.4</span> แผนผังคาร์โนห์ (Karnaugh Map)</h2>
+<p><strong>แผนผังคาร์โนห์</strong> (<em>Karnaugh map</em>) เป็นวิธีในการลดรูปนิพจน์บูลีนที่เป็นระบบ และถ้าใช้ได้อย่างถูกต้องแล้วจะสามารถลดรูปนิพจน์ SOP หรือ POS ได้เล็กที่สุดเท่าที่จะเป็นไปได้ ซึ่งจากที่ผ่านมาการใช้พีชคณิตบูลีนนั้น เราต้องมีความคล่องแคล่วในการใช้กฎ หลักเกณฑ์ และทฤษฎีบทที่อยู่ในพีชคณิตบูลีนได้เป็นอย่างดี ในขณะที่การใช้แผนผังคาร์โนห์จะมีขั้นตอนที่ชัดเจนและเป็นระบบสำหรับการลดรูปนิพจน์บูลีน</p>
+<p>แผนผังคาร์โนห์มีความคล้ายคลึงกับตารางค่าความจริง เพราะมีการแสดงค่าอินพุตทุก combination ที่เป็นไปได้และระบุเอาต์พุตที่ได้ แต่แทนที่จะแสดงในรูปของตารางเหมือนกับตารางค่าความจริง จะเปลี่ยนเป็นการแบ่งออกเป็นช่อง (<em>cell</em>) โดยแต่ละช่องจะบอกค่าไบนารีของแต่ละอินพุต รูปแบบการวางตัวของ cell ถูกคิดเอาไว้เพื่อความง่ายต่อการลดรูปนิพจน์ ซึ่งทำได้ด้วยการจับกลุ่ม cell เข้าด้วยกัน แผนผังคาร์โนห์สามารถใช้กับนิพจน์ที่มีตัวแปรตั้งแต่ 2 จนถึง 5 ตัว แต่ในที่นี้จะกล่าวถึงแบบ 3 ตัวแปรและ 4 ตัวแปรเท่านั้น</p>
+<p>จำนวน cell ในแผนผังคาร์โนห์จะมีจำนวนเท่ากับ combination ที่เป็นไปได้สำหรับจำนวนตัวแปรอินพุตหนึ่ง ๆ ดังนั้นสำหรับแผนผังคาร์โนห์แบบ 3 ตัวแปรจะมีจำนวน cell เท่ากับ 2<sup>3</sup> = 8 cell ส่วนแผนผังคาร์โนห์แบบ 4 ตัวแปรจะมีจำนวน cell เท่ากับ 2<sup>4</sup> = 16 cell</p>
+<h3 id="s5-4-1"><span class="no">5.4.1</span> แผนผังคาร์โนห์แบบ 3 ตัวแปร</h3>
+<p>ประกอบด้วย 8 cell ที่วางตัวกันดังเห็นในรูปที่ 5.4 (ก) ในที่นี้จะใช้ตัวแปร <em>A</em>, <em>B</em> และ <em>C</em> ซึ่งเราสามารถใช้อักษรตัวอื่นก็ได้ จากรูปจะเห็นว่ามีการจับคู่ตัวแปร A กับ B คู่กัน และมีการกำกับเลขไบนารีของตัวแปรแต่ละตัวเอาไว้ตรงด้านซ้าย ซึ่งถ้าพิจารณาดูจะมีการเรียงที่ไม่เป็นลำดับทางไบนารี แต่จะเป็น<strong>รหัสเกรย์</strong>แทน ส่วนค่าไบนารีของตัวแปร C จะอยู่ด้านบนของแผนผัง</p>
+<figure class="c"><div class="subrow">
+<div class="sub"><img alt="รูปที่ 5.4 แผนผังคาร์โนห์ขนาด 3 ตัวแปรที่แสดงพจน์การคูณ" loading="lazy" src="img/fig5-4a.png" style="width:161px"/><div class="subcap"><b>(ก)</b></div></div>
+<div class="sub"><img alt="รูปที่ 5.4 แผนผังคาร์โนห์ขนาด 3 ตัวแปรที่แสดงพจน์การคูณ" loading="lazy" src="img/fig5-4b.png" style="width:161px"/><div class="subcap"><b>(ข)</b></div></div></div>
+<figcaption><span class="cap-no">รูปที่ 5.4</span> แผนผังคาร์โนห์ขนาด 3 ตัวแปรที่แสดงพจน์การคูณ</figcaption></figure>
+<p>นักศึกษาคิดว่า ถ้าค่าไบนารีของพจน์หนึ่ง ๆ เท่ากับ <span class="bits">010</span> พจน์นั้นจะเป็นพจน์ที่อยู่ cell ใด ลองใช้ความคิดโดยประยุกต์ใช้ความรู้ที่ได้เรียนมาและใช้รูปที่ 5.4 (ข) ในการอ้างอิง</p>
+<h3 id="s5-4-2"><span class="no">5.4.2</span> แผนผังคาร์โนห์แบบ 4 ตัวแปร</h3>
+<p>ประกอบด้วย 16 cell ที่วางตัวกันดังเห็นในรูปที่ 5.5 (ก) ในที่นี้จะใช้ตัวแปร <em>A</em>, <em>B</em>, <em>C</em> และ <em>D</em> ซึ่งเราสามารถใช้อักษรตัวอื่นก็ได้ จากรูปจะเห็นว่ามีการจับคู่ตัวแปร A กับ B และ C กับ D คู่กัน โดย AB จะอยู่ทางด้านซ้ายมือ (แถว) และ CD จะอยู่ด้านบน (คอลัมน์)</p>
+<figure class="c"><div class="subrow" style="gap:38px">
+<div class="sub"><img alt="รูปที่ 5.5 แผนผังคาร์โนห์ขนาด 4 ตัวแปรที่แสดงพจน์การคูณ" loading="lazy" src="img/fig5-5a.png" style="width:255px"/><div class="subcap"><b>(ก)</b></div></div>
+<div class="sub"><img alt="รูปที่ 5.5 แผนผังคาร์โนห์ขนาด 4 ตัวแปรที่แสดงพจน์การคูณ" loading="lazy" src="img/fig5-5b.png" style="width:255px"/><div class="subcap"><b>(ข)</b></div></div></div>
+<figcaption><span class="cap-no">รูปที่ 5.5</span> แผนผังคาร์โนห์ขนาด 4 ตัวแปรที่แสดงพจน์การคูณ</figcaption></figure>
+<h3 id="s5-4-3"><span class="no">5.4.3</span> Cell Adjacency</h3>
+<p>Cell ใด ๆ ที่อยู่ในแผนผังคาร์โนห์นั้น จะสังเกตได้ว่า cell ที่อยู่ติดกัน (<em>adjacent cell</em>) จะมีการเปลี่ยนแปลงของตัวแปรเพียงตัวเดียวเท่านั้น (ซึ่งถ้าจำได้ <strong>รหัสเกรย์</strong> (<em>Gray code</em>) มีคุณลักษณะเป็นเช่นนั้น นักศึกษาลองดูตัวเลขที่กำกับแผนผังในรูปที่ 5.4 และ 5.5 เพื่อประกอบการพิจารณาทำความเข้าใจ) เช่น ในแผนผังคาร์โนห์แบบ 3 ตัวแปร cell ที่มีค่าไบนารี <span class="bits">010</span> จะอยู่ติดกับ cell ที่มีค่าไบนารี <span class="bits">000</span>, <span class="bits">011</span> และ <span class="bits">110</span> และจะไม่อยู่ติดกับ cell ที่มีค่าไบนารี <span class="bits">001</span>, <span class="bits">111</span>, <span class="bits">100</span> และ <span class="bits">101</span></p>
+<p>ถ้าเราพิจารณาดูแต่ละ cell ที่อยู่ติดกัน จะเป็น cell ที่อยู่ 4 ด้านรอบตัวทางแนวตั้งและแนวนอนห่างไป 1 cell เท่านั้น ส่วนที่ติดกันแบบแนวทแยงจะไม่นับว่าเป็น cell ที่ติดกันในที่นี้ (ใช้หลักเกณฑ์ของเลขไบนารีที่เปลี่ยนแปลงเพียง 1 บิตที่ได้กล่าวไว้ข้างต้น) ทั้งนี้ขอให้พิจารณา cell ที่อยู่ชายขอบให้ดี เช่น cell ที่อยู่ชายขอบซ้ายของแผนผังคาร์โนห์แบบ 4 ตัวแปรอย่าง <span class="bits">1100</span> กับ cell ที่อยู่ชายขอบขวาแถวเดียวกัน ได้แก่ <span class="bits">1110</span> นั้นถือว่าเป็น cell ที่อยู่ติดกันด้วย โดยลองจินตนาการว่าถ้าเราเอาแผนผังนี้มาม้วนเข้าหากันโดยให้แนวตั้งเป็นแกนม้วน จะเห็นว่าทั้งสอง cell นี้มาชนกันพอดี และถ้าเราม้วนอีกแนวแกนหนึ่ง เราก็จะเห็นว่าชายขอบบนกับชายขอบล่างก็จะมี cell ที่นับว่าอยู่ติดกันได้อีกด้วย ลองดูรูปที่ 5.6 ที่มีการแสดงการม้วนเข้าหากัน และลองอภิปรายสำหรับ cell ที่อยู่มุมทั้งสี่ของแผนผังด้วยว่ามีความสัมพันธ์กันอย่างไร (ถ้าการม้วนทำให้สับสน ให้พิจารณาจากการเปลี่ยนแปลงของค่าไบนารีประจำ cell นั้น ๆ เพื่อประกอบการวิเคราะห์)</p>
+<figure class="c"><img alt="รูปที่ 5.6 แผนผังคาร์โนห์ขนาด 4 ตัวแปรที่แสดงการติดกันของ cell ต่าง ๆ ดูการต่อกันที่กำกับด้วยหัวลูกศร" loading="lazy" src="img/fig5-6.png" style="width:274px"/><figcaption><span class="cap-no">รูปที่ 5.6</span> แผนผังคาร์โนห์ขนาด 4 ตัวแปรที่แสดงการติดกันของ cell ต่าง ๆ ดูการต่อกันที่กำกับด้วยหัวลูกศร</figcaption></figure>
+<div data-widget="adjacency"></div></section><section class="sec"><h2 id="s5-5"><span class="no">5.5</span> การใช้แผนผังคาร์โนห์สำหรับการลดรูปนิพจน์ SOP</h2>
+<p>ประโยชน์ของแผนผังคาร์โนห์นั้นมีไว้เพื่อการลดรูปนิพจน์บูลีนให้อยู่ในรูปที่ง่ายที่สุด หรือในอีกนัยหนึ่งคือเพื่อลดขนาดของวงจรนั่นเอง สำหรับหัวข้อนี้เราจะนำแผนผังคาร์โนห์มาลดรูปนิพจน์แบบ SOP ก่อน</p>
+<h3 id="s5-5-1"><span class="no">5.5.1</span> การจัดนิพจน์ SOP มาตรฐานเข้าสู่แผนผัง</h3>
+<p>เมื่อเรามีนิพจน์ SOP มาตรฐานแล้ว เราจะสามารถจัดพจน์การคูณแต่ละพจน์ที่ปรากฏอยู่ในนิพจน์นั้น โดยใส่ค่า 1 ลงไปยังช่องต่าง ๆ ที่มีค่าไบนารีสอดคล้องกับพจน์นั้น ๆ เช่น พจน์ <span class="m"><span class="m">A<span class="ov">B</span>C</span></span> จะใส่ลงไปใน cell ที่มีค่าไบนารีเป็น <span class="bits">101</span> ในแผนผังคาร์โนห์แบบ 3 ตัวแปร เป็นต้น</p>
+<p>เมื่อทุกพจน์ได้ถูกจัดลงในแผนผังโดยสมบูรณ์แล้ว เราจะได้จำนวนตัวเลข 1 ปรากฏเท่ากับจำนวนของพจน์ที่ปรากฏในนิพจน์ SOP มาตรฐานนั้น ๆ สำหรับ cell ที่ไม่มีตัวเลข 1 กำกับไว้ก็จะมีค่าเป็น 0 แต่เมื่อเราทำงานกับนิพจน์ SOP เราจะไม่ใส่ 0 เข้าไปให้รกตา สรุปขั้นตอนการจัดนิพจน์ SOP มาตรฐานเข้าสู่แผนผังได้ดังต่อไปนี้</p>
+<ol class="steps">
+<li><span class="step">ขั้นที่ 1</span> หาค่าไบนารีของพจน์การคูณแต่ละพจน์ที่ปรากฏในนิพจน์ SOP มาตรฐาน (ในขั้นตอนฝึกหัดแรก ๆ อาจใช้เวลาพอสมควร แต่เมื่อคล่องแคล่วแล้วเราจะสามารถทำในใจได้อย่างรวดเร็ว)</li>
+<li><span class="step">ขั้นที่ 2</span> เมื่อเราได้ค่าไบนารีแล้ว ให้จัดแต่ละพจน์ลงไปยังแต่ละ cell ที่สอดคล้องกันด้วยค่าไบนารี โดยเขียนตัวเลข 1 ลงไปยัง cell เหล่านั้น</li>
+</ol>
+<p>ดูตัวอย่างจากรูปที่ 5.7</p>
+<figure class="c"><img alt="รูปที่ 5.7 ตัวอย่างการจัดนิพจน์ SOP มาตรฐานลงในแผนผังคาร์โนห์แบบ 3 ตัวแปร" loading="lazy" src="img/fig5-7.png" style="width:397px"/><figcaption><span class="cap-no">รูปที่ 5.7</span> ตัวอย่างการจัดนิพจน์ SOP มาตรฐานลงในแผนผังคาร์โนห์แบบ 3 ตัวแปร</figcaption></figure>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.14</span></div>
+<div class="q">
+<p>จงจัดนิพจน์ SOP มาตรฐานต่อไปนี้ลงในแผนผังคาร์โนห์ให้ถูกต้อง</p>
+<div class="expr"><span class="m"><span class="ov">A</span><span class="ov">B</span>C + <span class="ov">A</span>B<span class="ov">C</span> + AB<span class="ov">C</span> + ABC</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>จากนิพจน์ SOP มาตรฐานนี้ทำให้เราทราบว่าโดเมนนี้มีตัวแปรทั้งหมด 3 ตัวแปร และเราสามารถประเมินค่าไบนารีของแต่ละพจน์ได้ดังนี้</p>
+<div class="tbl-scroll"><table class="bv" data-bv="p">
+<tr><td><span class="m"><span class="ov">A</span><span class="ov">B</span>C</span></td><td>+</td><td><span class="m"><span class="ov">A</span>B<span class="ov">C</span></span></td><td>+</td><td><span class="m">AB<span class="ov">C</span></span></td><td>+</td><td><span class="m">ABC</span></td></tr>
+<tr><td>001</td><td></td><td>010</td><td></td><td>110</td><td></td><td>111</td></tr>
+</table></div>
+<p>ซึ่งทำให้เราสามารถจัดแต่ละพจน์ให้ไปลงยัง cell ต่าง ๆ ได้ดังต่อไปนี้</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch5-ex14.png" style="width:213px"/></figure>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.15</span></div>
+<div class="q">
+<p>จงจัดนิพจน์ SOP มาตรฐานต่อไปนี้ลงในแผนผังคาร์โนห์ให้ถูกต้อง</p>
+<div class="expr sm"><span class="m"><span class="ov">A</span><span class="ov">B</span>CD + <span class="ov">A</span>B<span class="ov">C</span><span class="ov">D</span> + AB<span class="ov">C</span>D + ABCD + AB<span class="ov">C</span><span class="ov">D</span> + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>D + A<span class="ov">B</span>C<span class="ov">D</span></span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>จากนิพจน์ SOP มาตรฐานนี้ทำให้เราทราบว่าโดเมนนี้มีตัวแปรทั้งหมด 4 ตัวแปร และเราสามารถประเมินค่าไบนารีของแต่ละพจน์ได้ดังนี้</p>
+<div class="tbl-scroll"><table class="bv sm" data-bv="p">
+<tr><td><span class="m"><span class="ov">A</span><span class="ov">B</span>CD</span></td><td><span class="m"><span class="ov">A</span>B<span class="ov">C</span><span class="ov">D</span></span></td><td><span class="m">AB<span class="ov">C</span>D</span></td><td><span class="m">ABCD</span></td><td><span class="m">AB<span class="ov">C</span><span class="ov">D</span></span></td><td><span class="m"><span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>D</span></td><td><span class="m">A<span class="ov">B</span>C<span class="ov">D</span></span></td></tr>
+<tr><td>0011</td><td>0100</td><td>1101</td><td>1111</td><td>1100</td><td>0001</td><td>1010</td></tr>
+</table></div>
+<p>ซึ่งทำให้เราสามารถจัดแต่ละพจน์ให้ไปลงยัง cell ต่าง ๆ ได้ดังต่อไปนี้</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch5-ex15.png" style="width:359px"/></figure>
+</details></div>
+<div class="exercise"><div class="ex-title">✍️ แบบฝึกหัดที่ 5.3</div><div class="ex-body">
+<p>จงจัดนิพจน์ SOP มาตรฐานต่อไปนี้ลงในแผนผังคาร์โนห์ให้ถูกต้อง</p>
+<ol class="rom c2 r2">
+<li><span class="m"><span class="ov">A</span>BC + A<span class="ov">B</span>C + A<span class="ov">B</span><span class="ov">C</span></span></li>
+<li><span class="m"><span class="ov">A</span><span class="ov">B</span><span class="ov">C</span> + <span class="ov">A</span><span class="ov">B</span>C + A<span class="ov">B</span>C</span></li>
+<li><span class="m"><span class="ov">A</span>BC<span class="ov">D</span> + ABC<span class="ov">D</span> + AB<span class="ov">C</span><span class="ov">D</span> + ABCD</span></li>
+<li><span class="m"><span class="ov">A</span><span class="ov">B</span><span class="ov">C</span><span class="ov">D</span> + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>D + ABCD + ABC<span class="ov">D</span></span></li>
+</ol>
+</div></div>
+<h3 id="s5-5-2"><span class="no">5.5.2</span> การจัดนิพจน์ SOP ที่ไม่เป็นมาตรฐานลงในแผนผังคาร์โนห์</h3>
+<p>จากหัวข้อก่อนหน้านี้จะเห็นว่าการจัดพจน์ต่าง ๆ ลงในแผนผังคาร์โนห์นั้นจะทำได้ก็ต่อเมื่อนิพจน์ที่ถูกกำหนดเอาไว้อยู่ในแบบ SOP มาตรฐานเท่านั้น แต่ถ้านิพจน์นั้น ๆ ไม่ได้อยู่ในรูปมาตรฐาน เราก็ต้องทำการแปลงเสียก่อน โดยอาจใช้วิธีที่ได้กล่าวไว้ในหัวข้อ 5.2.1.4 ที่ผ่านมา หรืออาจจะใช้วิธี <strong>numerical expansion</strong> (การขยายพจน์ด้วยวิธีเชิงตัวเลข) ซึ่งเป็นวิธีที่มีประสิทธิภาพ</p>
+<p><span class="ul">การใช้ numerical expansion กับพจน์การคูณที่ไม่เป็นมาตรฐาน</span> พจน์ลักษณะนี้จะขาดตัวแปรบางตัวที่อยู่ในโดเมนของนิพจน์นั้น ๆ สมมติว่าพจน์หนึ่งในนิพจน์ที่มีตัวแปร 3 ตัว <em>A</em>, <em>B</em> และ <em>C</em> อยู่ในโดเมนปรากฏเป็น <span class="m"><span class="m">A<span class="ov">B</span></span></span> เราสามารถขยายพจน์นี้ออกได้เป็น 2 พจน์ โดยเริ่มจากการเขียนค่าไบนารีของ 2 ตัวแปรที่เห็น แล้วเขียน 0 ต่อท้ายสำหรับ <span class="m"><span class="m"><span class="ov">C</span></span></span> ที่หายไป ได้เป็น <span class="bits">100</span> ขั้นต่อไปให้เขียนค่าไบนารีของ 2 ตัวแปรที่เห็น แล้วเขียน 1 ต่อท้ายสำหรับ <span class="m"><span class="m">C</span></span> ที่หายไป เป็น <span class="bits">101</span> ซึ่งเราจะแปลงกลับให้เป็นพจน์การคูณได้เป็น <span class="m"><span class="m">A<span class="ov">B</span><span class="ov">C</span></span></span> และ <span class="m"><span class="m">A<span class="ov">B</span>C</span></span> ตามลำดับ</p>
+<p>สำหรับตัวอย่างถัดไป ในกรณีที่เป็นนิพจน์ขนาด 3 ตัวแปร แต่พจน์ที่มีอยู่ตัวหนึ่งนั้นเป็น <span class="m"><span class="m">B</span></span> ซึ่งขาด A และ C ไป เราสามารถทำ numerical expansion ได้ดังต่อไปนี้</p>
+<div class="tbl-scroll"><table class="nx" data-nx="ABC">
+<tr><th><span class="m">B</span></th></tr>
+<tr><td>010</td></tr><tr><td>011</td></tr><tr><td>110</td></tr><tr><td>111</td></tr>
+</table></div>
+<p>ซึ่งเราจะได้ค่าไบนารี 4 ค่าที่ขยายออกมา ซึ่งแปลงกลับให้เป็นพจน์การคูณมาตรฐานได้เป็น <span class="m"><span class="m"><span class="ov">A</span>B<span class="ov">C</span></span></span>, <span class="m"><span class="m"><span class="ov">A</span>BC</span></span>, <span class="m"><span class="m">AB<span class="ov">C</span></span></span> และ <span class="m"><span class="m">ABC</span></span> ตามลำดับ</p>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.16</span></div>
+<div class="q">
+<p>จงจัดนิพจน์ SOP ต่อไปนี้ลงในแผนผังคาร์โนห์ให้ถูกต้อง  <span class="m"><span class="m"><span class="ov">A</span> + A<span class="ov">B</span> + AB<span class="ov">C</span></span></span></p>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>นิพจน์นี้ไม่ได้เป็น SOP มาตรฐาน เพราะพจน์แรกขาดไป 2 ตัวแปร พจน์ที่สองขาดไป 1 ตัวแปร สำหรับพจน์สุดท้ายมีตัวแปรครบ ดังนั้นเราจะใช้ numerical expansion กับแต่ละพจน์ได้ดังต่อไปนี้</p>
+<div class="tbl-scroll"><table class="nx" data-nx="ABC">
+<tr><th><span class="m"><span class="ov">A</span></span></th><th>+</th><th><span class="m">A<span class="ov">B</span></span></th><th>+</th><th><span class="m">AB<span class="ov">C</span></span></th></tr>
+<tr><td>000</td><td></td><td>100</td><td></td><td>110</td></tr>
+<tr><td>001</td><td></td><td>101</td><td></td><td></td></tr>
+<tr><td>010</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>011</td><td></td><td></td><td></td><td></td></tr>
+</table></div>
+<p>จากผลลัพธ์ที่ได้นี้ เราจะนำค่าไบนารีที่ได้แต่ละค่าไปจัดลงในแผนผังคาร์โนห์ได้ดังต่อไปนี้</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch5-ex16.png" style="width:161px"/></figure>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.17</span></div>
+<div class="q">
+<p>จงจัดนิพจน์ SOP ต่อไปนี้ลงในแผนผังคาร์โนห์ให้ถูกต้อง</p>
+<div class="expr"><span class="m"><span class="ov">B</span><span class="ov">C</span> + A<span class="ov">B</span> + AB<span class="ov">C</span> + A<span class="ov">B</span>C<span class="ov">D</span> + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>D + A<span class="ov">B</span>CD</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>นิพจน์นี้ไม่ได้เป็น SOP มาตรฐาน เพราะพจน์แรกขาดไป 2 ตัวแปร พจน์ที่สองขาดไป 2 ตัวแปร พจน์ที่สามขาดไป 1 ตัวแปร สำหรับพจน์ที่เหลือเป็นพจน์ที่มีตัวแปรครบ 4 ตัวแปร ดังนั้นเมื่อเราใช้ numerical expansion เราจะได้ดังต่อไปนี้</p>
+<div class="tbl-scroll"><table class="nx" data-nx="ABCD">
+<tr><th><span class="m"><span class="ov">B</span><span class="ov">C</span></span></th><th><span class="m">A<span class="ov">B</span></span></th><th><span class="m">AB<span class="ov">C</span></span></th><th><span class="m">A<span class="ov">B</span>C<span class="ov">D</span></span></th><th><span class="m"><span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>D</span></th><th><span class="m">A<span class="ov">B</span>CD</span></th></tr>
+<tr><td>0000</td><td>1000</td><td>1100</td><td>1010</td><td>0001</td><td>1011</td></tr>
+<tr><td><span class="dup">0001</span></td><td>1001</td><td>1101</td><td></td><td></td><td></td></tr>
+<tr><td><span class="dup">1000</span></td><td><span class="dup">1010</span></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><span class="dup">1001</span></td><td><span class="dup">1011</span></td><td></td><td></td><td></td><td></td></tr>
+</table></div>
+<p>จากผลลัพธ์ที่ได้นี้ เราจะนำค่าไบนารีที่ได้แต่ละค่าไปจัดลงในแผนผังคาร์โนห์ขนาด 4 ตัวแปรได้ดังต่อไปนี้ ทั้งนี้สังเกตว่าค่าไบนารีบางค่า (ในวงกลม) มีความซ้ำซ้อนกับค่าอื่นอยู่ ซึ่งเพียงไม่ต้องสนใจตัวใดตัวหนึ่งที่ซ้ำกันเท่านั้น (นำค่าที่ซ้ำกันไปใส่ในแผนผังเพียงครั้งเดียว)</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch5-ex17.png" style="width:255px"/></figure>
+</details></div>
+<h3 id="s5-5-3"><span class="no">5.5.3</span> การใช้แผนผังคาร์โนห์เพื่อการลดรูปนิพจน์ SOP</h3>
+<p>กระบวนการที่ทำให้เกิดนิพจน์ซึ่งมีจำนวนพจน์น้อยที่สุด โดยที่แต่ละพจน์มีตัวแปรจำนวนน้อยที่สุด เรียกว่า <strong>การลดขนาดนิพจน์ให้เล็กที่สุด</strong> (<em>minimization</em>) ซึ่งจะทำได้ด้วยการจัดกลุ่มของตัวเลข 1 ที่ปรากฏบนแผนผัง อันจะเป็นขั้นตอนที่นำไปสู่การลดรูปนิพจน์ SOP ให้เล็กที่สุดเท่าที่จะเล็กได้ต่อไป</p>
+<p><span class="ul">การจัดกลุ่มของตัวเลข 1</span> การจัดกลุ่มตัวเลข 1 ที่อยู่บน cell ที่ติดกัน (<em>adjacent cell</em>) บนแผนผังคาร์โนห์นั้น จะต้องพยายามรวบรวมให้เกิดกลุ่มที่มีสมาชิกของกลุ่มให้มากที่สุด และมีจำนวนกลุ่มให้น้อยที่สุด โดยมีกฎในการจัดกลุ่มดังต่อไปนี้</p>
+<ol class="nsteps">
+<li>กลุ่มใดกลุ่มหนึ่งจะต้องประกอบด้วยจำนวน cell ของตัวเลข 1 เป็นจำนวน 1, 2, 4, 8 หรือ 16 (เป็นเลขยกกำลังของ 2) สำหรับกรณีตัวแปร 3 ตัวนั้น เราสามารถจัดกลุ่มได้ใหญ่ที่สุดคือ 2<sup>3</sup> = 8 cell</li>
+<li>แต่ละ cell ที่อยู่ในกลุ่มเดียวกันจะต้องเป็น cell ที่อยู่ติดกันกับ cell ใกล้เคียงซึ่งกันและกัน แต่ไม่จำเป็นต้องเป็น cell ที่ติดกับทุก cell ภายในกลุ่มเดียวกัน</li>
+<li>ต้องทำให้เกิดเป็นกลุ่มที่ใหญ่ที่สุดเท่าที่จะเป็นไปได้ โดยแต่ละกลุ่มจะต้องมีจำนวน cell เป็นไปตามที่ได้กำหนดไว้ในกฎการจัดกลุ่มข้อที่ 1</li>
+<li>ตัวเลข 1 แต่ละตัวที่ปรากฏบนแผนผังจะต้องอยู่ในกลุ่มใดกลุ่มหนึ่งเสมอ สำหรับตัวเลข 1 ที่อยู่ในกลุ่มใดกลุ่มหนึ่งอยู่แล้ว อาจนำไปจัดเข้ากับอีกกลุ่มหนึ่งก็ได้ โดยที่ทั้งสองกลุ่มนี้จะต้องไม่มีตัวเลข 1 ร่วมกันทั้งหมด (แต่ละกลุ่มต้องมีตัวเลข 1 อย่างน้อยหนึ่งตัวที่ไม่ได้อยู่ในอีกกลุ่มหนึ่ง)</li>
+</ol>
+<p>พิจารณาจากตัวอย่างต่อไปนี้</p>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.18</span></div>
+<div class="q">
+<p>จงจัดกลุ่มของตัวเลข 1 สำหรับแผนผังคาร์โนห์ที่ปรากฏในรูปต่อไปนี้</p>
+<figure><img alt="" loading="lazy" src="img/ch5-ex18q.png" style="width:619px"/></figure>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>การจัดกลุ่มในแต่ละแผนผังสามารถทำได้ดังรูปข้างล่าง (อาจมีวิธีอื่นอีกที่จะจัดกลุ่มให้ใหญ่ที่สุดได้)</p>
+<figure><img alt="" loading="lazy" src="img/ch5-ex18a.png" style="width:605px"/></figure>
+</details></div>
+<p><span class="ul">การหานิพจน์ SOP ที่เล็กที่สุดจากแผนผังฯ</span> เมื่อการจัดกลุ่มของตัวเลข 1 จากขั้นตอนก่อนหน้าได้เสร็จสิ้นแล้ว กระบวนการต่อไปคือการหานิพจน์ SOP ที่เล็กที่สุด ซึ่งจะต้องกระทำตามกฎดังต่อไปนี้</p>
+<ol class="nsteps">
+<li>กลุ่มที่เราจัดได้กลุ่มหนึ่ง ๆ นั้นจะได้ผลลัพธ์เป็นพจน์การคูณออกมา 1 พจน์ ซึ่งเราจะต้องหาสิ่งที่เรียกว่า <strong>ตัวแปรขัดแย้ง</strong> (<em>contradictory variables</em>) ที่เราจะทำการกำจัดออกไปได้ โดยตัวแปรขัดแย้งนั้นจะเป็นตัวแปรที่ปรากฏทั้งในรูปของตัวแปรตัวนั้นเองและในรูป complement ของตัวแปรตัวนั้นในกลุ่มที่ถูกจัดไว้</li>
+<li>การหาพจน์ที่เล็กที่สุดที่เป็นไปได้จากแต่ละกลุ่มจะเป็นไปตามนี้
+    <div class="gsz">
+<div class="tbl-scroll"><table class="gs"><tr><th colspan="2">ก. แผนผังขนาด 3 ตัวแปร</th></tr>
+<tr><td>1 cell</td><td>เกิดพจน์ขนาด 3 ตัวแปร</td></tr>
+<tr><td>2 cell</td><td>เกิดพจน์ขนาด 2 ตัวแปร</td></tr>
+<tr><td>4 cell</td><td>เกิดพจน์ขนาด 1 ตัวแปร</td></tr>
+<tr><td>8 cell</td><td>ได้นิพจน์ผลลัพธ์เท่ากับ 1</td></tr></table></div>
+<div class="tbl-scroll"><table class="gs"><tr><th colspan="2">ข. แผนผังขนาด 4 ตัวแปร</th></tr>
+<tr><td>1 cell</td><td>เกิดพจน์ขนาด 4 ตัวแปร</td></tr>
+<tr><td>2 cell</td><td>เกิดพจน์ขนาด 3 ตัวแปร</td></tr>
+<tr><td>4 cell</td><td>เกิดพจน์ขนาด 2 ตัวแปร</td></tr>
+<tr><td>8 cell</td><td>เกิดพจน์ขนาด 1 ตัวแปร</td></tr>
+<tr><td>16 cell</td><td>ได้นิพจน์ผลลัพธ์เท่ากับ 1</td></tr></table></div>
+</div></li>
+<li>เมื่อได้พจน์ผลลัพธ์จากแต่ละกลุ่มมาแล้ว ให้นำแต่ละพจน์มาบวก (<em>sum</em>) เข้าด้วยกัน เพื่อทำให้เกิดเป็นนิพจน์ SOP ซึ่งจะมีขนาดที่เล็กที่สุดที่เป็นไปได้</li>
+</ol>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.19</span></div>
+<div class="q">
+<p>จงหาพจน์การคูณสำหรับแผนผังคาร์โนห์ต่อไปนี้ พร้อมทั้งเขียนผลลัพธ์ที่อยู่ในรูปของนิพจน์ SOP ที่มีขนาดเล็กที่สุด</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch5-ex19.png" style="width:302px"/></figure>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>ทำการหาตัวแปรขัดแย้งในแต่ละกลุ่มที่จัดได้ เริ่มต้นจากกลุ่มขนาด 8 cell ซึ่งจะเห็นว่าในกลุ่มนี้มี <span class="m"><span class="m">A</span></span> กับ <span class="m"><span class="m"><span class="ov">A</span></span></span>, <span class="m"><span class="m">C</span></span> กับ <span class="m"><span class="m"><span class="ov">C</span></span></span> และ <span class="m"><span class="m">D</span></span> กับ <span class="m"><span class="m"><span class="ov">D</span></span></span> ซึ่งอยู่ในลักษณะตัวแปรขัดแย้ง และสามารถกำจัดออกไปได้ ทำให้กลุ่มนี้เกิดพจน์ขนาด 1 ตัวแปร ซึ่งคือ <span class="m"><span class="m">B</span></span> หลงเหลืออยู่ตัวเดียว สำหรับกลุ่มต่อไปคือกลุ่มขนาด 4 cell ซึ่งมี <span class="m"><span class="m">B</span></span> กับ <span class="m"><span class="m"><span class="ov">B</span></span></span> และ <span class="m"><span class="m">D</span></span> กับ <span class="m"><span class="m"><span class="ov">D</span></span></span> ซึ่งอยู่ในลักษณะตัวแปรขัดแย้งที่กำจัดออกไปได้ ทำให้พจน์นี้คงเหลือเป็น <span class="m"><span class="m"><span class="ov">A</span>C</span></span> และสำหรับกลุ่มสุดท้ายคือกลุ่มขนาด 2 cell ซึ่งมีเพียง <span class="m"><span class="m">B</span></span> กับ <span class="m"><span class="m"><span class="ov">B</span></span></span> เท่านั้นที่อยู่ในลักษณะตัวแปรขัดแย้ง จึงทำให้พจน์นี้มีผลลัพธ์เป็น <span class="m"><span class="m">A<span class="ov">C</span>D</span></span> คงเหลืออยู่ ลองพิจารณาดูว่าการซ้อนทับของกลุ่มที่พยายามจัดให้ใหญ่ที่สุดเท่าที่จะเป็นไปได้นั้น ส่งผลให้เกิดพจน์ที่มีขนาดเล็กที่สุดที่เป็นไปได้นั่นเอง และนิพจน์ SOP ผลลัพธ์ก็คือ</p>
+<div class="expr ans" data-km="ex19"><span class="m">B + <span class="ov">A</span>C + A<span class="ov">C</span>D</span></div>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.20</span></div>
+<div class="q">
+<p>จงหาพจน์การคูณสำหรับแผนผังคาร์โนห์ต่อไปนี้ พร้อมทั้งเขียนผลลัพธ์ที่อยู่ในรูปของนิพจน์ SOP ที่มีขนาดเล็กที่สุด</p>
+<figure><img alt="" loading="lazy" src="img/ch5-ex20.png" style="width:619px"/></figure>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>แต่ละรูปด้านบน เมื่อทำการจัดกลุ่มและหาพจน์ที่เล็กที่สุดด้วยการกำจัดตัวแปรขัดแย้งออกไปได้ จะทำให้เกิดผลลัพธ์เป็นนิพจน์ SOP ที่เล็กที่สุดดังต่อไปนี้</p>
+<div class="ab4">
+<div><span class="pn">(a)</span><span class="ans" data-km="ex20a"><span class="m">AB + BC + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span></span></span></div>
+<div><span class="pn">(b)</span><span class="ans" data-km="ex20b"><span class="m"><span class="ov">B</span> + <span class="ov">A</span><span class="ov">C</span> + AC</span></span></div>
+<div><span class="pn">(c)</span><span class="ans" data-km="ex20c"><span class="m"><span class="ov">A</span>B + <span class="ov">A</span><span class="ov">C</span> + A<span class="ov">B</span>D</span></span></div>
+<div><span class="pn">(d)</span><span class="ans" data-km="ex20d"><span class="m"><span class="ov">D</span> + A<span class="ov">B</span>C + B<span class="ov">C</span></span></span></div>
+</div>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.21</span></div>
+<div class="q">
+<p>จงใช้แผนผังคาร์โนห์เพื่อลดรูปนิพจน์ SOP มาตรฐานต่อไปนี้</p>
+<div class="expr" data-k="e521"><span class="m">A<span class="ov">B</span>C + <span class="ov">A</span>BC + <span class="ov">A</span><span class="ov">B</span>C + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span> + A<span class="ov">B</span><span class="ov">C</span></span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>เริ่มจากการหาค่าไบนารีของนิพจน์นี้ จะได้เป็น</p>
+<div class="expr" data-mins="e521:101,011,001,000,100">101 + 011 + 001 + 000 + 100</div>
+<p>เมื่อนำมาจัดลงแผนผังฯ จัดกลุ่มตัวเลข 1 และกำจัดตัวแปรขัดแย้งในแต่ละกลุ่มแล้ว จะได้ผลลัพธ์ดังต่อไปนี้</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch5-ex21.png" style="width:208px"/></figure>
+<p>ดังนั้นเราจะได้นิพจน์ SOP ที่ถูกลดรูปเป็น</p>
+<div class="expr ans" data-k="e521"><span class="m"><span class="ov">B</span> + <span class="ov">A</span>C</span></div>
+<p>ทั้งนี้อยากให้ลองพิจารณาการม้วนบรรจบของกลุ่ม 4 cell ที่เห็นในรูป ซึ่งเป็นจุดสำคัญที่ทำให้เกิดกลุ่มขนาดใหญ่ อันนำไปสู่การลดพจน์แรกให้เหลือเพียง (complement ของ) ตัวแปรเดียวเท่านั้น</p>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.22</span></div>
+<div class="q">
+<p>จงใช้แผนผังคาร์โนห์เพื่อลดรูปนิพจน์ SOP ต่อไปนี้</p>
+<div class="expr xs" data-k="e522"><span class="m"><span class="ov">B</span><span class="ov">C</span><span class="ov">D</span> + <span class="ov">A</span>B<span class="ov">C</span><span class="ov">D</span> + AB<span class="ov">C</span><span class="ov">D</span> + <span class="ov">A</span><span class="ov">B</span>CD + A<span class="ov">B</span>CD + <span class="ov">A</span><span class="ov">B</span>C<span class="ov">D</span> + <span class="ov">A</span>BC<span class="ov">D</span> + ABC<span class="ov">D</span> + A<span class="ov">B</span>C<span class="ov">D</span></span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>มีเฉพาะพจน์แรกเท่านั้นที่ไม่เป็นพจน์การคูณมาตรฐานสำหรับโดเมนในนิพจน์นี้ ซึ่งสามารถขยายออกได้เป็น 2 พจน์ ได้แก่ <span class="m"><span class="m">A<span class="ov">B</span><span class="ov">C</span><span class="ov">D</span></span></span> และ <span class="m"><span class="m"><span class="ov">A</span><span class="ov">B</span><span class="ov">C</span><span class="ov">D</span></span></span> ซึ่งเมื่อนำมาจัดลงในแผนผังฯ และทำการจัดกลุ่ม เราจะได้เป็น</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch5-ex22.png" style="width:307px"/></figure>
+<p>สำหรับกรณีนี้จะเห็นว่าการม้วนบรรจบทั้งสองแนวสามารถทำให้เกิดกลุ่มที่มีขนาด 4 cell (ม้วนตามแกนนอน) และกลุ่มขนาด 8 cell (ม้วนตามแกนตั้ง) ซึ่งทำให้เกิดการกำจัดตัวแปรขัดแย้งออกได้เป็นจำนวนมาก ยังผลให้ได้ผลลัพธ์เป็นนิพจน์ SOP ที่ลดรูปแล้วดังต่อไปนี้</p>
+<div class="expr ans" data-k="e522"><span class="m"><span class="ov">D</span> + <span class="ov">B</span>C</span></div>
+</details></div>
+<div class="exercise"><div class="ex-title">✍️ แบบฝึกหัดที่ 5.4</div><div class="ex-body">
+<p>จงใช้แผนผังคาร์โนห์เพื่อลดรูปนิพจน์ SOP ต่อไปนี้</p>
+<ol class="rom">
+<li><span class="m">X<span class="ov">Y</span>Z + XY<span class="ov">Z</span> + <span class="ov">X</span>Y<span class="ov">Z</span> + <span class="ov">X</span>YZ + X<span class="ov">Y</span><span class="ov">Z</span> + XYZ</span></li>
+<li><span class="m"><span class="ov">W</span><span class="ov">X</span><span class="ov">Y</span><span class="ov">Z</span> + W<span class="ov">X</span>YZ + W<span class="ov">X</span><span class="ov">Y</span>Z + <span class="ov">W</span>YZ + W<span class="ov">X</span><span class="ov">Y</span><span class="ov">Z</span></span></li>
+</ol>
+</div></div>
+<div data-widget="kmap" data-preset="5.21"></div><h3 id="s5-5-4"><span class="no">5.5.4</span> การจัดแผนผังคาร์โนห์จากตารางค่าความจริง</h3>
+<p>สิ่งที่เราทำมาทั้งหมดในการจัดแผนผังฯ เราเริ่มจากนิพจน์ SOP ใด ๆ ในหัวข้อนี้จะเป็นการจัดแผนผังคาร์โนห์จากตารางค่าความจริงโดยตรง ซึ่งเป็นเรื่องที่ง่ายมาก ขอให้ศึกษาจากรูปที่ 5.8</p>
+<figure class="c"><img alt="รูปที่ 5.8 ตัวอย่างของการจัดแผนผังคาร์โนห์จากตารางค่าความจริงโดยตรง" loading="lazy" src="img/fig5-8.png" style="width:430px"/><figcaption><span class="cap-no">รูปที่ 5.8</span> ตัวอย่างของการจัดแผนผังคาร์โนห์จากตารางค่าความจริงโดยตรง</figcaption></figure>
+<h3 id="s5-5-5"><span class="no">5.5.5</span> เงื่อนไข “Don’t Care”</h3>
+<p>ในบางสถานการณ์จะพบว่า combination ของตัวแปรอินพุตบางชุดจะไม่เกิดขึ้น ถ้าจำได้ในส่วนของรหัส 8421 หรือที่เรียกว่า BCD ซึ่งใช้ 4 บิต จะมีอยู่ 6 combination ที่เป็น invalid code ได้แก่ <span class="bits">1010</span>, <span class="bits">1011</span>, <span class="bits">1100</span>, <span class="bits">1101</span>, <span class="bits">1110</span> และ <span class="bits">1111</span> และในการใช้งานระบบที่เกี่ยวข้องกับ BCD นั้น combination ทั้งหกที่กล่าวมานี้จะไม่เกิดขึ้น ซึ่งเราจะกำหนดให้กรณีนี้เป็นพจน์ที่เป็น <strong>“don’t care”</strong> ซึ่งหมายความว่า ไม่ว่าเอาต์พุตของ combination ดังกล่าวจะเป็น 1 หรือ 0 ก็จะไม่มีผลใด ๆ เนื่องจากจะไม่มีวันเกิดขึ้น</p>
+<p>พจน์ “don’t care” นี้จะทำให้เกิดข้อได้เปรียบสำหรับการใช้แผนผังคาร์โนห์ในการลดรูปนิพจน์ ลองพิจารณาจากรูปที่ 5.9 (ข) ที่ได้มาจากการจัดลงจากตารางค่าความจริงของส่วน (ก) ซึ่งจะมีการเขียน cell ที่เป็นตัวแทนของพจน์ “don’t care” ด้วยเครื่องหมาย “X” ซึ่งหมายความว่าจะเป็น 0 หรือ 1 ก็ได้ ดังนั้นในกรณีของการใช้แผนผังฯ กับนิพจน์ SOP เราจะสามารถสมมติให้ “X” เป็น 1 ได้ ซึ่งเราสามารถนำไปร่วมจัดกลุ่มกับตัวเลข 1 ที่ปรากฏอยู่ในแผนผังคาร์โนห์นั้น ๆ อันจะเป็นการขยายความสามารถในการทำให้กลุ่มนั้นมีจำนวน cell ที่เป็นสมาชิกได้มากขึ้นด้วย</p>
+<p>ในรูปนี้จะเห็นว่า ถ้าเรารวมพจน์ “don’t care” เข้าไปในการจัดกลุ่มด้วย เราจะได้ผลลัพธ์เป็น <span class="m" data-km="f59dc"><span class="m">A + BCD</span></span> แทนที่จะเป็นนิพจน์ <span class="m" data-km="f59"><span class="m">A<span class="ov">B</span><span class="ov">C</span> + <span class="ov">A</span>BCD</span></span> ที่เกิดจากการไม่ได้นำพจน์ “don’t care” ไปร่วมกลุ่มด้วย</p>
+<figure class="c"><div class="subrow" style="gap:38px">
+<div class="sub"><img alt="รูปที่ 5.9 ตัวอย่างของการใช้พจน์ “don’t care” สำหรับการลดรูปนิพจน์ให้ได้ผลดีที่สุด" loading="lazy" src="img/fig5-9a.png" style="width:274px"/><div class="subcap"><b>(ก)</b> ตารางค่าความจริง</div></div>
+<div class="sub"><img alt="รูปที่ 5.9 ตัวอย่างของการใช้พจน์ “don’t care” สำหรับการลดรูปนิพจน์ให้ได้ผลดีที่สุด" loading="lazy" src="img/fig5-9b.png" style="width:302px"/><div class="subcap"><b>(ข)</b> กรณีไม่ใช้ “don’t care” เราจะได้ <span class="m"><span class="m">A<span class="ov">B</span><span class="ov">C</span> + <span class="ov">A</span>BCD</span></span><br/>ส่วนกรณีที่ใช้ “don’t care” เราจะได้ <span class="m"><span class="m">A + BCD</span></span></div></div></div>
+<figcaption><span class="cap-no">รูปที่ 5.9</span> ตัวอย่างของการใช้พจน์ “don’t care” สำหรับการลดรูปนิพจน์ให้ได้ผลดีที่สุด</figcaption></figure>
+<div data-widget="kmap" data-preset="รูป 5.9"></div></section><section class="sec"><h2 id="s5-6"><span class="no">5.6</span> การใช้แผนผังคาร์โนห์สำหรับการลดรูปนิพจน์ POS</h2>
+<p>หัวข้อที่ 5.5 เราได้เรียนรู้การใช้แผนผังคาร์โนห์สำหรับการลดรูปนิพจน์ SOP ไปแล้ว ในหัวข้อนี้จะเป็นการเรียนรู้สำหรับนิพจน์แบบ POS กันบ้าง ซึ่งกระบวนการมีรายละเอียดที่คล้ายคลึงกัน เพียงแต่เราจะใช้ตัวเลข 0 ใน POS แทนที่จะใช้ตัวเลข 1</p>
+<h3 id="s5-6-1"><span class="no">5.6.1</span> การจัดนิพจน์ POS มาตรฐานเข้าสู่แผนผังฯ</h3>
+<p>สำหรับนิพจน์ POS มาตรฐานใด ๆ เราสามารถบรรจุตัวเลข 0 เพื่อเป็นตัวแทนของแต่ละพจน์การบวกที่ปรากฏอยู่ ยกตัวอย่างเช่น พจน์การบวก <span class="m"><span class="m">A + <span class="ov">B</span> + C</span></span> เราก็จะบรรจุตัวเลข 0 ลงไปยัง cell ที่มีค่าไบนารี <span class="bits">010</span> สำหรับแผนผังฯ ขนาด 3 ตัวแปร</p>
+<p>เมื่อการจัดแผนผังเสร็จสิ้นแล้ว สิ่งที่เราจะได้คือจำนวนตัวเลข 0 ที่มีเท่ากับจำนวนพจน์การบวกมาตรฐาน (ที่ไม่ซ้ำซ้อนกัน) ยกตัวอย่างในรูปที่ 5.10 ที่แสดงการจัดนิพจน์ POS มาตรฐานเข้าสู่แผนผังฯ ซึ่งมีกระบวนการดังต่อไปนี้</p>
+<ol class="steps">
+<li><span class="step">ขั้นที่ 1</span> ทำการหาค่าไบนารีของแต่ละพจน์การบวกที่ปรากฏอยู่ในนิพจน์ POS มาตรฐานนั้น ๆ โดยที่ค่าไบนารีนั้นจะต้องทำให้พจน์นั้นมีค่าเท่ากับ 0</li>
+<li><span class="step">ขั้นที่ 2</span> บรรจุตัวเลข 0 ลงใน cell ที่มีค่าไบนารีสอดคล้องกับที่หาได้ในขั้นที่ 1</li>
+</ol>
+<figure class="c"><img alt="รูปที่ 5.10 ตัวอย่างการจัดนิพจน์ POS มาตรฐานเข้าสู่แผนผังฯ" loading="lazy" src="img/fig5-10.png" style="width:510px"/><figcaption><span class="cap-no">รูปที่ 5.10</span> ตัวอย่างการจัดนิพจน์ POS มาตรฐานเข้าสู่แผนผังฯ</figcaption></figure>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.23</span></div>
+<div class="q">
+<p>จงจัดนิพจน์ POS มาตรฐานต่อไปนี้เข้าสู่แผนผังคาร์โนห์</p>
+<div class="expr xs"><span class="m">(<span class="ov">A</span> + <span class="ov">B</span> + C + D)(<span class="ov">A</span> + B + <span class="ov">C</span> + <span class="ov">D</span>)(A + B + <span class="ov">C</span> + D)(<span class="ov">A</span> + <span class="ov">B</span> + <span class="ov">C</span> + <span class="ov">D</span>)(A + B + <span class="ov">C</span> + <span class="ov">D</span>)</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>เริ่มจากการหาค่าไบนารีของแต่ละพจน์การบวก และทำการบรรจุตัวเลข 0 ลงไปใน cell ของแผนผังคาร์โนห์ขนาด 4 ตัวแปรที่มีค่าไบนารีซึ่งมีความสอดคล้องกับแต่ละพจน์</p>
+<div class="tbl-scroll"><table class="bv vt" data-bv="s">
+<tr><td><span class="m">(<span class="ov">A</span> + <span class="ov">B</span> + C + D)</span></td><td>→</td><td>1100</td></tr>
+<tr><td><span class="m">(<span class="ov">A</span> + B + <span class="ov">C</span> + <span class="ov">D</span>)</span></td><td>→</td><td>1011</td></tr>
+<tr><td><span class="m">(A + B + <span class="ov">C</span> + D)</span></td><td>→</td><td>0010</td></tr>
+<tr><td><span class="m">(<span class="ov">A</span> + <span class="ov">B</span> + <span class="ov">C</span> + <span class="ov">D</span>)</span></td><td>→</td><td>1111</td></tr>
+<tr><td><span class="m">(A + B + <span class="ov">C</span> + <span class="ov">D</span>)</span></td><td>→</td><td>0011</td></tr>
+</table></div>
+<figure class="c"><img alt="" loading="lazy" src="img/ch5-ex23.png" style="width:383px"/></figure>
+</details></div>
+<h3 id="s5-6-2"><span class="no">5.6.2</span> การใช้แผนผังคาร์โนห์เพื่อการลดรูปนิพจน์ POS</h3>
+<p>กระบวนการนี้จะมีความคล้ายคลึงกับการทำกับนิพจน์ SOP เพียงแต่จะเปลี่ยนเป็นการจัดกลุ่มของตัวเลข 0 เพื่อทำการหาพจน์การบวก แทนที่จะเป็นการจัดกลุ่มตัวเลข 1 กฎการจัดกลุ่มของตัวเลข 0 ก็จะใช้แบบเดียวกันกับที่เรียนไปในหัวข้อ 5.5.3 ที่ใช้ในการจัดกลุ่มตัวเลข 1</p>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.24</span></div>
+<div class="q">
+<p>จงใช้แผนผังคาร์โนห์เพื่อทำการลดรูปนิพจน์ POS ต่อไปนี้ ทั้งนี้ให้หานิพจน์ SOP ที่เทียบเท่ากันมาพร้อมกันด้วย</p>
+<div class="expr sm" data-k="e524"><span class="m">(A + B + C)(A + B + <span class="ov">C</span>)(A + <span class="ov">B</span> + C)(A + <span class="ov">B</span> + <span class="ov">C</span>)(<span class="ov">A</span> + <span class="ov">B</span> + C)</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>สำหรับค่าไบนารีของแต่ละพจน์จะได้ดังต่อไปนี้</p>
+<div class="tbl-scroll"><table class="bv sm" data-bv="s">
+<tr><td><span class="m">(A + B + C)</span></td><td><span class="m">(A + B + <span class="ov">C</span>)</span></td><td><span class="m">(A + <span class="ov">B</span> + C)</span></td><td><span class="m">(A + <span class="ov">B</span> + <span class="ov">C</span>)</span></td><td><span class="m">(<span class="ov">A</span> + <span class="ov">B</span> + C)</span></td></tr>
+<tr><td>000</td><td>001</td><td>010</td><td>011</td><td>110</td></tr>
+</table></div>
+<p>ซึ่งเราสามารถจัดตัวเลข 0 ลงใน cell ต่าง ๆ (แถวเรียงตามรหัสเกรย์ 00, 01, 11, 10) และทำการหาพจน์การบวกได้ดังต่อไปนี้</p>
+<figure class="c"><svg class="kmap-svg" style="width:59.4mm" viewbox="55 8 720 682" xmlns="http://www.w3.org/2000/svg"><rect fill="#D1D2D4" height="534.0" width="267.0" x="205" y="140"></rect><rect fill="#fff" height="534.0" width="267.0" x="183" y="118"></rect><rect fill="#C6EAFB" height="245.0" rx="44" ry="44" width="245.0" x="194.0" y="129.0"></rect><rect fill="#C6EAFB" height="245.0" rx="44" ry="44" width="111.5" x="194.0" y="262.5"></rect><clippath id="p24c01"><rect height="245.0" rx="44" ry="44" width="245.0" x="194.0" y="129.0"></rect></clippath><g clip-path="url(#p24c01)"><rect fill="#6DCFF6" height="245.0" rx="44" ry="44" width="111.5" x="194.0" y="262.5"></rect></g><rect fill="none" height="245.0" rx="44" ry="44" stroke="#221F1F" stroke-width="2.6" width="245.0" x="194.0" y="129.0"></rect><rect fill="none" height="245.0" rx="44" ry="44" stroke="#221F1F" stroke-width="2.6" width="111.5" x="194.0" y="262.5"></rect><line stroke="#221F1F" stroke-width="5" x1="183.0" x2="183.0" y1="118" y2="652.0"></line><line stroke="#221F1F" stroke-width="4" x1="316.5" x2="316.5" y1="118" y2="652.0"></line><line stroke="#221F1F" stroke-width="5" x1="450.0" x2="450.0" y1="118" y2="652.0"></line><line stroke="#221F1F" stroke-width="5" x1="181" x2="452.0" y1="118.0" y2="118.0"></line><line stroke="#221F1F" stroke-width="4" x1="181" x2="452.0" y1="251.5" y2="251.5"></line><line stroke="#221F1F" stroke-width="4" x1="181" x2="452.0" y1="385.0" y2="385.0"></line><line stroke="#221F1F" stroke-width="4" x1="181" x2="452.0" y1="518.5" y2="518.5"></line><line stroke="#221F1F" stroke-width="5" x1="181" x2="452.0" y1="652.0" y2="652.0"></line><line stroke="#221F1F" stroke-width="4" x1="117" x2="183" y1="52" y2="118"></line><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" font-style="italic" x="147" y="56">C</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" font-style="italic" x="71" y="104">AB</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" text-anchor="middle" x="249.8" y="96">0</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" text-anchor="middle" x="383.2" y="96">1</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" text-anchor="end" x="159" y="199.8">00</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" text-anchor="end" x="159" y="333.2">01</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" text-anchor="end" x="159" y="466.8">11</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" text-anchor="end" x="159" y="600.2">10</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="383.2" y="199.8">0</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="249.8" y="199.8">0</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="383.2" y="333.2">0</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="249.8" y="466.8">0</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="249.8" y="333.2">0</text><text fill="#00ADEF" font-family="Times New Roman, Times, serif" font-size="46" font-style="italic" lengthadjust="spacingAndGlyphs" textlength="28.1" x="560.0" y="267.5">A</text><line stroke="#00ADEF" stroke-width="3.2" x1="552.0" x2="463.0" y1="251.5" y2="251.5"></line><path d="M441.0,251.5 L463.0,242.5 L463.0,260.5 Z" fill="#00ADEF"></path><text fill="#00ADEF" font-family="Times New Roman, Times, serif" font-size="46" font-style="italic" lengthadjust="spacingAndGlyphs" textlength="28.1" x="560.0" y="467.8">B</text><line stroke="#00ADEF" stroke-width="3" x1="567.4" x2="589.0" y1="430.9" y2="430.9"></line><text fill="#00ADEF" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="615.1" y="467.8">+</text><text fill="#00ADEF" font-family="Times New Roman, Times, serif" font-size="46" font-style="italic" lengthadjust="spacingAndGlyphs" textlength="30.7" x="642.1" y="467.8">C</text><line stroke="#00ADEF" stroke-width="3.2" x1="552.0" x2="329.5" y1="451.8" y2="451.8"></line><path d="M307.5,451.8 L329.5,442.8 L329.5,460.8 Z" fill="#00ADEF"></path></svg></figure>
+<p>ดังนั้นนิพจน์ POS ที่ได้จะเป็น</p>
+<div class="expr ans" data-k="e524"><span class="m">A(<span class="ov">B</span> + C)</span></div>
+<p>สำหรับการหานิพจน์ SOP ที่เทียบเท่า ก็เพียงใส่ตัวเลข 1 ใน cell ที่เหลือทั้งหมด แล้วทำการจัดกลุ่ม จะได้ดังต่อไปนี้</p>
+<figure class="c"><svg class="kmap-svg" style="width:59.4mm" viewbox="55 8 720 792" xmlns="http://www.w3.org/2000/svg"><rect fill="#D1D2D4" height="534.0" width="267.0" x="205" y="140"></rect><rect fill="#fff" height="534.0" width="267.0" x="183" y="118"></rect><rect fill="#C6EAFB" height="111.5" rx="44" ry="44" width="245.0" x="194.0" y="529.5"></rect><rect fill="#C6EAFB" height="245.0" rx="44" ry="44" width="111.5" x="327.5" y="396.0"></rect><clippath id="s24c01"><rect height="111.5" rx="44" ry="44" width="245.0" x="194.0" y="529.5"></rect></clippath><g clip-path="url(#s24c01)"><rect fill="#6DCFF6" height="245.0" rx="44" ry="44" width="111.5" x="327.5" y="396.0"></rect></g><rect fill="none" height="111.5" rx="44" ry="44" stroke="#221F1F" stroke-width="2.6" width="245.0" x="194.0" y="529.5"></rect><rect fill="none" height="245.0" rx="44" ry="44" stroke="#221F1F" stroke-width="2.6" width="111.5" x="327.5" y="396.0"></rect><line stroke="#221F1F" stroke-width="5" x1="183.0" x2="183.0" y1="118" y2="652.0"></line><line stroke="#221F1F" stroke-width="4" x1="316.5" x2="316.5" y1="118" y2="652.0"></line><line stroke="#221F1F" stroke-width="5" x1="450.0" x2="450.0" y1="118" y2="652.0"></line><line stroke="#221F1F" stroke-width="5" x1="181" x2="452.0" y1="118.0" y2="118.0"></line><line stroke="#221F1F" stroke-width="4" x1="181" x2="452.0" y1="251.5" y2="251.5"></line><line stroke="#221F1F" stroke-width="4" x1="181" x2="452.0" y1="385.0" y2="385.0"></line><line stroke="#221F1F" stroke-width="4" x1="181" x2="452.0" y1="518.5" y2="518.5"></line><line stroke="#221F1F" stroke-width="5" x1="181" x2="452.0" y1="652.0" y2="652.0"></line><line stroke="#221F1F" stroke-width="4" x1="117" x2="183" y1="52" y2="118"></line><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" font-style="italic" x="147" y="56">C</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" font-style="italic" x="71" y="104">AB</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" text-anchor="middle" x="249.8" y="96">0</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" text-anchor="middle" x="383.2" y="96">1</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" text-anchor="end" x="159" y="199.8">00</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" text-anchor="end" x="159" y="333.2">01</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" text-anchor="end" x="159" y="466.8">11</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="44" text-anchor="end" x="159" y="600.2">10</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="383.2" y="600.2">1</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="383.2" y="466.8">1</text><text fill="#221F1F" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="249.8" y="600.2">1</text><text fill="#9a9a9a" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="383.2" y="199.8">0</text><text fill="#9a9a9a" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="249.8" y="199.8">0</text><text fill="#9a9a9a" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="383.2" y="333.2">0</text><text fill="#9a9a9a" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="249.8" y="466.8">0</text><text fill="#9a9a9a" font-family="Times New Roman, Times, serif" font-size="46" text-anchor="middle" x="249.8" y="333.2">0</text><text fill="#00ADEF" font-family="Times New Roman, Times, serif" font-size="46" font-style="italic" lengthadjust="spacingAndGlyphs" textlength="58.7" x="560.0" y="467.8">AC</text><line stroke="#00ADEF" stroke-width="3.2" x1="552.0" x2="463.0" y1="451.8" y2="451.8"></line><path d="M441.0,451.8 L463.0,442.8 L463.0,460.8 Z" fill="#00ADEF"></path><text fill="#00ADEF" font-family="Times New Roman, Times, serif" font-size="46" font-style="italic" lengthadjust="spacingAndGlyphs" textlength="28.1" x="221.7" y="775.0">A</text><text fill="#00ADEF" font-family="Times New Roman, Times, serif" font-size="46" font-style="italic" lengthadjust="spacingAndGlyphs" textlength="28.1" x="249.8" y="775.0">B</text><line stroke="#00ADEF" stroke-width="3" x1="257.1" x2="278.7" y1="738.2" y2="738.2"></line><line stroke="#00ADEF" stroke-width="3.2" x1="249.8" x2="249.8" y1="728.0" y2="665.0"></line><path d="M249.8,643.0 L258.8,665.0 L240.8,665.0 Z" fill="#00ADEF"></path></svg></figure>
+<p>ซึ่งเราจะได้นิพจน์ SOP ผลลัพธ์เป็น</p>
+<div class="expr ans" data-k="e524"><span class="m">A<span class="ov">B</span> + AC</span></div>
+<p>ซึ่งนิพจน์ POS และ SOP ที่ได้ทั้งสองนี้มีค่าเท่ากัน ดังนั้น</p>
+<div class="expr" data-k="e524"><span class="m">A<span class="ov">B</span> + AC = A(<span class="ov">B</span> + C)</span></div>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 5.25</span></div>
+<div class="q">
+<p>จงใช้แผนผังคาร์โนห์ในการลดรูปนิพจน์ POS ต่อไปนี้</p>
+<div class="expr sm" data-k="e525"><span class="m">(B + C + D)(A + B + <span class="ov">C</span> + D)(<span class="ov">A</span> + B + C + <span class="ov">D</span>)(A + <span class="ov">B</span> + C + D)(<span class="ov">A</span> + <span class="ov">B</span> + C + D)</span></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>พจน์แรกเป็นพจน์เดียวที่ไม่ใช่พจน์การบวกมาตรฐาน ดังนั้นต้องนำมาขยายให้เป็นพจน์มาตรฐานได้ 2 พจน์ ได้แก่ <span class="m" data-k="e525x"><span class="m"><span class="ov">A</span> + B + C + D</span></span> กับ <span class="m" data-k="e525y"><span class="m">A + B + C + D</span></span> เมื่อนำไปจัดลงในแผนผังฯ และจัดกลุ่มจะได้ผลต่อไปนี้</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch5-ex25.png" style="width:317px"/></figure>
+<p>เมื่อทำการกำจัดตัวแปรขัดแย้งของแต่ละกลุ่มออกไป จะได้พจน์การบวกที่นำมาคูณกันเป็นนิพจน์ POS ดังต่อไปนี้</p>
+<div class="expr ans" data-k="e525"><span class="m">(C + D)(A + B + D)(<span class="ov">A</span> + B + C)</span></div>
+</details></div>
+<div class="exercise"><div class="ex-title">✍️ แบบฝึกหัดที่ 5.5</div><div class="ex-body">
+<p>จงใช้แผนผังคาร์โนห์เพื่อลดรูปนิพจน์ POS ต่อไปนี้</p>
+<ol class="rom">
+<li><span class="m">(X + <span class="ov">Y</span> + Z)(X + <span class="ov">Y</span> + <span class="ov">Z</span>)(<span class="ov">X</span> + <span class="ov">Y</span> + Z)(<span class="ov">X</span> + Y + Z)</span></li>
+<li><span class="m">(W + <span class="ov">X</span> + Y + <span class="ov">Z</span>)(W + X + Y + Z)(W + <span class="ov">X</span> + <span class="ov">Y</span> + Z)(<span class="ov">W</span> + <span class="ov">X</span> + Z)</span></li>
+</ol>
+</div></div>
+
+<div data-widget="kmap" data-mode="pos" data-preset="5.25 (POS)"></div></section></div>
+
+    <section class="sec" id="summary">
+      <h2>สรุปท้ายบท</h2>
+      <div class="summary"><ul><li>นิพจน์บูลีนลดรูปได้ด้วยกฎ หลักเกณฑ์ และทฤษฎีบทของ DeMorgan นิพจน์ที่ง่ายกว่าใช้เกทน้อยกว่าแต่ให้ผลลัพธ์เหมือนเดิมทุกประการ</li><li>รูปแบบมาตรฐานมี 2 แบบ คือ SOP (ผลบวกของพจน์การคูณ) และ POS (ผลคูณของพจน์การบวก) และรูปแบบ “มาตรฐาน” คือทุกพจน์มีตัวแปรครบทุกตัวในโดเมน</li><li>ขยายพจน์ให้เป็นมาตรฐานได้ด้วยการคูณ <span class="m"><span class="m">(X + <span class="ov">X</span>)</span></span> สำหรับ SOP หรือบวก <span class="m"><span class="m">X<span class="ov">X</span></span></span> สำหรับ POS หรือใช้ numerical expansion</li><li>พจน์การคูณมาตรฐานเป็น 1 ได้เพียง combination เดียว (1 → ตัวแปร, 0 → complement) ส่วนพจน์การบวกมาตรฐานเป็น 0 ได้เพียง combination เดียว (0 → ตัวแปร, 1 → complement)</li><li>แผนผังคาร์โนห์เรียง cell ตามรหัสเกรย์ cell ที่ติดกัน (รวมถึงการม้วนบรรจบที่ขอบ) ต่างกันเพียง 1 บิต</li><li>จัดกลุ่ม cell ที่ติดกันเป็นจำนวน 1, 2, 4, 8 หรือ 16 ให้ใหญ่ที่สุดและน้อยกลุ่มที่สุด แล้วกำจัดตัวแปรขัดแย้ง โดยกลุ่มของ 1 ใช้หา SOP และกลุ่มของ 0 ใช้หา POS</li><li>พจน์ “don’t care” (X) นำไปร่วมจัดกลุ่มได้เพื่อให้ได้นิพจน์ที่เล็กลงกว่าเดิม</li></ul></div>
+    </section>
+
+    <section class="sec" id="quiz">
+      <h2>แบบทดสอบท้ายบท</h2>
+      <p class="w-hint">เลือกคำตอบ ระบบจะเฉลยพร้อมคำอธิบายทันที (ไม่มีการบันทึกคะแนน ใช้สำหรับทบทวนด้วยตนเอง)</p>
+      <div class="quiz" id="quiz-box"></div>
+    </section>
+
+    <section class="sec" id="lab">
+  <h2>ปฏิบัติการสัปดาห์ที่ 6 · ลดรูปและต่อวงจรเปรียบเทียบ</h2>
+  <p>ตามแผนการสอนใน มคอ.3 — ลดรูปนิพจน์ด้วยแผนผังคาร์โนห์ แล้วต่อวงจรก่อนและหลังลดรูปบนแผงทดลองเพื่อยืนยันว่าทำงานเหมือนกันทุกกรณี และเปรียบเทียบจำนวนเกท/ไอซีที่ใช้</p>
+  <div class="card">
+    <h3 style="font-size:19px;margin-top:0">📋 ใบงานปฏิบัติการที่ 4 (สัปดาห์ที่ 6)</h3>
+    <ol>
+      <li><b>ลดรูปด้วยพีชคณิต:</b> ต่อวงจรตั้งต้น AB + A(B + C) + B(B + C) (รูปที่ 5.1 ก) และวงจรหลังลดรูป B + AC (รูปที่ 5.1 ข) ป้อนอินพุตครบ 8 กรณี บันทึกเอาต์พุตของทั้งสองวงจร</li>
+      <li><b>SOP → แผนผังคาร์โนห์:</b> ลดรูปนิพจน์ในตัวอย่างที่ 5.21 ด้วยแผนผัง แล้วต่อวงจร AND-OR ของผลลัพธ์ (<span class="ov">B</span> + <span class="ov">A</span>C) เทียบกับวงจร SOP มาตรฐาน 5 พจน์ (ทำบางกรณีพอให้เห็นความเท่ากัน)</li>
+      <li><b>ใช้ NAND ล้วน:</b> เขียนผลลัพธ์ข้อ 2 ใหม่ให้ใช้ NAND gate อย่างเดียว (ใช้ DeMorgan: วงจร AND-OR = NAND-NAND) แล้วต่อด้วย 7400</li>
+      <li><b>Don’t care:</b> ออกแบบวงจรที่ให้ 1 เมื่ออินพุต BCD (4 บิต) มีค่า 7, 8 หรือ 9 (รูปที่ 5.9) เปรียบเทียบผลลัพธ์แบบใช้และไม่ใช้ don’t care แล้วต่อแบบที่เล็กกว่า</li>
+      <li><b>POS:</b> ลดรูปตัวอย่างที่ 5.24 ทั้งแบบ POS และ SOP แล้วต่อวงจรทั้งสองแบบ เปรียบเทียบจำนวนเกท</li>
+    </ol>
+    <p class="w-hint" style="margin:0">ส่ง: แผนผังคาร์โนห์พร้อมการจัดกลุ่ม · นิพจน์ก่อน/หลังลดรูป · ตารางผลวัดจริง · ตารางเปรียบเทียบจำนวนเกทและจำนวนไอซี (ประเมินในหมวดแบบฝึกหัดและรายงานผลการทดลอง 20%)</p>
+  </div>
+  <p class="w-hint">ตรวจผลการลดรูปด้วยแบบจำลองแผนผังคาร์โนห์ในหัวข้อ 5.5 ได้ (กด “จัดลงแผนผัง” หลังพิมพ์นิพจน์) · การจัดขาไอซีดูได้ที่ <a href="../03/index.html#s3-7-1">บทที่ 3 หัวข้อ 3.7.1</a></p>
+</section>
+
+
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-top:48px;flex-wrap:wrap">
+      <a class="btn" href="../../index.html">← หน้ารายวิชา</a>
+      <a class="btn primary" href="slides.html">▶ ทบทวนด้วยสไลด์</a>
+    </div>
+  </main>
+</div>
+
+<footer class="footer">517 112 การออกแบบวงจรตรรกะเชิงเลข · ภาควิชาคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยศิลปากร · เนื้อหาจากเอกสารประกอบการสอน อ.อภิเษก หงษ์วิทยากร</footer>
+
+<script src="quiz.js"></script>
+<script>document.addEventListener("DOMContentLoaded", () => DLD.quiz(document.getElementById("quiz-box"), window.CH_QUIZ));</script>
+</body>
+</html>

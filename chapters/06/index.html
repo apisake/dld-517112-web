@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>บทที่ 6 การวิเคราะห์วงจรลอจิก แบบคอมไบเนชัน · 517 112</title>
+<meta name="description" content="517 112 การออกแบบวงจรตรรกะเชิงเลข — บทที่ 6 การวิเคราะห์วงจรลอจิก แบบคอมไบเนชัน (Combinational Logic Analysis)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Prompt:wght@400;600;700&family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/main.css">
+<link rel="stylesheet" href="../../assets/css/book.css">
+<link rel="stylesheet" href="chapter.css">
+<script src="../../assets/js/site.js"></script>
+<script src="../../assets/js/logic.js"></script>
+<script src="../../assets/js/numbers.js"></script>
+<script src="../../assets/js/boolean.js"></script>
+<script src="widgets.js"></script>
+</head>
+<body>
+<!-- สร้างอัตโนมัติด้วย web/tools/build_chapter.py — แก้เนื้อหาที่ source/content_ch6.html หรือ chapter.json แล้วรันใหม่ -->
+<header class="topbar">
+  <a class="brand" href="../../index.html"><span class="chip">517 112</span><span>Digital Logic Design</span></a>
+  <span class="crumb">/ บทที่ 6 การวิเคราะห์วงจรลอจิก แบบคอมไบเนชัน</span>
+  <span class="spacer"></span>
+  <a class="btn sm" href="slides.html">▶ สไลด์</a>
+  <button class="btn sm icon" data-theme-toggle title="สลับโหมดสว่าง/มืด" aria-label="สลับธีม">◐</button>
+</header>
+
+<div class="layout">
+  <nav class="toc-side" aria-label="สารบัญบทที่ 6">
+    <h4>บทที่ 6</h4>
+    <ol><li><a href="#overview">ภาพรวมและจุดประสงค์</a></li><li><a href="#s6-1">6.1 วงจรลอจิกคอมไบเนชันพื้นฐาน</a></li><li class="sub"><a href="#s6-1-1">6.1.1 วงจรลอจิก AND-OR</a></li><li class="sub"><a href="#s6-1-2">6.1.2 ลอจิก AND-OR-Invert</a></li><li class="sub"><a href="#s6-1-3">6.1.3 วงจร Exclusive-OR (XOR)</a></li><li class="sub"><a href="#s6-1-4">6.1.4 วงจร Exclusive-NOR (XNOR)</a></li><li class="sub"><a href="#s6-1-5">6.1.5 การสร้างวงจรลอจิกแบบคอมไบเนชัน</a></li><li><a href="#s6-2">6.2 การปฏิบัติการของวงจรลอจิกกับอินพ…</a></li><li><a href="#summary">สรุปท้ายบท</a></li><li><a href="#quiz">แบบทดสอบท้ายบท</a></li><li><a href="#lab">ปฏิบัติการและโครงงานกลุ่ม</a></li></ol>
+    <div class="side-actions">
+      <a class="btn primary" href="slides.html">▶ เปิดสไลด์บรรยาย</a>
+      <a class="btn" href="../../index.html">← หน้ารายวิชา</a>
+    </div>
+  </nav>
+
+  <main class="lesson">
+    <div class="hero">
+      <div class="ch-label">CHAPTER 06 · สัปดาห์ที่ 7</div>
+      <h1>การวิเคราะห์วงจรลอจิก แบบคอมไบเนชัน</h1>
+      <div class="en">Combinational Logic Analysis</div>
+      <div class="meta"><span>บรรยาย 2 ชม. + ปฏิบัติการ 2 ชม.</span><span>CLO3</span><span>CLO5</span><span>CLO10</span><span>CLO11</span><span>2 หัวข้อ · 5 แบบจำลองเชิงโต้ตอบ</span></div>
+      <div class="hero-actions">
+        <a class="btn" href="slides.html">▶ สไลด์บรรยาย</a>
+        <a class="btn ghost" href="#quiz">แบบทดสอบท้ายบท</a>
+        <a class="btn ghost" href="#lab">ใบงานปฏิบัติการ</a>
+      </div>
+    </div>
+
+    <section id="overview">
+      <div class="grid-2">
+        <div class="card objectives">
+          <h3 style="font-size:18px">🎯 จุดประสงค์ของบทเรียน</h3>
+          <ol><li>วิเคราะห์วงจรคอมไบเนชันพื้นฐาน เช่น AND-OR, AND-OR-Invert, Exclusive-OR และ Exclusive-NOR ได้</li><li>สามารถใช้วงจร AND-OR และ AND-OR-Invert สำหรับการสร้างวงจรทำงานตามนิพจน์ SOP และ POS</li><li>สามารถเขียนนิพจน์เอาต์พุตบูลีนสำหรับวงจรลอจิกแบบคอมไบเนชัน</li><li>สามารถสร้างตารางค่าความจริงจากนิพจน์เอาต์พุตสำหรับวงจรลอจิกแบบคอมไบเนชัน</li><li>สามารถออกแบบวงจรคอมไบเนชันจากนิพจน์บูลีน</li><li>สามารถออกแบบวงจรคอมไบเนชันจากตารางค่าความจริง</li></ol>
+        </div>
+        <div class="card">
+          <h3 style="font-size:18px">🧭 ความเชื่อมโยงกับ มคอ.3</h3>
+          <p style="margin:0 0 8px"><span class="clo-chip">CLO3</span> อธิบายการวิเคราะห์และออกแบบวงจรพื้นฐานสำหรับการสร้างวงจรองค์ประกอบของระบบคอมพิวเตอร์</p><p style="margin:0 0 8px"><span class="clo-chip">CLO5</span> อธิบายการทำงานของวงจรตรรกะพื้นฐานทั้งแบบวงจรผสมและวงจรเชิงลำดับในการนำไปใช้เป็นองค์ประกอบของระบบคอมพิวเตอร์</p><p style="margin:0 0 8px"><span class="clo-chip">CLO10</span> แบ่งงานเป็นงานย่อย และมอบหมายงานให้สมาชิกในทีมรับผิดชอบเต็มกำลังความสามารถ</p><p style="margin:0 0 8px"><span class="clo-chip">CLO11</span> อธิบายเป้าหมายของงานที่ได้รับมอบหมายกับผู้ร่วมทีมจนเข้าใจตรงกัน</p>
+          <p style="margin:0;font-size:15px;color:var(--ink-2)"><b>กิจกรรม:</b> บรรยาย / PBL · ปฏิบัติการ: ออกแบบวงจรคอมไบเนชันจากโจทย์ · มอบหมายโครงงานกลุ่มและการแบ่งงาน<br><b>การประเมิน:</b> แบบฝึกหัดและรายงานผลการทดลอง (20%) · โครงงานกลุ่ม (20%) · สอบกลางภาค บทที่ 1–6 (30%)</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="book">
+<section class="sec"><h2 id="s6-1"><span class="no">6.1</span> วงจรลอจิกคอมไบเนชันพื้นฐาน</h2>
+<h3 id="s6-1-1"><span class="no">6.1.1</span> วงจรลอจิก AND-OR</h3>
+<p>รูปที่ 6.1 แสดงให้เห็นวงจร <strong>AND-OR</strong> ที่ประกอบด้วย AND gate 2 อินพุต จำนวน 2 ตัว และ OR gate ขนาด 2 อินพุตอีก 1 ตัว โดยจะเป็นวงจรสำหรับนิพจน์ SOP ที่มีเอาต์พุต <em>X</em></p>
+<figure class="c"><img alt="รูปที่ 6.1 ผังวงจรลอจิกแบบ AND-OR" loading="lazy" src="img/fig6-1.png" style="width:331px"/><figcaption><span class="cap-no">รูปที่ 6.1</span> ผังวงจรลอจิกแบบ AND-OR</figcaption></figure>
+<p>สำหรับวงจรนี้จะได้เอาต์พุตสำหรับทุก combination ที่แสดงให้เห็นในตารางที่ 6.1 ซึ่งจะสามารถได้ข้อสรุปว่า</p>
+<div class="callout bk-callout"><div class="callout-head">ข้อสรุป</div>
+<p class="thm">สำหรับวงจรลอจิก AND-OR ขนาด 4 อินพุต เอาต์พุต <em>X</em> จะมีค่าเป็น HIGH (1) ถ้าทั้งอินพุต <em>A</em> และ <em>B</em> เป็น HIGH ทั้งคู่ หรือถ้าทั้งอินพุต <em>C</em> และ <em>D</em> เป็น HIGH</p></div>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 6.1</span> ตารางค่าความจริงสำหรับลอจิก AND-OR ในรูปที่ 6.1</div>
+<div class="tt-row">
+<table class="tt" data-cols="A|B|C|D|AB|CD|AB+CD">
+<thead>
+<tr><th class="vr" colspan="4">อินพุต</th><th class="vr" colspan="2">ผลระหว่างทาง</th><th class="out">เอาต์พุต</th></tr>
+<tr><th class="v">A</th><th class="v">B</th><th class="v">C</th><th class="v vr">D</th><th class="v">AB</th><th class="v vr">CD</th><th class="v out">X</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>0</td><td class="vr">0</td><td>0</td><td class="vr">0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>0</td><td>0</td><td class="vr">1</td><td>0</td><td class="vr">0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>0</td><td>1</td><td class="vr">0</td><td>0</td><td class="vr">0</td><td class="out">0</td></tr>
+<tr class="hit"><td>0</td><td>0</td><td>1</td><td class="vr">1</td><td>0</td><td class="vr">1</td><td class="out">1</td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td class="vr">0</td><td>0</td><td class="vr">0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td class="vr">1</td><td>0</td><td class="vr">0</td><td class="out">0</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td class="vr">0</td><td>0</td><td class="vr">0</td><td class="out">0</td></tr>
+<tr class="hit"><td>0</td><td>1</td><td>1</td><td class="vr">1</td><td>0</td><td class="vr">1</td><td class="out">1</td></tr>
+</tbody>
+</table>
+<table class="tt" data-cols="A|B|C|D|AB|CD|AB+CD">
+<thead>
+<tr><th class="vr" colspan="4">อินพุต</th><th class="vr" colspan="2">ผลระหว่างทาง</th><th class="out">เอาต์พุต</th></tr>
+<tr><th class="v">A</th><th class="v">B</th><th class="v">C</th><th class="v vr">D</th><th class="v">AB</th><th class="v vr">CD</th><th class="v out">X</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>0</td><td>0</td><td class="vr">0</td><td>0</td><td class="vr">0</td><td class="out">0</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td class="vr">1</td><td>0</td><td class="vr">0</td><td class="out">0</td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td class="vr">0</td><td>0</td><td class="vr">0</td><td class="out">0</td></tr>
+<tr class="hit"><td>1</td><td>0</td><td>1</td><td class="vr">1</td><td>0</td><td class="vr">1</td><td class="out">1</td></tr>
+<tr class="hit"><td>1</td><td>1</td><td>0</td><td class="vr">0</td><td>1</td><td class="vr">0</td><td class="out">1</td></tr>
+<tr class="hit"><td>1</td><td>1</td><td>0</td><td class="vr">1</td><td>1</td><td class="vr">0</td><td class="out">1</td></tr>
+<tr class="hit"><td>1</td><td>1</td><td>1</td><td class="vr">0</td><td>1</td><td class="vr">0</td><td class="out">1</td></tr>
+<tr class="hit"><td>1</td><td>1</td><td>1</td><td class="vr">1</td><td>1</td><td class="vr">1</td><td class="out">1</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 6.1</span></div>
+<div class="q">
+<p>โจทย์ตัวอย่างนี้เป็นระบบที่อยู่ในโรงงานเคมี ซึ่งมีถังสารเคมีที่เป็นของเหลวอยู่ 3 ถัง (<em>A</em>, <em>B</em> และ <em>C</em>) ในการแยกสารตั้งต้น แต่ละถังมีเซนเซอร์วัดระดับสารเคมีที่จะส่งสัญญาณ HIGH เมื่อระดับของสารเคมีลดต่ำลงกว่าขีดที่กำหนดเอาไว้</p>
+<p>จงออกแบบวงจรที่สามารถเฝ้าติดตามระดับสารเคมีในแต่ละถัง ซึ่งจะทำการแจ้งเตือนเมื่อระดับสารเคมีลดลงต่ำกว่าขีดที่กำหนดไว้จำนวนสองถัง</p>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>จากรูปข้างล่าง เราจะใช้วงจร AND-OR สำหรับการออกแบบวงจรเพื่อให้ทำงานได้ตามเป้าประสงค์ที่กำหนด กล่าวคือ ถ้าเราต้องการรู้ว่าเมื่อใดที่มีถังที่สารเคมีมีระดับต่ำกว่าขีดที่กำหนดจำนวน 2 ถัง ระบบต้องทำการเตือนขึ้นมา ทั้งนี้เซนเซอร์วัดระดับในแต่ละถังจะส่งสัญญาณ HIGH เมื่อสารเคมีพร่องลงต่ำกว่าขีด เราจึงต้องทำการนำสัญญาณจากแต่ละถังมาจับคู่กันให้ครบ ซึ่งจะได้เป็น 3 กรณี คือ <span class="m">AB</span>, <span class="m">AC</span> และ <span class="m">BC</span> จากรูปจะเห็นว่าได้มีการนำสัญญาณแต่ละคู่ไปป้อนยัง AND gate ชื่อ <em>G</em><sub>1</sub>, <em>G</em><sub>2</sub> และ <em>G</em><sub>3</sub> ตามลำดับ ซึ่งเมื่อในแต่ละถังมีสารเคมีอยู่เหนือขีดกำหนดแล้ว จะทำให้เอาต์พุตจากเซนเซอร์ของทั้ง 3 ถังมีค่าเป็น LOW ทั้งหมด ซึ่งเป็นสภาวะปกติ เป็นเหตุให้เมื่อนำมาป้อนเข้าที่อินพุตของ <em>G</em><sub>1</sub>, <em>G</em><sub>2</sub> และ <em>G</em><sub>3</sub> แล้วจะเกิดผลลัพธ์ที่เอาต์พุตเป็น LOW และทำให้ <em>X</em> ซึ่งเป็นผลลัพธ์ของการนำเอาสัญญาณเหล่านี้มา OR กันเป็น LOW ซึ่งตัว Low-level indicator ที่เห็นในรูปจะไม่ทำงานเนื่องจากเป็นสภาวะปกติ</p>
+<p>แต่ถ้ามีคู่ใดที่มีระดับสารเคมีลดต่ำลงจนทำให้มีค่าเป็น HIGH (1) ก็จะทำให้เอาต์พุตของ AND gate ตัวนั้นมีค่าเป็น HIGH ทันที ซึ่งปกติจะมีค่าเป็น LOW (0) และเมื่อวิเคราะห์ต่อไปจะเห็นว่า เมื่อเอาต์พุตตัวใดตัวหนึ่งเป็น HIGH ขึ้นมา จะเป็นตัวป้อนไปยัง OR gate ปลายทาง ที่เมื่ออินพุตตัวใดตัวหนึ่งเป็น HIGH ก็จะทำให้เอาต์พุต <em>X</em> เป็น HIGH (หรือกรณีที่ลดต่ำลงสามถังพร้อมกันก็จะแจ้งเตือนเช่นกัน) ซึ่งตัว Low-level indicator ก็จะทำงาน โดยอาจจะไปต่อกับหลอดไฟหรือตัวกำเนิดเสียงเพื่อทำการแจ้งเตือนได้ เป็นต้น</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex1.png" style="width:586px"/></figure>
+</details></div>
+<div data-widget="tankalarm"></div><h3 id="s6-1-2"><span class="no">6.1.2</span> ลอจิก AND-OR-Invert</h3>
+<p>ถ้าเราพิจารณาเฉพาะส่วนของวงจร AND-OR ที่ผ่านมา จะเห็นว่าเป็นวงจรที่สร้างจากนิพจน์ SOP แต่เมื่อนำเอาเอาต์พุตของวงจรนี้มาผ่าน Inverter ก็จะกลายเป็นวงจรที่เรียกว่า <strong>AND-OR-Invert</strong> ซึ่งเมื่อนำมาวิเคราะห์แล้วจะเห็นว่าวงจรนี้สามารถเป็นตัวแทนของนิพจน์แบบ POS ได้ ดังสมการบูลีนต่อไปนี้</p>
+<div class="expr aoi" data-chk=""><span class="m">X =</span> <span class="pos"><span class="m">(<span class="ov">A</span> + <span class="ov">B</span>)(<span class="ov">C</span> + <span class="ov">D</span>)</span><span class="pos-lab">POS</span></span> <span class="m">= (<span class="ov">AB</span>)(<span class="ov">CD</span>) = <span class="ov"><span class="ov">(<span class="ov">AB</span>)(<span class="ov">CD</span>)</span></span> = <span class="ov"><span class="ov">(<span class="ov">AB</span>)</span> + <span class="ov">(<span class="ov">CD</span>)</span></span> = <span class="ov">AB + CD</span></span></div>
+<p>รูปที่ 6.2 แสดงให้เห็นถึงวงจร AND-OR-Invert ที่เป็นการสร้างจากนิพจน์ POS ของเอาต์พุต</p>
+<figure class="c"><img alt="รูปที่ 6.2 ผังวงจรลอจิกแบบ AND-OR-Invert" loading="lazy" src="img/fig6-2.png" style="width:463px"/><figcaption><span class="cap-no">รูปที่ 6.2</span> ผังวงจรลอจิกแบบ AND-OR-Invert</figcaption></figure>
+<p>สำหรับปฏิบัติการของวงจร AND-OR-Invert นั้นสามารถสรุปได้เป็น</p>
+<div class="callout bk-callout"><div class="callout-head">ข้อสรุป</div>
+<p class="thm">สำหรับวงจรลอจิก AND-OR-Invert ขนาด 4 อินพุต เอาต์พุต <em>X</em> จะมีค่าเป็น LOW (0) ถ้าทั้งอินพุต <em>A</em> และ <em>B</em> เป็น HIGH ทั้งคู่ หรือถ้าทั้งอินพุต <em>C</em> และ <em>D</em> เป็น HIGH</p></div>
+<p>ซึ่งตารางค่าความจริงของวงจรนี้สามารถได้จากการปรับปรุงตารางที่ 6.1 โดยการเปลี่ยนคอลัมน์เอาต์พุตจาก 0 ให้เป็น 1 และเปลี่ยนจาก 1 เป็น 0 เท่านั้น</p>
+<div data-widget="aoi"></div><h3 id="s6-1-3"><span class="no">6.1.3</span> วงจร Exclusive-OR (XOR)</h3>
+<p>วงจรนี้มีความสำคัญมากจนกำหนดให้เป็นเกทลอจิกที่มีสัญลักษณ์ประจำตัว อย่างที่ได้กล่าวไปแล้วในบทที่ 3 ซึ่งในความจริงแล้ววงจรนี้เป็นวงจรที่มีการใช้ Inverter จำนวน 2 ตัว AND gate จำนวน 2 ตัว และ OR gate จำนวน 1 ตัว โดยมีการเชื่อมต่อวงจรดังที่เห็นในรูปที่ 6.3 (ก) และรูปที่ 6.3 (ข) เป็นสัญลักษณ์ของ XOR</p>
+<figure class="c"><img alt="รูปที่ 6.3 ผังวงจรลอจิกและสัญลักษณ์ของ XOR" loading="lazy" src="img/fig6-3.png" style="width:529px"/>
+<div class="sublab" style="width:529px"><span style="left:34%">(ก) ผังวงจรลอจิก XOR</span><span style="left:87%">(ข) สัญลักษณ์ XOR</span></div>
+<figcaption><span class="cap-no">รูปที่ 6.3</span> ผังวงจรลอจิกและสัญลักษณ์ของ XOR</figcaption></figure>
+<p>นิพจน์เอาต์พุตสำหรับวงจรนี้คือ</p>
+<div class="expr" data-chk="xor"><span class="m">X = A<span class="ov">B</span> + <span class="ov">A</span>B</span></div>
+<p>ตารางที่ 6.2 แสดงผลการปฏิบัติการของ XOR ซึ่งจะเห็นว่าเอาต์พุตจะเป็น HIGH สำหรับกรณีที่อินพุตทั้งสองมีค่าที่ตรงกันข้าม และ XOR จะมีเครื่องหมายปฏิบัติการเป็น <span class="m">⊕</span> ซึ่งจะทำให้เราสามารถเขียนนิพจน์ของ XOR ที่เป็น <span data-chk="xor"><span class="m">X = A<span class="ov">B</span> + <span class="ov">A</span>B</span></span> ด้วยการใช้เครื่องหมายดังกล่าวได้เป็น</p>
+<div class="expr" data-chk="xor"><span class="m">X = A ⊕ B</span></div>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 6.2</span> ตารางค่าความจริงของ XOR</div>
+<div class="tbl-scroll"><table class="tt" data-cols="A|B|A~B+~AB">
+<thead>
+<tr><th class="vr" colspan="2">อินพุต</th><th class="out">เอาต์พุต</th></tr>
+<tr><th class="v">A</th><th class="v vr">B</th><th class="v out">X</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td class="vr">0</td><td class="out">0</td></tr>
+<tr class="hit"><td>0</td><td class="vr">1</td><td class="out">1</td></tr>
+<tr class="hit"><td>1</td><td class="vr">0</td><td class="out">1</td></tr>
+<tr><td>1</td><td class="vr">1</td><td class="out">0</td></tr>
+</tbody>
+</table></div>
+</div>
+<h3 id="s6-1-4"><span class="no">6.1.4</span> วงจร Exclusive-NOR (XNOR)</h3>
+<p>วงจรนี้เป็น invert ของวงจร XOR ซึ่งเราสามารถวิเคราะห์นิพจน์ได้ดังต่อไปนี้</p>
+<div class="expr" data-chk="xnor"><span class="m">X = <span class="ov">A<span class="ov">B</span> + <span class="ov">A</span>B</span> = (<span class="ov">A<span class="ov">B</span></span>)(<span class="ov"><span class="ov">A</span>B</span>) = (<span class="ov">A</span> + B)(A + <span class="ov">B</span>) = <span class="ov">A</span><span class="ov">B</span> + AB</span></div>
+<p>สังเกตว่าเอาต์พุต <em>X</em> จะมีค่าเป็น HIGH ก็ต่อเมื่ออินพุตทั้งสองมีค่าเดียวกัน ซึ่งเราสามารถสร้างวงจร XNOR ได้โดยการทำการ Invert จากวงจร XOR ดังที่เห็นในรูปที่ 6.4 (ก) หรือจะสร้างจากนิพจน์ <span data-chk="xnor"><span class="m"><span class="ov">A</span><span class="ov">B</span> + AB</span></span> ดังที่แสดงในรูปที่ 6.4 (ข) ก็ได้</p>
+<figure class="c"><img alt="รูปที่ 6.4 ผังวงจรลอจิกของ XNOR ที่เทียบเท่ากัน" loading="lazy" src="img/fig6-4.png" style="width:643px"/>
+<div class="sublab" style="width:643px"><span style="left:25%">(ก) <span data-chk="xnor"><span class="m">X = <span class="ov">A<span class="ov">B</span> + <span class="ov">A</span>B</span></span></span></span><span style="left:77%">(ข) <span data-chk="xnor"><span class="m">X = <span class="ov">A</span><span class="ov">B</span> + AB</span></span></span></div>
+<figcaption><span class="cap-no">รูปที่ 6.4</span> ผังวงจรลอจิกของ XNOR ที่เทียบเท่ากัน</figcaption></figure>
+<div data-widget="sopcircuit" data-expr="AB&#x27; + A&#x27;B"></div><h3 id="s6-1-5"><span class="no">6.1.5</span> การสร้างวงจรลอจิกแบบคอมไบเนชัน</h3>
+<p>ในหัวข้อนี้จะเป็นการศึกษาการสร้างวงจรลอจิกจากนิพจน์บูลีนและจากตารางค่าความจริงด้วยการใช้ตัวอย่างต่าง ๆ โดยเราจะมีการประยุกต์ใช้เทคนิคการลดรูปนิพจน์ที่ได้เรียนจากบทที่ 5 ร่วมด้วย</p>
+<p class="sub4"><span class="n">6.1.5.1</span>การสร้างวงจรจากนิพจน์บูลีน</p>
+<p>พิจารณานิพจน์ต่อไปนี้</p>
+<div class="expr"><span class="m">X = AB + CDE</span></div>
+<p>จะเห็นว่านิพจน์นี้ประกอบด้วย 2 พจน์ ได้แก่ <span class="m">AB</span> และ <span class="m">CDE</span> ซึ่งเป็นโดเมนขนาด 5 ตัวแปร พจน์แรกเป็นการ AND กันระหว่าง <em>A</em> กับ <em>B</em> ส่วนพจน์ที่สองเป็นการ AND กันระหว่าง <em>C</em>, <em>D</em> และ <em>E</em> แล้วนำทั้งสองมาทำการ OR กัน ซึ่งจะได้เอาต์พุต <em>X</em> ซึ่งจะได้โครงสร้างของวงจรจากการวิเคราะห์นิพจน์ดังต่อไปนี้</p>
+<figure class="c struct"><svg class="struct-svg" style="width:76mm" viewbox="0 0 270 96"><text class="v" x="20" y="58">X</text><text class="op" x="48" y="58">=</text><text class="v" x="76" y="58">A</text><text class="v" x="94" y="58">B</text><text class="op" x="117" y="58">+</text><text class="v" x="140" y="58">C</text><text class="v" x="159" y="58">D</text><text class="v" x="177" y="58">E</text><path class="ln" d="M90 14H232M90 14V33M159 14V33"></path><path class="hd" d="M86.5 31L90 38L93.5 31Z M155.5 31L159 38L162.5 31Z"></path><path class="ln" d="M117 84H232M117 84V69"></path><path class="hd" d="M113.5 71L117 64L120.5 71Z"></path><text class="lb" x="238" y="18">AND</text><text class="lb" x="238" y="88">OR</text></svg></figure>
+<p>จากนิพจน์ดังกล่าวนี้ ลำดับการปฏิบัติการจะต้องเกิดจากการ AND กันของแต่ละพจน์ อันได้แก่ <span class="m">AB</span> และ <span class="m">CDE</span> ให้เสร็จสิ้น แล้วนำผลลัพธ์จากการ AND กันนี้มาทำการ OR กันอีกครั้ง ซึ่งจะให้ผลลัพธ์เอาต์พุต <em>X</em> ทำให้เราได้วงจรการทำงานที่ต้องใช้ AND gate ขนาด 2 อินพุตสำหรับพจน์ <span class="m">AB</span> และใช้ AND gate ขนาด 3 อินพุตสำหรับพจน์ <span class="m">CDE</span> และเราจะใช้ OR gate ขนาด 2 อินพุตเพื่อปฏิบัติการกับผลลัพธ์ที่ได้จาก AND gate ทั้งสอง ซึ่งจะเขียนเป็นวงจรได้ตามรูปที่ 6.5</p>
+<figure class="c"><img alt="รูปที่ 6.5 ผังวงจรลอจิกของนิพจน์ X = AB + CDE" loading="lazy" src="img/fig6-5.png" style="width:378px"/><figcaption><span class="cap-no">รูปที่ 6.5</span> ผังวงจรลอจิกของนิพจน์ <span class="m">X = AB + CDE</span></figcaption></figure>
+<p>สำหรับตัวอย่างต่อไปจะสร้างวงจรจากนิพจน์</p>
+<div class="expr" data-chk="abcdef"><span class="m">X = AB(C<span class="ov">D</span> + EF)</span></div>
+<p>ซึ่งเมื่อเรานำนิพจน์นี้มาแยกออกเป็นพจน์ต่าง ๆ เราจะได้พจน์ <span class="m">AB</span> และพจน์ <span class="m">(C<span class="ov">D</span> + EF)</span> ที่ทำการ AND กันอยู่ และถ้าเรานำพจน์ <span class="m">C<span class="ov">D</span> + EF</span> มาแยกต่อ จะได้พจน์ย่อยที่เป็นการ AND กันระหว่าง <em>C</em> กับ <span class="m"><span class="ov">D</span></span> และระหว่าง <em>E</em> กับ <em>F</em> และสองพจน์นี้นำมา OR กันอีกทีหนึ่ง ดังนั้นเมื่อเราพิจารณาโครงสร้าง เราจะได้ดังต่อไปนี้</p>
+<figure class="c struct"><svg class="struct-svg" style="width:84mm" viewbox="0 0 300 128"><text class="v" x="18" y="80">X</text><text class="op" x="46" y="80">=</text><text class="v" x="74" y="80">A</text><text class="v" x="92" y="80">B</text><text class="op" x="106" y="80">(</text><text class="v" x="120" y="80">C</text><text class="v" x="138" y="80">D</text><text class="op" x="162" y="80">+</text><text class="v" x="184" y="80">E</text><text class="v" x="201" y="80">F</text><text class="op" x="214" y="80">)</text><path class="bar" d="M131.5 57.5H146"></path><path class="ln" d="M88 12H262M88 12V47M104 12V47"></path><path class="hd" d="M84.5 45L88 52L91.5 45Z M100.5 45L104 52L107.5 45Z"></path><path class="ln" d="M139 28H262M139 28V45"></path><path class="hd" d="M135.5 43L139 50L142.5 43Z"></path><path class="ln" d="M162 44H262M162 44V57"></path><path class="hd" d="M158.5 55L162 62L165.5 55Z"></path><path class="ln" d="M131 118H262M131 118V93M193 118V93"></path><path class="hd" d="M127.5 95L131 88L134.5 95Z M189.5 95L193 88L196.5 95Z"></path><text class="lb" x="268" y="16">AND</text><text class="lb" x="268" y="32">NOT</text><text class="lb" x="268" y="48">OR</text><text class="lb" x="268" y="122">AND</text></svg></figure>
+<p>ขั้นตอนในการสร้างวงจรสำหรับนิพจน์นี้ทำได้ดังต่อไปนี้</p>
+<ol class="nsteps">
+<li>นำ Inverter มาใช้เพื่อให้ได้ผลลัพธ์ <span class="m"><span class="ov">D</span></span></li>
+<li>นำ AND gate ขนาด 2 อินพุตมา 2 ตัวสำหรับการสร้าง <span class="m">C<span class="ov">D</span></span> และ <span class="m">EF</span></li>
+<li>นำ OR gate ขนาด 2 อินพุตเพื่อสร้าง <span class="m">C<span class="ov">D</span> + EF</span></li>
+<li>นำ AND gate ขนาด 3 อินพุตเพื่อสร้างผลลัพธ์ <em>X</em></li>
+</ol>
+<p>วงจรนี้สามารถเขียนได้ดังรูปที่ 6.6 (ก) ซึ่งจะต้องใช้เกท 4 ตัวกับ inverter อีก 1 ตัวที่เป็นตัวปฏิบัติการตั้งแต่อินพุตไปถึงเอาต์พุต ซึ่งจะทำให้เกิดการใช้เวลาที่เรียกว่า <strong>propagation delay</strong> ซึ่งเพิ่มขึ้นทุกครั้งจากการที่สัญญาณถูกปฏิบัติการจาก inverter และเกท ดังนั้นยิ่งมีการใช้เกทมากเท่าใด ก็ยิ่งเกิด propagation delay มากขึ้น</p>
+<p>ทั้งนี้ถ้าเราลองเปลี่ยนแปลงนิพจน์ดังกล่าวให้เป็น SOP ที่เทียบเท่ากัน เราจะสามารถแปลงนิพจน์ได้เป็น</p>
+<div class="expr" data-chk="abcdef"><span class="m">AB(C<span class="ov">D</span> + EF) = ABC<span class="ov">D</span> + ABEF</span></div>
+<p>จะเห็นว่าเมื่อทำการวาดวงจรดังรูปที่ 6.6 (ข) แล้ว จะมีปริมาณของเกทที่ใช้ระหว่างอินพุตต้นทางจนถึงเอาต์พุตปลายทางลดลง ส่งผลให้เกิด propagation delay ลดลง</p>
+<figure class="wide c66"><img alt="รูปที่ 6.6 ผังวงจรลอจิกของนิพจน์ X = AB(C D + EF) = ABC D + ABEF" loading="lazy" src="img/fig6-6.png" style="width:803px"/>
+<div class="sublab" style="width:803px"><span style="left:27%">(ก)</span><span style="left:78%">(ข) วงจรจากนิพจน์แบบ SOP ที่เทียบเท่ากับวงจรในรูป (ก)</span></div>
+<figcaption><span class="cap-no">รูปที่ 6.6</span> ผังวงจรลอจิกของนิพจน์ <span data-chk="abcdef"><span class="m">X = AB(C<span class="ov">D</span> + EF) = ABC<span class="ov">D</span> + ABEF</span></span></figcaption></figure>
+<p class="sub4"><span class="n">6.1.5.2</span>การสร้างวงจรจากตารางค่าความจริง</p>
+<p>ถ้าโจทย์กำหนดตารางค่าความจริงให้มาแทนที่จะเป็นนิพจน์ สิ่งที่ต้องทำคือการระบุพจน์การคูณได้จากแถวที่มีค่าเอาต์พุตเป็น 1 โดยการหาค่าไบนารีของตัวแปรอินพุต ยกตัวอย่างเช่น ในตารางค่าความจริงที่ปรากฏในตารางที่ 6.3 เราจะได้ค่าไบนารี <em>A</em>, <em>B</em> และ <em>C</em> เป็น <span class="bits">011</span> และ <span class="bits">100</span> ซึ่งจะได้พจน์การคูณเป็น <span class="m"><span class="ov">A</span>BC</span> และ <span class="m">A<span class="ov">B</span><span class="ov">C</span></span> ดังตาราง</p>
+<div class="tblock">
+<div class="tcap solo"><span class="cap-no">ตารางที่ 6.3</span> ตารางค่าความจริง</div>
+<div class="tbl-scroll"><table class="tt" data-cols="A|B|C|~ABC+A~B~C|term">
+<thead>
+<tr><th class="vr" colspan="3">อินพุต</th><th class="out vr">เอาต์พุต</th><th rowspan="2">พจน์การคูณ</th></tr>
+<tr><th class="v">A</th><th class="v">B</th><th class="v vr">C</th><th class="v out vr">X</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="vr">0</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr><td>0</td><td>0</td><td class="vr">1</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr><td>0</td><td>1</td><td class="vr">0</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr class="hit"><td>0</td><td>1</td><td class="vr">1</td><td class="out vr">1</td><td class="term"><span class="m"><span class="ov">A</span>BC</span></td></tr>
+<tr class="hit"><td>1</td><td>0</td><td class="vr">0</td><td class="out vr">1</td><td class="term"><span class="m">A<span class="ov">B</span><span class="ov">C</span></span></td></tr>
+<tr><td>1</td><td>0</td><td class="vr">1</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr><td>1</td><td>1</td><td class="vr">0</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr><td>1</td><td>1</td><td class="vr">1</td><td class="out vr">0</td><td class="term"></td></tr>
+</tbody>
+</table></div>
+</div>
+<p>นิพจน์ SOP ที่ได้จากตารางค่าความจริงจะเป็นการ OR ระหว่างพจน์การคูณทั้งสองพจน์ที่ได้ ดังนั้นจะได้นิพจน์เป็น</p>
+<div class="expr"><span class="m">X = <span class="ov">A</span>BC + A<span class="ov">B</span><span class="ov">C</span></span></div>
+<p>ซึ่งเราสามารถเขียนเป็นวงจรได้ดังรูปที่ 6.7</p>
+<figure class="c"><img alt="รูปที่ 6.7 ผังวงจรลอจิกของนิพจน์ X = A BC + A B C" loading="lazy" src="img/fig6-7.png" style="width:539px"/><figcaption><span class="cap-no">รูปที่ 6.7</span> ผังวงจรลอจิกของนิพจน์ <span class="m">X = <span class="ov">A</span>BC + A<span class="ov">B</span><span class="ov">C</span></span></figcaption></figure>
+<p>จากนิพจน์จะมี complement ของตัวแปรอยู่ 3 ตัว ได้แก่ <span class="m"><span class="ov">A</span></span> ของพจน์แรก กับ <span class="m"><span class="ov">B</span></span> และ <span class="m"><span class="ov">C</span></span> ของพจน์ที่สอง จึงต้องนำ inverter 3 ตัวมาใช้สำหรับการสร้างสัญญาณขาอินพุตให้แก่ <em>A</em>, <em>B</em> และ <em>C</em> ตามลำดับ และจะใช้ AND gate แบบ 3 อินพุตจำนวน 2 ตัวเพื่อนำมาสร้างตามพจน์ทั้งสองพจน์ที่ปรากฏอยู่ และเมื่อได้เอาต์พุตจากการ AND แล้วก็นำมาเป็นอินพุตของ OR gate ที่จะปฏิบัติการเพื่อให้ได้เอาต์พุต <em>X</em> ตามที่นิพจน์ระบุเอาไว้</p>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 6.2</span></div>
+<div class="q">
+<p>จงออกแบบวงจรเพื่อให้ปฏิบัติการตามตารางค่าความจริงที่ปรากฏด้านล่างนี้</p>
+<div class="tbl-scroll"><table class="tt" data-cols="A|B|C|~ABC+A~BC+AB~C|term">
+<thead>
+<tr><th class="vr" colspan="3">อินพุต</th><th class="out vr">เอาต์พุต</th><th rowspan="2">พจน์การคูณ</th></tr>
+<tr><th class="v">A</th><th class="v">B</th><th class="v vr">C</th><th class="v out vr">X</th></tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td class="vr">0</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr><td>0</td><td>0</td><td class="vr">1</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr><td>0</td><td>1</td><td class="vr">0</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr class="hit"><td>0</td><td>1</td><td class="vr">1</td><td class="out vr">1</td><td class="term"><span class="m"><span class="ov">A</span>BC</span></td></tr>
+<tr><td>1</td><td>0</td><td class="vr">0</td><td class="out vr">0</td><td class="term"></td></tr>
+<tr class="hit"><td>1</td><td>0</td><td class="vr">1</td><td class="out vr">1</td><td class="term"><span class="m">A<span class="ov">B</span>C</span></td></tr>
+<tr class="hit"><td>1</td><td>1</td><td class="vr">0</td><td class="out vr">1</td><td class="term"><span class="m">AB<span class="ov">C</span></span></td></tr>
+<tr><td>1</td><td>1</td><td class="vr">1</td><td class="out vr">0</td><td class="term"></td></tr>
+</tbody>
+</table></div>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>เมื่อต้องการให้เอาต์พุต <span class="m">X = 1</span> จะทำให้เราได้พจน์ทั้งหมด 3 พจน์ เมื่อนำมารวมกันเป็นนิพจน์ SOP จะได้เป็น</p>
+<div class="expr"><span class="m">X = <span class="ov">A</span>BC + A<span class="ov">B</span>C + AB<span class="ov">C</span></span></div>
+<p>ดังนั้นเราต้องการ inverter 3 ตัว AND gate ขนาด 3 อินพุตจำนวน 3 ตัว และ OR gate ขนาด 3 อินพุตจำนวน 1 ตัว โดยจะมีวงจรดังต่อไปนี้</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex2.png" style="width:359px"/></figure>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 6.3</span></div>
+<div class="q">
+<p>จงออกแบบวงจรลอจิกที่มีตัวแปรอินพุต 4 ตัว ซึ่งจะสร้างสัญญาณเอาต์พุตเป็น 1 ในกรณีที่มีอินพุต 3 ตัวเป็น 1 พร้อมกัน</p>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>เมื่อเราพิจารณาตารางค่าความจริงของตัวแปรอินพุตจำนวน 4 ตัว <em>A</em>, <em>B</em>, <em>C</em> และ <em>D</em> เราจะได้ 16 combination แต่กรณีที่มีอินพุตเป็น 1 พร้อมกัน 3 ตัวนั้นมีเพียง 4 กรณี ได้แก่ <span class="bits">0111</span>, <span class="bits">1011</span>, <span class="bits">1101</span> และ <span class="bits">1110</span> หรือเขียนเป็นพจน์การคูณจะได้เป็น <span class="m"><span class="ov">A</span>BCD</span>, <span class="m">A<span class="ov">B</span>CD</span>, <span class="m">AB<span class="ov">C</span>D</span> และ <span class="m">ABC<span class="ov">D</span></span> ตามลำดับ ดังนั้นนิพจน์ SOP สำหรับวงจรนี้จะได้เป็น</p>
+<div class="expr" data-chk="three"><span class="m">X = <span class="ov">A</span>BCD + A<span class="ov">B</span>CD + AB<span class="ov">C</span>D + ABC<span class="ov">D</span></span></div>
+<p>ซึ่งการสร้างวงจรนี้ต้องการ inverter จำนวน 4 ตัว AND gate ขนาด 4 อินพุตจำนวน 4 ตัว และ OR gate ขนาด 4 อินพุตจำนวน 1 ตัว และสามารถเขียนเป็นผังวงจรได้ดังต่อไปนี้</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex3.png" style="width:387px"/></figure>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 6.4</span></div>
+<div class="q">
+<p>จงลดรูปวงจรลอจิกแบบคอมไบเนชันที่ปรากฏในรูปข้างล่างนี้ให้เล็กที่สุด</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex4q.png" style="width:444px"/></figure>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>นิพจน์ของวงจรนี้จะเป็น</p>
+<div class="expr" data-chk="ex4"><span class="m">X = <span class="ov">(<span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>)</span>C + <span class="ov">(<span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>)</span> + D</span></div>
+<p>การลดรูปวงจรนี้เราต้องอาศัยทฤษฎีบทของ DeMorgan เป็นหลักในการวิเคราะห์ ซึ่งจะได้ดังต่อไปนี้</p>
+<div class="expr-block" data-chk="ex4">
+<div><span class="m">X = (<span class="ov"><span class="ov">A</span></span> + <span class="ov"><span class="ov">B</span></span> + <span class="ov"><span class="ov">C</span></span>)C + <span class="ov"><span class="ov">A</span></span> + <span class="ov"><span class="ov">B</span></span> + <span class="ov"><span class="ov">C</span></span> + D</span></div>
+<div class="cont"><span class="m">= AC + BC + CC + A + B + C + D</span></div>
+<div class="cont"><span class="m">= AC + BC + C + A + B +</span> <span class="strike"><span class="m">C</span></span> <span class="m">+ D</span></div>
+<div class="cont"><span class="m">= C(A + B + 1) + A + B + D</span></div>
+<div><span class="m">X = A + B + C + D</span></div>
+</div>
+<p>ซึ่งวงจรที่ลดรูปมาจะเป็นการใช้ OR gate ขนาด 4 อินพุตเพียงตัวเดียวเท่านั้น ดังรูป</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex4a.png" style="width:189px"/></figure>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 6.5</span></div>
+<div class="q">
+<p>จงลดรูปวงจรที่เห็นในรูปข้างล่างนี้ (ในรูปจะไม่แสดงให้เห็น inverter เพื่อลดความซับซ้อน)</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex5q.png" style="width:331px"/></figure>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>ก่อนอื่นทำการหานิพจน์ของวงจรนี้ ซึ่งเราจะได้เป็น</p>
+<div class="expr" data-chk="ex5"><span class="m">X = A<span class="ov">B</span><span class="ov">C</span> + AB<span class="ov">C</span><span class="ov">D</span> + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>D + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span><span class="ov">D</span></span></div>
+<p>จากนิพจน์นี้เราจะเห็นว่ามีพจน์แรกที่ไม่เป็นพจน์การคูณมาตรฐาน ดังนั้นเมื่อเราจะทำการลดรูปด้วยการใช้แผนผังคาร์โนห์ เราจะต้องทำการขยายพจน์แรกเพื่อให้เข้ารูปมาตรฐานเสียก่อน ซึ่งเราจะได้ดังต่อไปนี้</p>
+<div class="expr-block" data-chk="ex5">
+<div><span class="m">X = A<span class="ov">B</span><span class="ov">C</span>(D + <span class="ov">D</span>) + AB<span class="ov">C</span><span class="ov">D</span> + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>D + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span><span class="ov">D</span></span></div>
+<div class="cont"><span class="m">= A<span class="ov">B</span><span class="ov">C</span>D + A<span class="ov">B</span><span class="ov">C</span><span class="ov">D</span> + AB<span class="ov">C</span><span class="ov">D</span> + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span>D + <span class="ov">A</span><span class="ov">B</span><span class="ov">C</span><span class="ov">D</span></span></div>
+</div>
+<p>นำนิพจน์ SOP มาตรฐานที่ได้มาทำการจัดลงในแผนผังคาร์โนห์แบบ 4 ตัวแปรเพื่อทำการลดรูปนิพจน์ และเขียนวงจรที่ลดรูปแล้วจะได้ดังต่อไปนี้</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex5a.png" style="width:567px"/></figure>
+<p>ดังนั้นนิพจน์ที่ลดรูปแล้วคือ <span class="ans" data-chk="ex5"><span class="m">X = <span class="ov">B</span><span class="ov">C</span> + A<span class="ov">C</span><span class="ov">D</span></span></span></p>
+</details></div>
+<div class="exercise"><div class="ex-title">✍️ แบบฝึกหัดที่ 6.1</div><div class="ex-body">
+<ol class="num">
+<li>จงสร้างวงจรจากนิพจน์บูลีนต่อไปนี้
+    <ol class="rom">
+<li><span class="m">X = ABC + AB + AC</span></li>
+<li><span class="m">X = AB(C + DE)</span></li>
+</ol></li>
+<li>จงสร้างวงจรที่มีอินพุตขนาด 3 ตัวแปร ที่จะได้เอาต์พุตเป็น 1 เฉพาะเมื่ออินพุตทั้งสามมีค่าเป็น 1 ทั้งหมด และเมื่ออินพุตทั้งสามมีค่าเป็น 0 ทั้งหมด</li>
+<li>ทำการลดรูปนิพจน์บูลีนในข้อที่ 1 ให้อยู่ในรูป SOP ที่เล็กที่สุด แล้วเขียนวงจรที่ได้จากการลดรูปนี้</li>
+</ol></div></div>
+<div data-widget="sopcircuit" data-expr="A&#x27;BC + AB&#x27;C + ABC&#x27;"></div></section><section class="sec"><h2 id="s6-2"><span class="no">6.2</span> การปฏิบัติการของวงจรลอจิกกับอินพุตที่เป็นสัญญาณพัลส์</h2>
+<p>แต่ละเกทในวงจรลอจิกนั้น ไม่ว่าสัญญาณที่เข้ามาที่อินพุตจะเป็นสัญญาณที่คงที่ หรือสัญญาณที่เปลี่ยนแปลงไปตามเวลาเนื่องจากวงจรใด ๆ ก็จะมีตารางค่าความจริงคงที่ ไม่มีการเปลี่ยนแปลง สำหรับการเรียนรู้ในส่วนนี้จะเป็นการเรียนรู้ผ่านตัวอย่างดังต่อไปนี้</p>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 6.6</span></div>
+<div class="q">
+<p>จงหารูปสัญญาณเอาต์พุต <em>X</em> ของวงจรที่เห็นในรูป ซึ่งมีรูปสัญญาณอินพุต <em>A</em>, <em>B</em> และ <em>C</em> ดังที่แสดง</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex6.png" style="width:595px"/></figure>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>นิพจน์เอาต์พุต <span data-chk="ex6"><span class="m">X = <span class="ov">A(B + C)</span> = <span class="ov">AB + AC</span></span></span> บ่งให้เห็นว่าเอาต์พุต <em>X</em> มีค่าเป็น LOW เมื่อ</p>
+<ul class="dash">
+<li>ทั้ง <em>A</em> และ <em>B</em> เป็น HIGH หรือ</li>
+<li>ทั้ง <em>A</em> และ <em>C</em> เป็น HIGH หรือ</li>
+<li>อินพุตทั้งหมดเป็น HIGH</li>
+</ul>
+<p>ซึ่งรูปสัญญาณเอาต์พุต <em>X</em> จะได้ดังที่เห็นจากรูปข้างบน สำหรับ <em>Y</em> นั้นเป็นสัญญาณที่ได้จาก OR gate ที่ปฏิบัติกับสัญญาณอินพุต <em>B</em> และ <em>C</em></p>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 6.7</span></div>
+<div class="q">
+<p>จงวาดผังเวลาของสัญญาณที่ได้จากวงจรดังรูปข้างล่าง ซึ่งแสดงให้เห็นเอาต์พุตจากเกท <em>G</em><sub>1</sub>, <em>G</em><sub>2</sub> และ <em>G</em><sub>3</sub> ที่ป้อนด้วยสัญญาณอินพุต <em>A</em> และ <em>B</em> ดังที่ระบุเอาไว้</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex7q.png" style="width:548px"/></figure>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>เมื่ออินพุตทั้งสองเป็น HIGH หรือเมื่ออินพุตทั้งสองเป็น LOW เอาต์พุต <em>X</em> จะเป็น HIGH ซึ่งก็คือวงจร XNOR นั่นเอง</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex7a.png" style="width:378px"/></figure>
+</details></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 6.8</span></div>
+<div class="q">
+<p>จงหารูปสัญญาณเอาต์พุต <em>X</em> ของวงจรลอจิก โดยหาจากสัญญาณระหว่างทาง <em>Y</em><sub>1</sub>, <em>Y</em><sub>2</sub>, <em>Y</em><sub>3</sub> และ <em>Y</em><sub>4</sub> โดยที่รูปสัญญาณอินพุต <em>A</em>, <em>B</em>, <em>C</em> และ <em>D</em> เป็นดังที่กำหนด</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex8.png" style="width:435px"/></figure>
+</div></div>
+<div class="example long"><div class="ex-head"><span class="ex-tag">ตัวอย่างที่ 6.9</span></div>
+<div class="q">
+<p>จงเขียนรูปสัญญาณของเอาต์พุต <em>X</em> ของวงจรในรูป</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex9q.png" style="width:643px"/></figure>
+</div>
+<details class="solution"><summary>แสดงวิธีทำ</summary>
+<p>พิจารณาแต่ละสัญญาณที่อยู่ระหว่างทางเพื่อวิเคราะห์รูปสัญญาณผลลัพธ์</p>
+<figure class="c"><img alt="" loading="lazy" src="img/ch6-ex9a.png" style="width:539px"/></figure>
+</details></div>
+
+<div data-widget="waveckt"></div></section></div>
+
+    <section class="sec" id="summary">
+      <h2>สรุปท้ายบท</h2>
+      <div class="summary"><ul><li>วงจร AND-OR สร้างนิพจน์ SOP เช่น <span class="m">X = AB + CD</span> ส่วนวงจร AND-OR-Invert ให้เอาต์พุต <span data-chk="aoi2"><span class="m">X = <span class="ov">AB + CD</span></span></span> ซึ่งเทียบเท่านิพจน์ POS <span data-chk="aoi2"><span class="m">(<span class="ov">A</span> + <span class="ov">B</span>)(<span class="ov">C</span> + <span class="ov">D</span>)</span></span></li><li>XOR: <span data-chk="xor"><span class="m">X = A<span class="ov">B</span> + <span class="ov">A</span>B = A ⊕ B</span></span> เป็น HIGH เมื่ออินพุตต่างกัน ส่วน XNOR: <span data-chk="xnor"><span class="m">X = <span class="ov">A</span><span class="ov">B</span> + AB</span></span> เป็น HIGH เมื่ออินพุตเหมือนกัน</li><li>การสร้างวงจรจากนิพจน์บูลีน ให้แยกนิพจน์เป็นพจน์ย่อยแล้วเรียงลำดับการปฏิบัติการ NOT → AND → OR ตามโครงสร้างของนิพจน์</li><li>การแปลงนิพจน์ให้อยู่ในรูป SOP ช่วยลดจำนวนเกทระหว่างอินพุตถึงเอาต์พุต และลด propagation delay</li><li>การสร้างวงจรจากตารางค่าความจริง ให้เขียนพจน์การคูณจากแถวที่เอาต์พุตเป็น 1 แล้วนำมา OR กันเป็นนิพจน์ SOP</li><li>วงจรที่ซับซ้อนลดรูปได้ด้วยทฤษฎีบทของ DeMorgan และแผนผังคาร์โนห์</li><li>เมื่ออินพุตเป็นสัญญาณพัลส์ ตารางค่าความจริงของวงจรยังคงเดิม จึงหารูปสัญญาณเอาต์พุตได้โดยพิจารณาสัญญาณระหว่างทางทีละช่วงเวลา</li></ul></div>
+    </section>
+
+    <section class="sec" id="quiz">
+      <h2>แบบทดสอบท้ายบท</h2>
+      <p class="w-hint">เลือกคำตอบ ระบบจะเฉลยพร้อมคำอธิบายทันที (ไม่มีการบันทึกคะแนน ใช้สำหรับทบทวนด้วยตนเอง)</p>
+      <div class="quiz" id="quiz-box"></div>
+    </section>
+
+    <section class="sec" id="lab">
+  <h2>ปฏิบัติการสัปดาห์ที่ 7 · ออกแบบวงจรคอมไบเนชันจากโจทย์ และมอบหมายโครงงานกลุ่ม</h2>
+  <p>ตามแผนการสอนใน มคอ.3 สัปดาห์นี้ใช้การเรียนรู้แบบโครงงานเป็นฐาน (PBL) — ฝึกกระบวนการออกแบบครบวงจร ตั้งแต่โจทย์ → ตารางค่าความจริง → นิพจน์ → ลดรูป → วงจร → ต่อจริง และเริ่มโครงงานกลุ่ม</p>
+  <div class="card">
+    <h3 style="font-size:19px;margin-top:0">📋 ใบงานปฏิบัติการที่ 5 (สัปดาห์ที่ 7)</h3>
+    <p style="margin:0 0 6px"><b>ขั้นตอนการออกแบบ (ใช้ทุกโจทย์):</b> ① กำหนดอินพุต/เอาต์พุตและความหมายของ 0/1 ② เขียนตารางค่าความจริง ③ เขียน SOP มาตรฐาน ④ ลดรูปด้วยแผนผังคาร์โนห์ ⑤ วาดวงจรและเลือกไอซี ⑥ ต่อวงจรและทดสอบครบทุกกรณี</p>
+    <ol>
+      <li><b>เตือนระดับสารเคมี (ตัวอย่างที่ 6.1):</b> ต่อวงจร X = AB + AC + BC ด้วย 7408 + 7432 ใช้สวิตช์แทนเซนเซอร์ LED แทน indicator</li>
+      <li><b>Majority voter 3 อินพุต:</b> เปรียบเทียบกับข้อ 1 — เป็นวงจรเดียวกันหรือไม่ อภิปราย</li>
+      <li><b>ตรวจจับ “3 ใน 4” (ตัวอย่างที่ 6.3):</b> ลดรูปก่อนต่อ แล้วนับจำนวนไอซีที่ประหยัดได้</li>
+      <li><b>XOR จากเกทพื้นฐาน:</b> ต่อ A<span class="ov">B</span> + <span class="ov">A</span>B ด้วย 7404 + 7408 + 7432 เทียบกับ 7486 ป้อนสัญญาณนาฬิกา 1 kHz ที่อินพุต A และสวิตช์ที่ B สังเกตผังเวลาบนออสซิลโลสโคป (หัวข้อ 6.2)</li>
+      <li><b>ใช้ NAND ล้วน:</b> แปลงวงจรข้อ 1 เป็น NAND-NAND แล้วต่อด้วย 7400 เทียบผล</li>
+    </ol>
+    <p class="w-hint" style="margin:0">ส่ง: ตารางค่าความจริง · แผนผังคาร์โนห์ · วงจรพร้อมเบอร์ไอซีและขา · ผลทดสอบ (ประเมินในหมวดแบบฝึกหัดและรายงานผลการทดลอง 20%) — ใช้แบบจำลอง “สร้างวงจร AND-OR” ในหัวข้อ 6.1.5 ตรวจงานได้</p>
+  </div>
+
+  <div class="card" style="margin-top:16px;border-left:5px solid var(--accent)">
+    <h3 style="font-size:19px;margin-top:0">👥 มอบหมายโครงงานกลุ่ม (สัปดาห์ที่ 7–15 · 20%)</h3>
+    <p style="margin:0 0 8px">กลุ่มละ 3–4 คน ออกแบบวงจรดิจิทัลขนาดเล็กที่ใช้ความรู้ในวิชานี้ ต่อวงจรจริงหรือจำลอง/เขียน Verilog ให้ทำงานได้ และนำเสนอในสัปดาห์ที่ 15</p>
+    <div class="grid-2" style="font-size:15.5px">
+      <div><b>ตัวอย่างหัวข้อ</b>
+        <ul style="margin:4px 0 0;padding-left:1.2em">
+          <li>ระบบเตือนภัย/เฝ้าระวังด้วยเซนเซอร์หลายตัว</li>
+          <li>เครื่องลงคะแนน (voting) แสดงผลบน 7-segment</li>
+          <li>เกมทายเลข/ลูกเต๋าดิจิทัล</li>
+          <li>นาฬิกา/ตัวจับเวลา (ใช้วงจรนับ บทที่ 9)</li>
+          <li>ตัวควบคุมไฟจราจร (เครื่องสถานะ บทที่ 10)</li>
+        </ul></div>
+      <div><b>กำหนดการและการประเมิน</b>
+        <ul style="margin:4px 0 0;padding-left:1.2em">
+          <li>สัปดาห์ 7: ตั้งทีม เลือกหัวข้อ <b>แบ่งงานเป็นงานย่อย</b> และมอบหมายผู้รับผิดชอบ (CLO10)</li>
+          <li>สัปดาห์ 9: ส่งข้อเสนอโครงงาน (เป้าหมาย อินพุต/เอาต์พุต แผนงาน) ที่ทุกคนเข้าใจตรงกัน (CLO11)</li>
+          <li>สัปดาห์ 12: <b>รายงานความก้าวหน้า</b> และปัญหา (CLO12)</li>
+          <li>สัปดาห์ 15: นำเสนอผลงาน + สรุปบทความเทคนิคใหม่ (CLO12, CLO13)</li>
+          <li>ประเมินตามสภาพจริง: ผลงานวงจร · การทำงานเป็นทีม · รายงาน · การนำเสนอ</li>
+        </ul></div>
+    </div>
+  </div>
+</section>
+
+
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-top:48px;flex-wrap:wrap">
+      <a class="btn" href="../../index.html">← หน้ารายวิชา</a>
+      <a class="btn primary" href="slides.html">▶ ทบทวนด้วยสไลด์</a>
+    </div>
+  </main>
+</div>
+
+<footer class="footer">517 112 การออกแบบวงจรตรรกะเชิงเลข · ภาควิชาคอมพิวเตอร์ คณะวิทยาศาสตร์ มหาวิทยาลัยศิลปากร · เนื้อหาจากเอกสารประกอบการสอน อ.อภิเษก หงษ์วิทยากร</footer>
+
+<script src="quiz.js"></script>
+<script>document.addEventListener("DOMContentLoaded", () => DLD.quiz(document.getElementById("quiz-box"), window.CH_QUIZ));</script>
+</body>
+</html>
